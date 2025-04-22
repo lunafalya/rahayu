@@ -40,7 +40,7 @@
             </li>
             <li class="menu w-full mb-32">
                 <a class="flex flex-row items-center gap-2" @click="$router.push('/employee')">
-                    <font-awesome-icon icon="user-group" class="w-12 h-auto" />
+                    <font-awesome-icon icon="user-group" class="w-10 h-10 p-2 transition-all duration-300 bg-cyan-300 rounded-sm" />
                     <span class="menu-text opacity-0 transition-opacity duration-300 delay-75 whitespace-nowrap font-bold">Employee</span>
                 </a>
             </li>
@@ -207,31 +207,8 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-  .modal-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-  }
-  .modal {
-    background: rgb(255, 255, 255);
-    position: fixed;
-    padding: 24px;
-    border-radius: 20px;
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    justify-content: center;
-    align-items: center;
-    visibility: visible;
-  }
+
+
   .modal-buttons {
     display: flex;
     justify-content: space-between;

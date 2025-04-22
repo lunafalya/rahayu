@@ -22,7 +22,7 @@
             </li>
             <li class="menu w-full">
                 <a class="flex flex-row items-center gap-2" @click="$router.push('/order')">
-                    <font-awesome-icon icon="fa-brands fa-shopify" class="w-12 h-auto" />
+                    <font-awesome-icon icon="fa-brands fa-shopify" class="w-10 h-10 p-2 transition-all duration-300 bg-cyan-300 rounded-sm" />
                     <span class="menu-text opacity-0 transition-opacity duration-300 delay-75 whitespace-nowrap font-bold">Order</span>
                 </a>
             </li>
@@ -75,13 +75,14 @@
             <th>Aksi</th>
           </tr>
         </thead>
-        <tbody class="bg-white text-cyan-950>">
+        <tbody class="bg-white text-cyan-950">
             <tr v-for="(order, index) in filteredorder" :key="index">
               <td>{{ index + 1 }}</td>
               <td>{{ order.namaPemesan }}</td>
               <td>{{ order.tanggalPengeluaran }}</td>
               <td>{{ totalHargaFormat(order.totalHarga) }}</td>
               <td><button @click="editKaryawan(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button></td>
+              
             </tr>
         </tbody>
       </table>
@@ -89,17 +90,17 @@
 
       <!-- OrderModal -->
       <div class="modal-overlay " v-if="showModal">
-    <div class="modal">
-      <h2>Tambah Pesanan</h2>
+      <div class="modal-content">
+      <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Tambah Pesanan</h2>
     
-      <label>Nama Pemesan:</label>
-      <input v-model="form.namaPemesan" type="text" placeholder="Nama Pemesan" />
+      <label class="text-cyan-950">Nama Pemesan:</label>
+      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.namaPemesan" type="text" placeholder="Nama Pemesan" />
 
-      <label>Nomor Pesanan:</label>
-      <input v-model="form.nomorPesanan" type="text" placeholder="Nomor Pesanan" />
+      <label class="text-cyan-950">Nomor Pesanan:</label>
+      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.nomorPesanan" type="text" placeholder="Nomor Pesanan" />
 
-      <label>Jenis Produk:</label>
-      <select v-model="form.jenisProduk">
+      <label class="text-cyan-950">Jenis Produk:</label>
+      <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.jenisProduk">
         <option disabled value="">Pilih Jenis Produk</option>
         <option>Kaos</option>
         <option>Almamater</option>
@@ -108,48 +109,48 @@
         <option>Jersey</option>
       </select>
 
-      <label>Jumlah Produk:</label>
-      <input v-model.number="form.jumlahProduk" type="number" placeholder="Jumlah Produk" />
+      <label class="text-cyan-950">Jumlah Produk:</label>
+      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="form.jumlahProduk" type="number" placeholder="Jumlah Produk" />
 
-      <label>Extra:</label>
-      <input v-model="form.extra" type="text" placeholder="Extra" />
+      <label class="text-cyan-950">Extra:</label>
+      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.extra" type="text" placeholder="Extra" />
 
-      <label>Total Harga:</label>
-      <input v-model.number="form.hargaPerBaju" type="number" placeholder="Harga per Baju" />
+      <label class="text-cyan-950">Total Harga:</label>
+      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"  v-model.number="form.hargaPerBaju" type="number" placeholder="Harga per Baju" />
 
-      <input :value="totalHargaFormatted" type="text" placeholder="Total Seluruh Harga" disabled />
+      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" :value="totalHargaFormatted" type="text" placeholder="Total Seluruh Harga" disabled />
 
       <div class="ukuran-group">
         <label>Ukuran:</label>
         <br>
-        <label>S</label>
-        <input v-model.number="form.ukuran.S" type="number" placeholder="S" />
+        <label class="text-cyan-950 pr-9">S</label>
+        <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="form.ukuran.S" type="number" placeholder="S" />
         <br>
-        <label>M</label>
-        <input v-model.number="form.ukuran.M" type="number" placeholder="M" />
+        <label class="text-cyan-950 pr-7">M</label>
+        <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="form.ukuran.M" type="number" placeholder="M" />
         <br>
-        <label>L</label>
-        <input v-model.number="form.ukuran.L" type="number" placeholder="L" />
+        <label class="text-cyan-950 pr-9">L</label>
+        <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="form.ukuran.L" type="number" placeholder="L" />
         <br>
-        <label>XL</label>
-        <input v-model.number="form.ukuran.XL" type="number" placeholder="XL" />
+        <label class="text-cyan-950 pr-7">XL</label>
+        <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="form.ukuran.XL" type="number" placeholder="XL" />
         <br>
-        <label>XXl</label>
-        <input v-model.number="form.ukuran.XXL" type="number" placeholder="XXL" />
+        <label class="text-cyan-950 pr-5">XXl</label>
+        <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="form.ukuran.XXL" type="number" placeholder="XXL" />
         <br>
-        <label>Lainnya</label>
-        <input v-model="form.ukuran.lainnya" type="text" placeholder="Lainnya..." />
+        <label class="text-cyan-950 pr-6">Lainnya</label>
+        <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.ukuran.lainnya" type="text" placeholder="Lainnya..." />
       </div>
 
       <select v-model="form.metodePembayaran">
-        <option disabled value="">Pilih Metode Pembayaran</option>
-        <option>Cash</option>
-        <option>Dana</option>
-        <option>BCA</option>
-        <option>Lainnya</option>
+        <option class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" disabled value="">Pilih Metode Pembayaran</option>
+        <option class="text-cyan-950">Cash</option>
+        <option class="text-cyan-950">Dana</option>
+        <option class="text-cyan-950">BCA</option>
+        <option class="text-cyan-950">Lainnya</option>
       </select>
 
-      <input v-model="form.tanggalPengeluaran" type="date" />
+      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.tanggalPengeluaran" type="date" />
 
       <div class="modal-buttons">
         <button @click="closeModal" class="close-button">Batal</button>
@@ -169,13 +170,6 @@
   <script setup>
   
   import { ref, computed } from 'vue';
-
-  // filter kalau ingin pencarian
-const filteredorder = computed(() => {
-  return daftarPesanan.value.filter(order =>
-    order.namaPemesan.toLowerCase().includes(search.value.toLowerCase())
-  );
-});
 
   const showModal = ref(false);
 
@@ -213,6 +207,37 @@ const filteredorder = computed(() => {
     }).format(totalHarga.value);
   });
 
+  const isEdit = ref(false);
+  const editIndex = ref(null);
+
+function addKaryawan() {
+  const newOrder = { ...form.value, totalHarga: totalHarga.value };
+  daftarPesanan.value.push(newOrder);
+  showModal.value = false;
+  resetForm();
+}
+
+function editKaryawan(index) {
+  const order = daftarPesanan.value[index];
+  form.value = JSON.parse(JSON.stringify(order)); // clone object biar reaktif
+  showModal.value = true;
+  isEdit.value = true;
+  editIndex.value = index;
+}
+
+function updateKaryawan() {
+  if (editIndex.value !== null) {
+    daftarPesanan.value[editIndex.value] = {
+      ...form.value,
+      totalHarga: totalHarga.value
+    };
+    showModal.value = false;
+    resetForm();
+    isEdit.value = false;
+    editIndex.value = null;
+  }
+}
+
   function totalHargaFormat(value) {
   return new Intl.NumberFormat('id-ID', {
     style: 'currency',
@@ -247,6 +272,12 @@ const filteredorder = computed(() => {
       tanggalPengeluaran: ''
     };
   }
+  const filteredorder = computed(() => {
+  if (!search.value) return daftarPesanan.value;
+  return daftarPesanan.value.filter(order =>
+    order.namaPemesan.toLowerCase().includes(search.value.toLowerCase())
+  );
+});
 
   </script>
   
@@ -264,15 +295,16 @@ const filteredorder = computed(() => {
   z-index: 9999; /* supaya di atas elemen lain */
 }
 
-  
-  .modal {
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    width: 400px;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
+.modal-content {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  max-height: 90vh; /* tambahkan ini agar modal tidak lebih tinggi dari viewport */
+  overflow-y: auto;  /* tambahkan ini agar kontennya bisa discroll */
+}
   
   .modal input,
   .modal select {

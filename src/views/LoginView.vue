@@ -18,7 +18,7 @@
                 Forgot Password?
             </a>
 
-            <button class="btn btn-primary w-full my-4 bg-cyan-300 hover:bg-cyan-700" type="button" @click="$router.push('/dashboard')">
+            <button class="btn btn-primary w-full my-4 text-cyan-950 bg-cyan-400 hover:bg-cyan-950 hover:text-white" type="button" @click="$router.push('/dashboard')">
                 <p>Login</p>
             </button>
         </fieldset>

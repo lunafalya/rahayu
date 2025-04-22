@@ -1,7 +1,6 @@
 <template>
-    <div class="flex h-screen">
-      <!-- Sidebar -->
-      <div>
+    <!-- Sidebar -->
+    <div>
         <ul class="menu menu-lg bg-base-200 rounded-box w-28 h-full m-8 hover:bg-base-300 transition-all duration-300 ease-in-out shadow-lg hover:w-56">
             <li class="menu-title w-full">
                 <div class="flex flex-row items-center gap-2">
@@ -34,7 +33,7 @@
             </li>
             <li class="menu w-full">
                 <a class="flex flex-row items-center gap-2" @click="$router.push('/expense')">
-                    <font-awesome-icon icon="receipt" class="w-10 h-10 p-2 transition-all duration-300 bg-cyan-300 rounded-sm" />
+                    <font-awesome-icon icon="receipt" class="w-12 h-auto" />
                     <span class="menu-text opacity-0 transition-opacity duration-300 delay-75 whitespace-nowrap font-bold">Expense</span>
                 </a>
             </li>
@@ -51,50 +50,4 @@
             </li>
         </ul>
     </div>
-
-<!-- Main Content -->
-<div class="flex-grow px-6 pt-12 flex gap-6 main-content">
-      <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
-        <div class="karyawan-page">
-          <!-- Search and Tabs -->
-          <div class="flex mt-8 justify-between pb-6">
-            <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3" />
-          </div>
-
-          <!-- Tab Buttons -->
-          <div class="flex gap-4 mb-4">
-          <button class="btn bg-white text-cyan-950 hover:bg-cyan-950 hover:text-white" @click="tab = 'general'">
-              Pengeluaran General
-            </button>
-
-            <button
-              class="btn bg-white text-cyan-950 hover:bg-cyan-950 hover:text-white" @click="tab = 'gaji'">
-              Gaji Karyawan
-            </button>
-
-            <button
-              class="btn bg-white text-cyan-950 hover:bg-cyan-950 hover:text-white" @click="tab = 'pinjaman'">
-              Peminjaman
-            </button>
-
-            <button @click="showModal=true" class="btn hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
-          Tambah
-        </button>
-
-            
-              
-            </div>
-
-          </div>
-
-
-          
-          
-
-
-        </div>
-      </div>
-    </div>
-
-
 </template>

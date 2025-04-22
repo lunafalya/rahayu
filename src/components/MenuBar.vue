@@ -10,7 +10,7 @@
             </li>
             <li class="menu w-full">
                 <div class="flex flex-row items-center gap-2" @click="$router.push('/dashboard')">
-                    <a><font-awesome-icon icon="house" class="w-12 h-auto" /></a>
+                    <a><font-awesome-icon icon="house" class="w-10 h-10 p-2 transition-all duration-300 bg-cyan-300 rounded-sm" /></a>
                     <span class="menu-text opacity-0 transition-opacity duration-300 delay-75 whitespace-nowrap font-bold">Dashboard</span>
                 </div>
             </li>
