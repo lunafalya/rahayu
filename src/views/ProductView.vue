@@ -52,33 +52,43 @@
         </ul>
     </div>
     
-    <!-- Search Bar and Add Button -->
-    <div class="flex-grow p-6 flex gap-6 main-content">
-    <div class="rounded-2xl shadow-md flex-grow p-6">
-    <div class="order-page">
-      <div class="flex mt-8 justify-between pb-6">
-          <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-white border px-3" />
-          <button @click="showModal=true" class="btn hover:text-gray-300 hover:bg-cyan-950 text-cyan-950 bg-white">
-          Tambah
-        </button>
-      </div>
-
-        <!-- Product Grid Berdasarkan Kategori -->
-<div v-for="(items, category) in groupedProducts" :key="category" class="mb-10">
-  <h2 class="text-xl font-bold mb-4 text-white">{{ category }}</h2>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    <div
-      v-for="(item, index) in items"
-      :key="index"
-      class="border rounded-lg shadow hover:shadow-lg p-4 text-center bg-white"
-    >
-      <img :src="item.imageUrl" alt="Produk" class="w-full h-48 object-cover rounded mb-2" />
-      <h3 class="font-semibold text-cyan-950">{{ item.name }}</h3>
-      <p class="text-sm text-gray-600">{{ item.priceRange }}</p>
-      <button @click="editProduct(item.originalIndex)" class="bg-cyan-950 text-white px-4 py-1 mt-2 rounded">Edit</button>
+    <!-- Kontainer Utama -->
+<div class="flex-grow p-6 flex gap-6 main-content">
+  <!-- Konten Putih -->
+  <div class="bg-white rounded-2xl shadow-md flex-grow p-6 flex flex-col">
+    <!-- Search bar dan tombol tambah -->
+    <div class="flex justify-between pb-4 shrink-0">
+      <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3" />
+      <button @click="showModal = true" class="btn hover:text-gray-300 hover:bg-cyan-950 text-cyan-950 bg-white">
+        Tambah
+      </button>
     </div>
-  </div>
-</div>
+
+    <!-- Scrollable Produk Grid -->
+    <div class="overflow-y-auto mt-4 pr-2" style="max-height: calc(100vh - 250px);">
+      <div v-for="(items, category) in groupedProducts" :key="category" class="mb-10">
+        <h2 class="text-xl font-bold mb-4 text-cyan-950">{{ category }}</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div
+            v-for="(item, index) in items"
+            :key="index"
+            class="border rounded-lg shadow hover:shadow-lg p-4 text-center bg-white"
+          >
+            <img :src="item.imageUrl" alt="Produk" class="w-full h-48 object-cover rounded mb-2" />
+            <h3 class="font-semibold text-cyan-950">{{ item.name }}</h3>
+            <p class="text-sm text-gray-600">{{ item.priceRange }}</p>
+            <button
+              @click="editProduct(item.originalIndex)"
+              class="bg-cyan-950 text-white px-4 py-1 mt-2 rounded"
+            >
+              Edit
+            </button>
+          </div>
+        </div>
+      </div>
+      
+
+        
       <!-- Modal Form -->
       <div class="modal-overlay" v-if="showModal">
         <div class="modal-content">
