@@ -65,12 +65,13 @@
 
 
       <!-- Tabel Data Karyawan -->
-      <div class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950">
-        <table class="table">
+      <div class="overflow-x-auto w-full table-fixed rounded-box border border-base-content/5 bg-cyan-950">
+        <table class="table text-left">
           <thead>
             <tr>
-              <th>No.</th>
-              <th>Nama</th>
+              <th class="w-20">No.</th>
+              <th class="w-30 pl-9">Profile</th>
+              <th >Nama</th>
               <th>Jabatan</th>
               <th>Status</th>
               <th>Aksi</th>
@@ -78,13 +79,14 @@
           </thead>
           <tbody class="bg-white text-cyan-950">
             <tr v-for="(karyawan, index) in filteredKaryawan" :key="index">
-              <td>{{ index + 1 }}</td>
-              <td>{{ karyawan.nama }}</td>
-              <td>{{ karyawan.jabatan }}</td>
-              <td class="flex items-center gap-2">
-                <span class="rounded-4xl" :class="['status-badge', karyawan.status.toLowerCase()]">{{ karyawan.status }}</span>
+              <td class="align-middle">{{ index + 1 }}</td>
+              <td class="align-middle"><img :src="karyawan.imageUrl" alt="Profile" class="align-middle w-12 h-12 object-cover rounded-full mx-auto" /></td>
+              <td class="align-middle">{{ karyawan.nama }}</td>
+              <td class="align-middle">{{ karyawan.jabatan }}</td>
+              <td class="flex items-center gap-2 align-middle">
+                <span class="align-middle" :class="['status-badge', karyawan.status.toLowerCase()]">{{ karyawan.status }}</span>
               </td>
-              <td><button @click="editKaryawan(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button></td>
+              <td class="align-middle"><button @click="editKaryawan(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button></td>
             </tr>
           </tbody>
         </table>
@@ -97,6 +99,13 @@
           <label class="font-medium text-cyan-950">Nama Karyawan</label>
           <input v-model="form.nama" type="text" placeholder="Nama Karyawan" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" />
           
+          <label class="font-medium text-cyan-950">Foto Profil</label>
+          <input type="file" @change="handleImageUpload" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" />
+
+          <div v-if="form.imageUrl" class="flex justify-center mb-4">
+          <img :src="form.imageUrl" alt="Preview" class="w-24 h-24 rounded-full object-cover border" />
+          </div>
+
           <label class="font-medium text-cyan-950">Jabatan</label>
           <select v-model="form.jabatan" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-6">
             <option class="text-cyan-950" disabled value="">Pilih Jabatan</option>
@@ -135,6 +144,7 @@
         editIndex: null,
         form: {
           nama: '',
+          imageUrl: '',
           jabatan: '',
           status: 'Active',
           aksi: ''
@@ -153,13 +163,13 @@
 
   methods: {
   resetForm() {
-    this.form = { nama: '', jabatan: '', status: 'Active' };
+    this.form = { nama: '',  imageUrl: '', jabatan: '', status: 'Active' };
     this.showModal = false;
     this.isEdit = false;
     this.editIndex = null;
   },
   addKaryawan() {
-    if (this.form.nama && this.form.jabatan) {
+    if (this.form.nama && this.form.imageUrl && this.form.jabatan ) {
       this.karyawanList.push({ ...this.form });
       this.resetForm();
     } else {
@@ -173,15 +183,26 @@
     this.showModal = true;
   },
   updateKaryawan() {
-    if (this.editIndex !== null && this.form.nama && this.form.jabatan) {
+    if (this.editIndex !== null && this.form.nama && this.form.imageUrl && this.form.jabatan) {
       this.karyawanList.splice(this.editIndex, 1, { ...this.form });
       this.resetForm();
     } else {
       alert('Lengkapi semua field!');
     }
+  },
+  handleImageUpload(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.form.imageUrl = reader.result;
+    };
+    reader.readAsDataURL(file);
   }
 }
+}
   }
+
   </script>
   
   <style scoped>

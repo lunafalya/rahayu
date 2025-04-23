@@ -77,6 +77,7 @@
           v-for="day in daysInMonth"
           :key="day"
           class="relative cursor-pointer text-cyan-950 hover:bg-cyan-100 rounded-lg"
+          :class="{ 'bg-green-200': isToday(day) }"
           @click="openModal(day)"
         >
           <div>{{ day }}</div>
@@ -235,5 +236,14 @@ function openModal(day) {
   monthInput.value = ''
   dayInput.value = ''
   yearInput.value = ''
+}
+
+function isToday(day) {
+  const today = new Date()
+  return (
+    day === today.getDate() &&
+    currentMonth.value === today.getMonth() &&
+    currentYear.value === today.getFullYear()
+  )
 }
 </script>
