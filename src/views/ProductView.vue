@@ -52,7 +52,7 @@
         </ul>
     </div>
     
-    <!-- Kontainer Utama -->
+<!-- Kontainer Utama -->
 <div class="flex-grow p-6 flex gap-6 main-content">
   <!-- Konten Putih -->
   <div class="bg-white rounded-2xl shadow-md flex-grow p-6 flex flex-col">
@@ -200,34 +200,3 @@ const filteredProducts = computed(() => {
   )
 })
 </script>
-
-<style scoped>
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); /* hitam transparan */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999; /* supaya di atas elemen lain */
-}
-
-.modal-content {
-  background-color: #ffffff;
-  padding: 2rem;
-  border-radius: 1rem;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-::-webkit-scrollbar {
-  height: 8px;
-}
-::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 4px;
-}
-</style>

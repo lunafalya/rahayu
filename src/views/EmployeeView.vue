@@ -97,7 +97,7 @@
           <label class="font-medium text-cyan-950">Nama Karyawan</label>
           <input v-model="form.nama" type="text" placeholder="Nama Karyawan" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" />
           
-          <label class="font-medium text-cyan-950">Pilih Jabatan</label>
+          <label class="font-medium text-cyan-950">Jabatan</label>
           <select v-model="form.jabatan" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-6">
             <option class="text-cyan-950" disabled value="">Pilih Jabatan</option>
             <option class="text-cyan-950">Penjahit</option>
@@ -112,7 +112,7 @@
             <option>Active</option>
             <option>Passive</option>
           </select>
-          <div class="modal-buttons">
+          <div class="flex justify-end space-x-2">
             <button @click="resetForm" class="btn bg-gray-500 text-white">Batal</button>
             <button v-if="!isEdit" @click="addKaryawan" class="btn bg-cyan-950 text-white">Simpan</button>
             <button v-else @click="updateKaryawan" class="btn bg-cyan-950 text-white">Update</button>
@@ -185,34 +185,6 @@
   </script>
   
   <style scoped>
-  .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); /* hitam transparan */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999; /* supaya di atas elemen lain */
-}
-
-.modal-content {
-  background-color: #ffffff;
-  padding: 2rem;
-  border-radius: 1rem;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-
-
-  .modal-buttons {
-    display: flex;
-    justify-content: space-between;
-  }
   .status-badge {
     padding: 5px 12px;
     border-radius: 20px;

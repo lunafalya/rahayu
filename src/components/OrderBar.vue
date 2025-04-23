@@ -142,6 +142,7 @@
         <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.ukuran.lainnya" type="text" placeholder="Lainnya..." />
       </div>
 
+      <label class="text-cyan-950 pr-6">Metode Pembayaran</label>
       <select v-model="form.metodePembayaran">
         <option class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" disabled value="">Pilih Metode Pembayaran</option>
         <option class="text-cyan-950">Cash</option>
@@ -152,8 +153,9 @@
 
       <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.tanggalPengeluaran" type="date" />
 
-      <div class="modal-buttons">
-        <button @click="closeModal" class="close-button">Batal</button>
+      
+      <div class="flex justify-end space-x-2">
+        <button @click="closeModal" class="btn bg-gray-200 text-white">Batal</button>
         <button v-if="!isEdit" @click="addKaryawan" class="btn bg-cyan-950 text-white">Simpan</button>
         <button v-else @click="updateKaryawan" class="btn bg-cyan-950 text-white">Update</button>
       </div>
@@ -282,19 +284,6 @@ function updateKaryawan() {
   </script>
   
   <style scoped>
-  .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); /* hitam transparan */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999; /* supaya di atas elemen lain */
-}
-
 .modal-content {
   background-color: #ffffff;
   padding: 2rem;
@@ -305,23 +294,5 @@ function updateKaryawan() {
   max-height: 90vh; /* tambahkan ini agar modal tidak lebih tinggi dari viewport */
   overflow-y: auto;  /* tambahkan ini agar kontennya bisa discroll */
 }
-  
-  .modal input,
-  .modal select {
-    width: 100%;
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-  }
-  
-  .ukuran-group input {
-    width: 70px;
-    margin-right: 0.5rem;
-  }
-  
-  .modal-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-  }
   </style>
   

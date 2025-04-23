@@ -52,7 +52,7 @@
         </ul>
     </div>
 
-<!-- Product -->
+<!-- Income -->
   <div class="flex-grow px-6 pt-12 flex gap-6 main-content">
     <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
     <div class="karyawan-page">      
@@ -62,7 +62,7 @@
           Filter
         </button>
       </div>
-      <
+      
 
 
 <!-- Tabel Data Pemasukan -->
