@@ -52,6 +52,11 @@ const router = createRouter({
       name: 'forgot',
       component: ForgotView,
     },
+    {
+      path: '/exit',
+      name: 'exit',
+      component: LoginView,
+    },
   ],
 })
 

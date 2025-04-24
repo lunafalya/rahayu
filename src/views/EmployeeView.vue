@@ -1,59 +1,10 @@
 <template>
     <div class="flex h-screen">
-      <!-- Sidebar -->
-      <div>
-        <ul class="menu menu-lg bg-base-200 rounded-box w-28 h-full m-8 hover:bg-base-300 transition-all duration-300 ease-in-out shadow-lg hover:w-56">
-            <li class="menu-title w-full">
-                <div class="flex flex-row items-center gap-2">
-                    <img src="../assets/rahayuwhite.svg" alt="rahayu logo">
-                </div>
-            </li>
-            <li class="menu w-full">
-                <div class="flex flex-row items-center gap-2" @click="$router.push('/dashboard')">
-                    <a><font-awesome-icon icon="house" class="w-12 h-auto" /></a>
-                    <span class="menu-text opacity-0 transition-opacity duration-300 delay-75 whitespace-nowrap font-bold">Dashboard</span>
-                </div>
-            </li>
-            <li class="menu w-full">
-                <a class="flex flex-row items-center gap-2" @click="$router.push('/income')">
-                    <font-awesome-icon icon="sack-dollar" class="w-12 h-auto" />
-                    <span class="menu-text opacity-0 transition-opacity duration-300 delay-75 whitespace-nowrap font-bold">Income</span>
-                </a>
-            </li>
-            <li class="menu w-full">
-                <a class="flex flex-row items-center gap-2" @click="$router.push('/order')">
-                    <font-awesome-icon icon="fa-brands fa-shopify" class="w-12 h-auto" />
-                    <span class="menu-text opacity-0 transition-opacity duration-300 delay-75 whitespace-nowrap font-bold">Order</span>
-                </a>
-            </li>
-            <li class="menu w-full">
-                <a class="flex flex-row items-center gap-2" @click="$router.push('/product')">
-                    <font-awesome-icon icon="shirt" class="w-12 h-auto" />
-                    <span class="menu-text opacity-0 transition-opacity duration-300 delay-75 whitespace-nowrap font-bold">Product</span>
-                </a>
-            </li>
-            <li class="menu w-full">
-                <a class="flex flex-row items-center gap-2" @click="$router.push('/expense')">
-                    <font-awesome-icon icon="receipt" class="w-12 h-auto" />
-                    <span class="menu-text opacity-0 transition-opacity duration-300 delay-75 whitespace-nowrap font-bold">Expense</span>
-                </a>
-            </li>
-            <li class="menu w-full mb-32">
-                <a class="flex flex-row items-center gap-2" @click="$router.push('/employee')">
-                    <font-awesome-icon icon="user-group" class="w-10 h-10 p-2 transition-all duration-300 bg-cyan-300 rounded-sm" />
-                    <span class="menu-text opacity-0 transition-opacity duration-300 delay-75 whitespace-nowrap font-bold">Employee</span>
-                </a>
-            </li>
-            <li class="menu">
-                <a class="flex flex-row items-center gap-2">
-                    <font-awesome-icon icon="right-from-bracket" class="w-12 h-auto" />
-                </a>
-            </li>
-        </ul>
-    </div>
-    
+      <SideBar />
+      
+      
       <!-- Expense -->
-  <div class="flex-grow px-6 pt-12 flex gap-6 main-content">
+  <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
     <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
     <div class="karyawan-page">      
         <div class="flex mt-8 justify-between pb-6">
@@ -71,7 +22,8 @@
             <tr>
               <th class="w-20">No.</th>
               <th class="w-30 pl-9">Profile</th>
-              <th >Nama</th>
+              <th>ID</th>
+              <th>Nama</th>
               <th>Jabatan</th>
               <th>Status</th>
               <th>Aksi</th>
@@ -81,6 +33,7 @@
             <tr v-for="(karyawan, index) in filteredKaryawan" :key="index">
               <td class="align-middle">{{ index + 1 }}</td>
               <td class="align-middle"><img :src="karyawan.imageUrl" alt="Profile" class="align-middle w-12 h-12 object-cover rounded-full mx-auto" /></td>
+              <td class="align-middle">{{ karyawan.id }}</td>
               <td class="align-middle">{{ karyawan.nama }}</td>
               <td class="align-middle">{{ karyawan.jabatan }}</td>
               <td class="flex items-center gap-2 align-middle">
@@ -96,6 +49,9 @@
       <div class="modal-overlay" v-if="showModal">
         <div class="modal-content">
           <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Tambah Karyawan</h2>
+          <label class="font-medium text-cyan-950">ID Karyawan</label>
+          <input v-model="form.id" type="text" placeholder="ID Karyawan" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" />
+
           <label class="font-medium text-cyan-950">Nama Karyawan</label>
           <input v-model="form.nama" type="text" placeholder="Nama Karyawan" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" />
           
@@ -134,7 +90,12 @@
 </div>
   </template>
   
+  <script setup>
+import SideBar from '@/components/SideBar.vue'
+</script>
+
   <script>
+
   export default {
     data() {
       return {
@@ -143,6 +104,7 @@
         isEdit: false,
         editIndex: null,
         form: {
+          id: '',
           nama: '',
           imageUrl: '',
           jabatan: '',
@@ -163,13 +125,13 @@
 
   methods: {
   resetForm() {
-    this.form = { nama: '',  imageUrl: '', jabatan: '', status: 'Active' };
+    this.form = { id: '', nama: '',  imageUrl: '', jabatan: '', status: 'Active' };
     this.showModal = false;
     this.isEdit = false;
     this.editIndex = null;
   },
   addKaryawan() {
-    if (this.form.nama && this.form.imageUrl && this.form.jabatan ) {
+    if (this.form.id && this.form.nama && this.form.imageUrl && this.form.jabatan ) {
       this.karyawanList.push({ ...this.form });
       this.resetForm();
     } else {
@@ -183,7 +145,7 @@
     this.showModal = true;
   },
   updateKaryawan() {
-    if (this.editIndex !== null && this.form.nama && this.form.imageUrl && this.form.jabatan) {
+    if (this.editIndex !== null && this.form.id && this.form.nama && this.form.imageUrl && this.form.jabatan) {
       this.karyawanList.splice(this.editIndex, 1, { ...this.form });
       this.resetForm();
     } else {

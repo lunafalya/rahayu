@@ -1,97 +1,61 @@
 <template>
     <div class="flex h-screen">
       <!-- Sidebar -->
-      <div>
-        <ul class="menu menu-lg bg-base-200 rounded-box w-28 h-full m-8 hover:bg-base-300 transition-all duration-300 ease-in-out shadow-lg hover:w-56">
-            <li class="menu-title w-full">
-                <div class="flex flex-row items-center gap-2">
-                    <img src="../assets/rahayuwhite.svg" alt="rahayu logo">
-                </div>
-            </li>
-            <li class="menu w-full">
-                <div class="flex flex-row items-center gap-2" @click="$router.push('/dashboard')">
-                    <a><font-awesome-icon icon="house" class="w-10 h-10 p-2 transition-all duration-300 bg-cyan-300 rounded-sm" /></a>
-                    <span class="menu-text opacity-0 transition-opacity duration-300 delay-75 whitespace-nowrap font-bold">Dashboard</span>
-                </div>
-            </li>
-            <li class="menu w-full">
-                <a class="flex flex-row items-center gap-2" @click="$router.push('/income')">
-                    <font-awesome-icon icon="sack-dollar" class="w-12 h-auto" />
-                    <span class="menu-text opacity-1 transition-opacity duration-300 delay-75 whitespace-nowrap font-bold">Income</span>
-                </a>
-            </li>
-            <li class="menu w-full">
-                <a class="flex flex-row items-center gap-2" @click="$router.push('/order')">
-                    <font-awesome-icon icon="fa-brands fa-shopify" class="w-12 h-auto" />
-                    <span class="menu-text opacity-0 transition-opacity duration-300 delay-75 whitespace-nowrap font-bold">Order</span>
-                </a>
-            </li>
-            <li class="menu w-full">
-                <a class="flex flex-row items-center gap-2" @click="$router.push('/product')">
-                    <font-awesome-icon icon="shirt" class="w-12 h-auto" />
-                    <span class="menu-text opacity-0 transition-opacity duration-300 delay-75 whitespace-nowrap font-bold">Product</span>
-                </a>
-            </li>
-            <li class="menu w-full">
-                <a class="flex flex-row items-center gap-2" @click="$router.push('/expense')">
-                    <font-awesome-icon icon="receipt" class="w-12 h-auto" />
-                    <span class="menu-text opacity-0 transition-opacity duration-300 delay-75 whitespace-nowrap font-bold">Expense</span>
-                </a>
-            </li>
-            <li class="menu w-full mb-32">
-                <a class="flex flex-row items-center gap-2" @click="$router.push('/employee')">
-                    <font-awesome-icon icon="user-group" class="w-12 h-auto" />
-                    <span class="menu-text opacity-0 transition-opacity duration-300 delay-75 whitespace-nowrap font-bold">Employee</span>
-                </a>
-            </li>
-            <li class="menu">
-                <a class="flex flex-row items-center gap-2">
-                    <font-awesome-icon icon="right-from-bracket" class="w-12 h-auto" />
-                </a>
-            </li>
-        </ul>
-    </div>
+      <SideBar />
       
   
-      <div class="flex-grow px-6 pt-12 flex gap-6 main-content">
-    <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
-      <!-- Header -->
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold text-cyan-950">Deadline</h2>
-        <div class="flex items-center gap-2 font-semibold">
-          <button class="text-cyan-950" @click="prevMonth">&lt;</button>
-          <span class="text-cyan-950">{{ currentMonthName }} {{ currentYear }}</span>
-          <button class="text-cyan-950" @click="nextMonth">&gt;</button>
-        </div>
-      </div>
-
-      <!-- Days of week -->
-      <div class="grid grid-cols-7 text-center font-semibold bg-cyan-950 text-white py-2 rounded-t-xl">
-        <div v-for="day in days" :key="day">{{ day }}</div>
-      </div>
-
-      <!-- Days grid -->
-      <div class="grid grid-cols-7 gap-y-4 text-center border border-cyan-950 rounded-b-xl py-4">
-        <div v-for="n in startOffset" :key="'empty' + n"></div>
-        <div
-          v-for="day in daysInMonth"
-          :key="day"
-          class="relative cursor-pointer text-cyan-950 hover:bg-cyan-100 rounded-lg"
-          :class="{ 'bg-green-200': isToday(day) }"
-          @click="openModal(day)"
-        >
-          <div>{{ day }}</div>
-          <div v-if="hasNote(day)" class="text-xs text-red-500 mt-1">📌 {{ notes[noteKey(day)] }}</div>
-        </div>
-      </div>
-
-      <!-- Add Note Button -->
-      <div class="mt-6 text-right">
-        <button @click="openModal(null)" class="btn bg-cyan-500 text-white hover:bg-cyan-950">
-          Tambahkan Deadline Baru
-        </button>
+      <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
+  <!-- Calendar Section (80%) -->
+  <div class="bg-white rounded-2xl shadow-md p-6 w-4/5">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-2xl font-bold text-cyan-950">Deadline</h2>
+      <div class="flex items-center gap-2 font-semibold">
+        <button class="text-cyan-950" @click="prevMonth">&lt;</button>
+        <span class="text-cyan-950">{{ currentMonthName }} {{ currentYear }}</span>
+        <button class="text-cyan-950" @click="nextMonth">&gt;</button>
       </div>
     </div>
+
+    <!-- Days of Week -->
+    <div class="grid grid-cols-7 text-center font-semibold bg-cyan-950 text-white py-2 rounded-t-xl">
+      <div v-for="day in days" :key="day">{{ day }}</div>
+    </div>
+
+    <!-- Days Grid -->
+    <div class="grid grid-cols-7 gap-y-4 text-center border border-cyan-950 rounded-b-xl py-4">
+      <div v-for="n in startOffset" :key="'empty' + n"></div>
+      <div
+        v-for="day in daysInMonth"
+        :key="day"
+        class="relative cursor-pointer text-cyan-950 hover:bg-cyan-100 rounded-lg"
+        :class="{ 'bg-green-200': isToday(day) }"
+        @click="openModal(day)"
+      >
+        <div>{{ day }}</div>
+        <div v-if="hasNote(day)" class="text-xs text-red-500 mt-1">📌 {{ notes[noteKey(day)] }}</div>
+      </div>
+    </div>
+
+    <!-- Add Note Button -->
+    <div class="mt-6 text-right">
+      <button @click="openModal(null)" class="btn bg-cyan-500 text-white hover:bg-cyan-950">
+        Tambahkan Deadline Baru
+      </button>
+    </div>
+  </div>
+
+  <!-- Notification Section (20%) -->
+  <div class="w-1/5 flex flex-col gap-4">
+    <div class="bg-white rounded-2xl shadow-md p-4 h-60">
+      <h3 class="font-bold text-cyan-950">NOTIFIKASI</h3>
+      <p class="text-sm text-gray-600 mt-2">Belum ada notifikasi baru.</p>
+    </div>
+    <div class="bg-white rounded-2xl shadow-md p-4 h-40"></div>
+    <div class="bg-white rounded-2xl shadow-md p-4 h-40"></div>
+  </div>
+</div>
+
 
 <!-- Modal -->
 <div v-if="showModal" class="modal-overlay">
@@ -121,7 +85,6 @@
     </div>
   </div>
   </div>
-</div>
   </template>
   
   <style scoped>
@@ -150,6 +113,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import SideBar from '@/components/SideBar.vue'
 
 const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']
 const now = new Date()
