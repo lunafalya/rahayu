@@ -26,6 +26,7 @@
               <th>Nama</th>
               <th>Jabatan</th>
               <th>Status</th>
+              <th>VA</th>
               <th>Aksi</th>
             </tr>
           </thead>
@@ -39,6 +40,7 @@
               <td class="flex items-center gap-2 align-middle">
                 <span class="align-middle" :class="['status-badge', karyawan.status.toLowerCase()]">{{ karyawan.status }}</span>
               </td>
+              <td class="align-middle">{{ karyawan.virtual }}</td>
               <td class="align-middle"><button @click="editKaryawan(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button></td>
             </tr>
           </tbody>
@@ -77,6 +79,10 @@
             <option>Active</option>
             <option>Passive</option>
           </select>
+
+          <label class="font-medium text-cyan-950">Virtual Account</label>
+          <input v-model="form.virtual" type="text" placeholder="Virtual Account" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" />
+
           <div class="flex justify-end space-x-2">
             <button @click="resetForm" class="btn bg-gray-500 text-white">Batal</button>
             <button v-if="!isEdit" @click="addKaryawan" class="btn bg-cyan-950 text-white">Simpan</button>
@@ -109,6 +115,7 @@ import SideBar from '@/components/SideBar.vue'
           imageUrl: '',
           jabatan: '',
           status: 'Active',
+          virtual: '',
           aksi: ''
         },
         karyawanList: []
@@ -125,13 +132,13 @@ import SideBar from '@/components/SideBar.vue'
 
   methods: {
   resetForm() {
-    this.form = { id: '', nama: '',  imageUrl: '', jabatan: '', status: 'Active' };
+    this.form = { id: '', nama: '',  imageUrl: '', jabatan: '', status: 'Active', virtual: '' };
     this.showModal = false;
     this.isEdit = false;
     this.editIndex = null;
   },
   addKaryawan() {
-    if (this.form.id && this.form.nama && this.form.imageUrl && this.form.jabatan ) {
+    if (this.form.id && this.form.nama && this.form.imageUrl && this.form.jabatan && this.form.virtual  ) {
       this.karyawanList.push({ ...this.form });
       this.resetForm();
     } else {
@@ -145,7 +152,7 @@ import SideBar from '@/components/SideBar.vue'
     this.showModal = true;
   },
   updateKaryawan() {
-    if (this.editIndex !== null && this.form.id && this.form.nama && this.form.imageUrl && this.form.jabatan) {
+    if (this.editIndex !== null && this.form.id && this.form.nama && this.form.imageUrl && this.form.jabatan && this.form.virtual) {
       this.karyawanList.splice(this.editIndex, 1, { ...this.form });
       this.resetForm();
     } else {

@@ -10,7 +10,7 @@
     <!-- Search bar dan tombol tambah -->
     <div class="flex mt-8 justify-between pb-6">
       <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3" />
-      <button @click="showModal = true" class="btn hover:text-gray-300 hover:bg-cyan-950 text-cyan-950 bg-white">
+      <button @click="showModal = true" class="btn hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
         Tambah
       </button>
     </div>

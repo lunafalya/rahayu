@@ -9,7 +9,7 @@
   <div class="bg-white rounded-2xl shadow-md p-6 w-4/5">
     <!-- Header -->
     <div class="flex justify-between items-center mb-4">
-      <h2 class="text-2xl font-bold text-cyan-950">Deadline</h2>
+      <h2 class="text-2xl font-bold text-cyan-950">DEADLINE</h2>
       <div class="flex items-center gap-2 font-semibold">
         <button class="text-cyan-950" @click="prevMonth">&lt;</button>
         <span class="text-cyan-950">{{ currentMonthName }} {{ currentYear }}</span>
@@ -39,7 +39,7 @@
 
     <!-- Add Note Button -->
     <div class="mt-6 text-right">
-      <button @click="openModal(null)" class="btn bg-cyan-500 text-white hover:bg-cyan-950">
+      <button @click="openModal(null)" class="btn bg-cyan-700 text-white hover:bg-cyan-950">
         Tambahkan Deadline Baru
       </button>
     </div>
@@ -86,30 +86,6 @@
   </div>
   </div>
   </template>
-  
-  <style scoped>
-  .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); /* hitam transparan */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999; /* supaya di atas elemen lain */
-}
-
-.modal-content {
-  background-color: #ffffff;
-  padding: 2rem;
-  border-radius: 1rem;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-  </style>
 
 <script setup>
 import { ref, computed } from 'vue'

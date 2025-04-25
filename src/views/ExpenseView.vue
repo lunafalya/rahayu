@@ -19,64 +19,144 @@
             <button @click="tab = 'Gaji'" :class="getTabClass('Gaji')">Gaji Karyawan</button>
             <button @click="tab = 'Peminjaman'" :class="getTabClass('Peminjaman')">Peminjaman</button>
             </div>
-            <button @click="showModal = true" class="btn hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
+            <button @click="openCategorySelector" class="btn hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
             Tambah
           </button>
         </div>
 
+        <!-- Tabel General -->
+        <table v-if="tab === 'General'" class="w-full text-left border">
+          <thead>
+            <tr>
+              <th class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950 px-4 py-2">ID Pengeluaran</th>
+              <th class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950 px-4 py-2">Jumlah</th>
+              <th class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950 px-4 py-2">Keterangan</th>
+              <th class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950 px-4 py-2">Tanggal</th>
+              <th class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950 px-4 py-2">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in generalList" :key="index">
+              <td class="bg-white border-cyan-200 text-cyan-950 px-4 py-2">{{ item.id_general }}</td>
+              <td class="bg-white text-cyan-950 px-4 py-2">{{totalHargaFormat(item.jumlah) }}</td>
+              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.keterangan }}</td>
+              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.tanggal }}</td>
+              <td><button @click="editGeneral(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
+        <!-- Tabel Gaji -->
+        <table v-if="tab === 'Gaji'" class="w-full text-left border">
+          <thead>
+            <tr>
+              <th class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950 px-4 py-2">ID Karyawan</th>
+              <th class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950 px-4 py-2">Total Gaji</th>
+              <th class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950 px-4 py-2">Potongan</th>
+              <th class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950 px-4 py-2">Tanggal</th>
+              <th class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950 px-4 py-2">Status</th>
+              <th class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950 px-4 py-2">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in gajiList" :key="index">
+              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.id_karyawan }}</td>
+              <td class="bg-white text-cyan-950 px-4 py-2">{{totalHargaFormat(item.total_gaji) }}</td>
+              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.potongan }}</td>
+              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.tanggal_pengajuan }}</td>
+              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.status }}</td>
+              <td><button @click="editGaji(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-<!-- Table Pengeluaran Berdasarkan Tab -->
-<div class="overflow-y-auto mt-4 pr-2" style="max-height: calc(100vh - 250px);">
-  <h2 class="text-lg font-bold mb-2 text-cyan-950">Kategori: {{ tab }}</h2>
-  <div class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>No.</th>
-          <th>Tanggal</th>
-          <th>Keterangan</th>
-          <th>Jumlah</th>
-          <th>Transaksi</th>
-          <th colspan="2">Aksi</th>
-        </tr>
-      </thead>
-      <tbody class="bg-white text-cyan-950">
-        <tr v-for="(pengeluaran, index) in filteredByCategory" :key="index">
-          <td>{{ index + 1 }}</td>
-          <td>{{ pengeluaran.tanggal }}</td>
-          <td>{{ pengeluaran.keterangan }}</td>
-          <td>Rp. {{ formatRupiah(pengeluaran.jumlah) }}</td>
-          <td>{{ pengeluaran.transaksi }}</td>
-          <td>
-            <button @click="editPengeluaran(pengeluaran)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button>
-          </td>
-          <td>
-            <button @click="openDetailModal(pengeluaran)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Detail</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+        <!-- Tabel Pinjam -->
+        <table v-if="tab === 'Peminjaman'" class="w-full text-left border">
+          <thead>
+            <tr>
+              <th class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950 px-4 py-2">ID Karyawan</th>
+              <th class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950 px-4 py-2">Nama</th>
+              <th class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950 px-4 py-2">Nominal</th>
+              <th class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950 px-4 py-2">Tanggal</th>
+              <th class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950 px-4 py-2">Status</th>
+              <th class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950 px-4 py-2">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in pinjamList" :key="index">
+              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.id_karyawan}}</td>
+              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.nama }}</td>
+              <td class="bg-white text-cyan-950 px-4 py-2">{{ totalHargaFormat(item.jumlah) }}</td>
+              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.tanggal }}</td>
+              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.status }}</td>
+              <td><button @click="editPinjam(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-        <!-- Modal Form -->
-        <div class="modal-overlay" v-if="showModal">
+        <!-- Modal Pilih Kategori -->
+        <div class="modal-overlay" v-if="showCategoryModal">
           <div class="modal-content">
-            <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Tambah Pengeluaran</h2>
-            <label class="font-medium text-cyan-950">Tanggal Pengeluaran</label>
-            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.tanggal" type="date" />
+            <h2 class="text-xl font-bold text-cyan-950 mb-4">Pilih Kategori Pengeluaran</h2>
+            <div class="flex gap-2 mb-4">
+              <button class="btn hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white" @click="selectCategory('General')">General</button>
+              <button class="btn hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white" @click="selectCategory('Gaji')">Gaji</button>
+              <button class="btn hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white" @click="selectCategory('Peminjaman')">Peminjaman</button>
+            </div>
+            <button @click="showCategoryModal = false" class="mt-4 text-gray-500 hover:text-cyan-950">Batal</button>
+          </div>
+        </div>
 
-            <label class="font-medium text-cyan-950">Kategori Pengeluaran</label>
-            <select v-model="form.kategori" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-6">
-              <option class="text-cyan-950" disabled value="">Pilih Kategori</option>
-              <option class="text-cyan-950">General</option>
-              <option class="text-cyan-950">Gaji</option>
-              <option class="text-cyan-950">Peminjaman</option>
+        <!-- Modal Gaji -->
+        <div class="modal-overlay" v-if="showGajiModal">
+          <div class="modal-content max-w-xl w-full">
+            <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Form Gaji Karyawan</h2>
+            
+            <label class="font-medium text-cyan-950">ID Karyawan</label>
+            <select v-model="gajiForm.id_karyawan" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
+              <option v-for="k in karyawanList" :key="k.id" :value="k.id">{{ k.id }} - {{ k.nama }}</option>
             </select>
 
+            <label class="font-medium text-cyan-950">Total Gaji</label>
+            <input v-model="gajiForm.total_gaji" type="number" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"/>
+
+            <label class="font-medium text-cyan-950">Potongan Pinjaman</label>
+            <input v-model="gajiForm.potongan" type="number" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"/>
+
+            <label class="font-medium text-cyan-950">Tanggal Pengajuan</label>
+            <input v-model="gajiForm.tanggal_pengajuan" type="date" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"/>
+
+            <label class="font-medium text-cyan-950">Status</label>
+            <select v-model="gajiForm.status" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
+              <option>Lunas</option>
+              <option>Tunggak</option>
+            </select>
+
+            <div class="flex justify-end gap-2">
+              <button @click="resetGajiForm" class="btn bg-gray-500 text-white">Batal</button>
+              <button v-if="!isEditGaji" @click="addGaji" class="btn bg-cyan-950 text-white">Simpan</button>
+              <button v-else @click="updateGaji" class="btn bg-cyan-950 text-white">Update</button>
+            </div>
+          </div>
+        </div>
+
+        
+        <!-- Modal General Form -->
+        <div class="modal-overlay" v-if="showGeneralModal">
+          <div class="modal-content">
+            <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Tambah Pengeluaran</h2>
+
+            <label class="text-cyan-950">ID Pengeluaran</label>
+            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="generalForm.id_general" type="text" />
+
+            <label class="font-medium text-cyan-950">Tanggal Pengeluaran</label>
+            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="generalForm.tanggal" type="date" />
+
             <label class="font-medium text-cyan-950">Transaksi</label>
-            <select v-model="form.transaksi" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-6">
+            <select v-model="generalForm.transaksi" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-6">
               <option class="text-cyan-950" disabled value="">Pilih Jenis Transaksi</option>
               <option class="text-cyan-950">Transfer</option>
               <option class="text-cyan-950">Cash</option>
@@ -84,41 +164,77 @@
             </select>
 
             <label class="text-cyan-950">Keterangan</label>
-            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.keterangan" type="text" />
+            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="generalForm.keterangan" type="text" />
 
             <label class="text-cyan-950">Jumlah</label>
-            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="form.jumlah" type="number" />
+            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="generalForm.jumlah" type="number" />
 
             <div class="flex justify-end space-x-2">
-              <button @click="resetForm" class="btn bg-gray-500 text-white">Batal</button>
-              <button v-if="!isEdit" @click="addPengeluaran" class="btn bg-cyan-950 text-white">Simpan</button>
-              <button v-else @click="updatePengeluaran" class="btn bg-cyan-950 text-white">Update</button>
+              <button @click="resetGeneralForm" class="btn bg-gray-500 text-white">Batal</button>
+              <button v-if="!isEditGeneral" @click="addGeneral" class="btn bg-cyan-950 text-white">Simpan</button>
+              <button v-else @click="updateGeneral" class="btn bg-cyan-950 text-white">Update</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Pinjam Form -->
+        <div class="modal-overlay" v-if="showPinjamModal">
+          <div class="modal-content">
+            <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Tambah Pengeluaran</h2>
+            <label class="font-medium text-cyan-950">ID Karyawan</label>
+            <!-- <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="pinjamForm.id_karyawan" type="text" /> -->
+            <select v-model="pinjamForm.id" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
+              <option v-for="k in karyawanList" :key="k.id" :value="k.id">{{ k.id }} - {{ k.nama }}</option>
+            </select>
+
+            <label class="font-medium text-cyan-950">Nama Karyawan</label>
+            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="pinjamForm.nama" type="text" />
+
+            <label class="text-cyan-950">Nominal</label>
+            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="pinjamForm.jumlah" type="number" />
+
+            <label class="font-medium text-cyan-950">Tanggal Pinjam</label>
+            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="pinjamForm.tanggal" type="date" />
+
+            <label class="font-medium text-cyan-950">Status</label>
+            <select v-model="pinjamForm.status" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
+              <option>Lunas</option>
+              <option>Tunggak</option>
+            </select>
+
+            <div class="flex justify-end space-x-2">
+              <button @click="resetPinjamForm" class="btn bg-gray-500 text-white">Batal</button>
+              <button v-if="!isEditPinjam" @click="addPinjam" class="btn bg-cyan-950 text-white">Simpan</button>
+              <button v-else @click="updatePinjam" class="btn bg-cyan-950 text-white">Update</button>
             </div>
           </div>
         </div>
       </div>
 
 
+      
+
+
       <!-- Modal Detail -->
-<div class="modal-overlay" v-if="showDetailModal">
-  <div class="modal-content max-w-xl w-full">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-bold text-cyan-950">Detail Transaksi</h2>
-      <button @click="closeDetail" class="text-gray-500 hover:text-cyan-950">&times;</button>
-    </div>
-    <div class="text-sm text-gray-800 mb-4">
-      <!-- <p><strong>Transaksi dikirim ke:</strong> {{ selectedDetail.nama }}</p> -->
-      <p>Tanggal    : {{ selectedDetail.tanggal }}</p>
-      <p>Keterangan : {{ selectedDetail.keterangan }}</p>
-    </div>
-    <div class="flex justify-between items-center border-y py-2 mb-2">
-      <span class="text-lg font-bold text-cyan-950">Jumlah      : Rp. {{ formatRupiah(selectedDetail.jumlah) }}</span>
+      <div class="modal-overlay" v-if="showDetailModal">
+        <div class="modal-content max-w-xl w-full">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-cyan-950">Detail Transaksi</h2>
+            <button @click="closeDetail" class="text-gray-500 hover:text-cyan-950">&times;</button>
+          </div>
+          <div class="text-sm text-gray-800 mb-4">
+            <!-- <p><strong>Transaksi dikirim ke:</strong> {{ selectedDetail.nama }}</p> -->
+            <p>Tanggal    : {{ selectedDetail.tanggal }}</p>
+            <p>Keterangan : {{ selectedDetail.keterangan }}</p>
+          </div>
+          <div class="flex justify-between items-center border-y py-2 mb-2">
+            <span class="text-lg font-bold text-cyan-950">Jumlah      : Rp. {{ formatRupiah(selectedDetail.jumlah) }}</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-    </div>
-  </div>
-    </div>
 </template>
 
 <script setup>
@@ -126,14 +242,28 @@ import { ref, computed } from 'vue'
 import SideBar from '@/components/SideBar.vue'
 
 const search = ref('')
-const tab = ref('general')
-const showModal = ref(false)
-const isEdit = ref(false)
-const editIndex = ref(null)
+const tab = ref('General')
 const showDetailModal = ref(false)
+const showCategoryModal = ref(false)
+const showGajiModal = ref(false)
+const showGeneralModal = ref(false)
+const showPinjamModal = ref(false)
 const selectedDetail = ref({})
 
+const gajiList = ref([]);
+const isEditGaji = ref(false);
+const editIndexGaji = ref(null);
+
+const generalList = ref([]);
+const isEditGeneral = ref(false);
+const editIndexGeneral = ref(null);
+
+const pinjamList = ref([]);
+const isEditPinjam = ref(false);
+const editIndexPinjam = ref(null);
+
 const pengeluaranList = ref([])
+
 
 const form = ref({
   tanggal: '',
@@ -142,46 +272,212 @@ const form = ref({
   jumlah: null,
 })
 
+const karyawanList = ref([
+  { id: 'K001', nama: 'Ani' },
+  { id: 'K002', nama: 'Budi' },
+  { id: 'K003', nama: 'Citra' }
+])
+
+// GAJI
+const gajiForm = ref({
+  id_karyawan: '',
+  nama:'',
+  total_gaji: 0,
+  potongan: 0,
+  tanggal_pengajuan: '',
+  status: 'Lunas'
+});
+
+
+function addGaji() {
+  gajiList.value.push({ ...gajiForm.value });
+  resetGajiForm();
+}
+
+function editGaji(item) {
+  gajiForm.value = { ...item }
+  isEditGaji.value = true
+  showGajiModal.value = true
+  editIndexGaji.value = gajiList.value.indexOf(item)
+}
+
+function updateGaji() {
+  if (editIndexGaji.value !== null) {
+    gajiList.value[editIndexGaji.value] = { ...gajiForm.value };
+  }
+  resetGajiForm()
+}
+
+function resetGajiForm() {
+  gajiForm.value = {
+    id_karyawan: '',
+    nama: '',
+    total_gaji: 0,
+    potongan: 0,
+    tanggal_pengajuan: '',
+    status: 'Lunas'
+  };
+  showGajiModal.value = false;
+  isEditGaji.value = false
+  editIndexGaji.value = null
+}
+
+function simpanGaji() {
+  if (isEditGaji.value) {
+    updateGaji();
+  } else {
+    // Simpan logika
+    const newGaji = { ...gajiForm.value };
+    gajiList.value.push(newGaji);
+  }
+  resetGajiForm();
+}
+
+
+
+
+
+
+// GENERAL
+
+const generalForm = ref({
+  id:'',
+  kategori: '',
+  jumlah: 0,
+  tanggal: '',
+  keterangan: ''
+});
+
+function addGeneral() {
+  generalList.value.push({ ...generalForm.value });
+  resetGeneralForm();
+}
+
+function resetGeneralForm() {
+  generalForm.value = {
+    id:'',
+    kategori: '',
+    jumlah: 0,
+    tanggal: '',
+    keterangan: ''
+  };
+  showGeneralModal.value = false;
+  isEditGeneral.value = false
+  editIndexGeneral.value = null
+}
+
+
+function simpanGeneral() {
+  if (isEditGeneral.value) {
+    updateGeneral();
+  } else {
+    const newGeneral = { ...generalForm.value };
+    generalList.value.push(newGeneral);
+  }
+  resetGeneralForm();
+}
+
+function updateGeneral() {
+  if (editIndexGeneral.value !== null) {
+    generalList.value[editIndexGeneral.value] = { ...generalForm.value };
+  }
+  resetGeneralForm()
+}
+
+function editGeneral(item) {
+  generalForm.value = { ...item }
+  isEditGeneral.value = true
+  showGeneralModal.value = true
+  editIndexGeneral.value = generalList.value.indexOf(item)
+}
+
+
+
+// PINJAM
+const pinjamForm = ref({
+  id_karyawan: '',
+  nama: '',
+  jumlah: 0,
+  tanggal: '',
+  status: 'Tunggak'
+});
+
+function addPinjam() {
+  pinjamList.value.push({ ...pinjamForm.value });
+  resetPinjamForm();
+}
+
+function resetPinjamForm() {
+  pinjamForm.value = {
+    id_karyawan: '',
+    nama: '',
+    jumlah: 0,
+    tanggal: '',
+    status: 'Tunggak'
+  };
+  showPinjamModal.value = false;
+  isEditPinjam.value = false
+  editIndexPinjam.value = null
+}
+
+function simpanPinjam() {
+  if (isEditPinjam.value) {
+    updatePinjam();
+  } else {
+    const newPinjam = { ...pinjamForm.value };
+    pinjamList.value.push(newPinjam);
+  }
+  resetPinjamForm();
+}
+
+function updatePinjam() {
+  if (editIndexPinjam.value !== null) {
+    pinjamList.value[editIndexPinjam.value] = { ...pinjamForm.value };
+  }
+  resetPinjamForm()
+}
+
+function editPinjam(item) {
+  pinjamForm.value = { ...item }
+  isEditPinjam.value = true
+  showPinjamModal.value = true
+  editIndexPinjam.value = pinjamList.value.indexOf(item)
+}
+
+
+
+function openCategorySelector() {
+  showCategoryModal.value = true
+}
+
+function selectCategory(category) {
+  tab.value = category;
+  showCategoryModal.value = false;
+
+  // Tampilkan modal berdasarkan kategori yang dipilih
+  if (category === 'Gaji') {
+    showGajiModal.value = true;
+  } else if (category === 'General') {
+    showGeneralModal.value = true;
+  } else if (category === 'Peminjaman') {
+    showPinjamModal.value = true;
+  }
+}
 
 const filteredByCategory = computed(() => {
   return pengeluaranList.value.filter(
     p => p.kategori === tab.value && p.keterangan.toLowerCase().includes(search.value.toLowerCase())
-  )
-})
+  );
+});
 
-function getTabClass(category) {
-  return tab.value === category
-    ? 'btn bg-cyan-950 text-white'
-    : 'btn bg-white text-cyan-950 border border-cyan-950'
+
+function getTabClass(currentTab) {
+  return tab.value === currentTab ? 'btn bg-cyan-950 text-white' : 'btn bg-white text-cyan-950'
 }
 
 const uniqueCategories = computed(() => {
   return [...new Set(pengeluaranList.value.map(p => p.kategori))]
 })
-
-function addPengeluaran() {
-  pengeluaranList.value.push({ ...form.value })
-  resetForm()
-}
-
-function editPengeluaran(item) {
-  form.value = { ...item }
-  isEdit.value = true
-  showModal.value = true
-  editIndex.value = pengeluaranList.value.indexOf(item)
-}
-
-function updatePengeluaran() {
-  pengeluaranList.value[editIndex.value] = { ...form.value }
-  resetForm()
-}
-
-function resetForm() {
-  form.value = { tanggal: '', kategori: '', keterangan: '', jumlah: null }
-  showModal.value = false
-  isEdit.value = false
-  editIndex.value = null
-}
 
 function openDetailModal(pengeluaran) {
   selectedDetail.value = pengeluaran
@@ -196,28 +492,19 @@ function closeDetail() {
 function formatRupiah(angka) {
   return new Intl.NumberFormat('id-ID').format(angka)
 }
+
+function totalHargaFormat(value) {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR'
+  }).format(value);
+}
+
+const totalHargaFormatted = computed(() => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR'
+    }).format(totalHarga.value);
+  });
+  
 </script>
-
-<style scoped>
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); /* hitam transparan */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999; /* supaya di atas elemen lain */
-}
-
-.modal-content {
-  background-color: #ffffff;
-  padding: 2rem;
-  border-radius: 1rem;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-</style>

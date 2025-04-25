@@ -30,7 +30,7 @@
             <tr v-for="(order, index) in filteredorder" :key="index">
               <td>{{ index + 1 }}</td>
               <td>{{ order.namaPemesan }}</td>
-              <td>{{ order.tanggalPengeluaran }}</td>
+              <td >{{ order.tanggalPengeluaran }}</td>
               <td>{{ totalHargaFormat(order.totalHarga) }}</td>
               <td><button @click="editKaryawan(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button></td>
               
@@ -52,7 +52,7 @@
 
       <label class="text-cyan-950">Jenis Produk:</label>
       <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.jenisProduk">
-        <option disabled value="">Pilih Jenis Produk</option>
+        <option class="text-cyan-950" disabled value="">Pilih Jenis Produk</option>
         <option>Kaos</option>
         <option>Almamater</option>
         <option>Seragam Jas</option>
@@ -72,7 +72,7 @@
       <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" :value="totalHargaFormatted" type="text" placeholder="Total Seluruh Harga" disabled />
 
       <div class="ukuran-group">
-        <label>Ukuran:</label>
+        <label class="text-cyan-950">Ukuran:</label>
         <br>
         <label class="text-cyan-950 pr-9">S</label>
         <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="form.ukuran.S" type="number" placeholder="S" />
@@ -94,14 +94,15 @@
       </div>
 
       <label class="text-cyan-950 pr-6">Metode Pembayaran</label>
-      <select v-model="form.metodePembayaran">
-        <option class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" disabled value="">Pilih Metode Pembayaran</option>
-        <option class="text-cyan-950">Cash</option>
-        <option class="text-cyan-950">Dana</option>
-        <option class="text-cyan-950">BCA</option>
-        <option class="text-cyan-950">Lainnya</option>
+      <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.jenisProduk">
+        <option class="text-cyan-950" disabled value="">Pilih Metode Pembayaran</option>
+        <option>Cash</option>
+        <option>Dana</option>
+        <option>BCA</option>
+        <option>Lainnya</option>
       </select>
 
+      <label class="text-cyan-950 pr-6">Tenggat Waktu</label>
       <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.tanggalPengeluaran" type="date" />
 
       
@@ -233,16 +234,4 @@ function updateKaryawan() {
 
   </script>
   
-  <style scoped>
-.modal-content {
-  background-color: #ffffff;
-  padding: 2rem;
-  border-radius: 1rem;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  max-height: 90vh; /* tambahkan ini agar modal tidak lebih tinggi dari viewport */
-  overflow-y: auto;  /* tambahkan ini agar kontennya bisa discroll */
-}
-  </style>
   
