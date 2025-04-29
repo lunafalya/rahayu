@@ -12,7 +12,7 @@
             <img src="../assets/rahayuwhite.svg" alt="rahayu logo" class="w-10" />
             <span class="text-lg font-bold text-white transition-opacity duration-300"
                   :class="{ 'opacity-100': isHovering, 'opacity-0': !isHovering }">
-              Rahayu
+              Rahayu Konveksi
             </span>
           </li>
   
@@ -24,7 +24,7 @@
                 'bg-cyan-700': isActive(item.route),
                 'hover:bg-cyan-600': !isActive(item.route)
               }"
-              @click="$router.push(item.route)"
+              @click="$router.replace(item.route)"
             >
               <font-awesome-icon :icon="item.icon" class="w-6 h-6" />
               <span class="sidebar-text opacity-0 font-semibold group-hover:opacity-100 transition-opacity delay-100 duration-300 whitespace-nowrap overflow-hidden"
