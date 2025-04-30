@@ -64,7 +64,7 @@
           <tbody>
             <tr v-for="(item, index) in gajiList" :key="index">
               <td class="bg-white text-cyan-950 px-4 py-2">{{ item.id_karyawan }}</td>
-              <td class="bg-white text-cyan-950 px-4 py-2">{{totalHargaFormat(item.total_gaji) }}</td>
+              <td class="bg-white text-cyan-950 px-4 py-2">{{ totalHargaFormat(detailData.total) }}</td>
               <td class="bg-white text-cyan-950 px-4 py-2">{{ item.potongan }}</td>
               <td class="bg-white text-cyan-950 px-4 py-2">{{ item.tanggal_pengajuan }}</td>
               <td class="bg-white text-cyan-950 px-4 py-2">{{ item.status }}</td>
@@ -141,6 +141,9 @@
 
             <label class="font-medium text-cyan-950">Potongan Pinjaman</label>
             <input v-model="gajiForm.potongan" type="number" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"/>
+
+            <label class="font-medium text-cyan-950">Total yang dibayarkan</label>
+            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" :value="totalGajiFormatted" type="text" placeholder="Total Seluruh Harga" disabled />
 
             <label class="font-medium text-cyan-950">Tanggal Pengajuan</label>
             <input v-model="gajiForm.tanggal_pengajuan" type="date" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"/>
@@ -264,9 +267,10 @@
     </div>
 
     <div v-else-if="tab === 'Gaji'">
-      <h1 class="text-3xl font-bold mb-4">Jumlah: {{ totalHargaFormat(detailData.total_gaji) }}</h1>
+      <h1 class="text-3xl font-bold mb-4">Jumlah: {{ totalHargaFormat(detailData.total) }}</h1>
       <p><strong>ID Karyawan:</strong> {{ detailData.id_karyawan }}</p>
-      <p><strong>Potongan:</strong> {{ detailData.potongan }}</p>
+      <p><strong>Gaji awal :</strong> {{ totalHargaFormat(detailData.total_gaji) }}</p>
+      <p><strong>Potongan:</strong> {{ totalHargaFormat(detailData.potongan) }}</p>
       <p><strong>Tanggal Pengajuan:</strong> {{ detailData.tanggal_pengajuan }}</p>
       <p><strong>Pembayaran:</strong> {{ detailData.transaksi }}</p>
       <p><strong>Rekening:</strong> {{ detailData.vac }}</p>
@@ -345,15 +349,35 @@ const gajiForm = ref({
   potongan: 0,
   tanggal_pengajuan: '',
   transaksi: '',
+  total: '',
   vac: '',
   status: 'Lunas'
 });
 
+const totalHarga = computed(() => { 
+  return (Number(gajiForm.value.total_gaji) || 0) - (Number(gajiForm.value.potongan) || 0);
+});
+
+const totalGajiFormatted = computed(() => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR'
+  }).format(totalHarga.value);
+});
+
+function totalHargaFormat(value) {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR'
+  }).format(value || 0);
+}
 
 function addGaji() {
-  gajiList.value.push({ ...gajiForm.value });
+  const total = (Number(gajiForm.value.total_gaji) || 0) - (Number(gajiForm.value.potongan) || 0);
+  gajiList.value.push({ ...gajiForm.value, total });
   resetGajiForm();
 }
+
 
 function editGaji(item) {
   gajiForm.value = { ...item }
@@ -364,9 +388,10 @@ function editGaji(item) {
 
 function updateGaji() {
   if (editIndexGaji.value !== null) {
-    gajiList.value[editIndexGaji.value] = { ...gajiForm.value };
+    const total = (Number(gajiForm.value.total_gaji) || 0) - (Number(gajiForm.value.potongan) || 0);
+    gajiList.value[editIndexGaji.value] = { ...gajiForm.value, total };
   }
-  resetGajiForm()
+  resetGajiForm();
 }
 
 function resetGajiForm() {
@@ -377,6 +402,7 @@ function resetGajiForm() {
     potongan: 0,
     tanggal_pengajuan: '',
     transaksi: '',
+    total: '',
     vac: '',
     status: 'Lunas'
   };
@@ -555,32 +581,9 @@ function showDetail(item) {
   this.showDetailModal = true;
 }
 
-// function openDetailModal(pengeluaran) {
-//   selectedDetail.value = pengeluaran
-//   showDetailModal.value = true
-// }
-
-// function closeDetail() {
-//   showDetailModal.value = false
-// }
-
 // Tambahan: Fungsi format rupiah
 function formatRupiah(angka) {
   return new Intl.NumberFormat('id-ID').format(angka)
 }
 
-function totalHargaFormat(value) {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR'
-  }).format(value);
-}
-
-const totalHargaFormatted = computed(() => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR'
-    }).format(totalHarga.value);
-  });
-  
 </script>
