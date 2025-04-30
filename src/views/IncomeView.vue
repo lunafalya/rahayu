@@ -68,27 +68,6 @@ const showModal = ref(false)
 const showDetailModal = ref(false)
 const detailData = ref({})
 
-// Dummy data (replace with API later)
-const gajiList = ref([
-  {
-    tanggal_kirim: '2025-04-30',
-    keterangan: 'Penjualan produk A',
-    jumlah: 150000,
-    nama: 'Andi',
-    bank: 'BCA',
-    va: '1234567890',
-    status: 'Sukses'
-  },
-  {
-    tanggal_kirim: '2025-04-29',
-    keterangan: 'Penjualan produk B',
-    jumlah: 300000,
-    nama: 'Budi',
-    bank: 'BRI',
-    va: '0987654321',
-    status: 'Sukses'
-  }
-])
 
 const filteredList = computed(() => {
   if (!search.value) return gajiList.value
