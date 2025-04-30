@@ -10,7 +10,7 @@
     <!-- Search bar dan tombol tambah -->
     <div class="flex mt-8 justify-between pb-6">
       <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3" />
-      <button @click="showModal = true" class="btn hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
+      <button @click="showModal = true" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
         Tambah
       </button>
     </div>
@@ -23,11 +23,11 @@
           <div
             v-for="(item, index) in items"
             :key="index"
-            class="border rounded-lg shadow hover:shadow-lg p-4 text-center bg-white"
+            class="rounded-lg shadow hover:shadow-lg p-4 text-center bg-white"
           >
             <img :src="item.imageUrl" alt="Produk" class="w-full h-48 object-cover rounded mb-2" />
             <h3 class="font-semibold text-cyan-950">{{ item.name }}</h3>
-            <p class="text-sm text-gray-600">{{ item.priceRange }}</p>
+            <p class="text-sm text-gray-600 ">{{ item.priceRange }}</p>
             <button
               @click="editProduct(item.originalIndex)"
               class="bg-cyan-950 text-white px-4 py-1 mt-2 rounded"

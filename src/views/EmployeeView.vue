@@ -4,15 +4,15 @@
       
       
       <!-- Expense -->
-  <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
-    <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
-    <div class="karyawan-page">      
-        <div class="flex mt-8 justify-between pb-6">
-          <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3" />
-          <button @click="showModal=true" class="btn hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
-          Tambah
-        </button>
-      </div>
+      <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
+        <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
+        <div class="karyawan-page">      
+            <div class="flex mt-8 justify-between pb-6">
+              <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3" />
+              <button @click="showModal=true" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
+              Tambah
+            </button>
+          </div>
 
 
       <!-- Tabel Data Karyawan -->
@@ -22,12 +22,12 @@
             <tr>
               <th class="w-20">No.</th>
               <th class="w-30 pl-9">Profile</th>
-              <th>ID</th>
-              <th>Nama</th>
-              <th>Jabatan</th>
-              <th>Status</th>
-              <th>VA</th>
-              <th>Aksi</th>
+              <th class="text-white">ID</th>
+              <th class="text-white">Nama</th>
+              <th class="text-white">Jabatan</th>
+              <th class="text-white">Status</th>
+              <th class="text-white">VA</th>
+              <th class="text-white">Aksi</th>
             </tr>
           </thead>
           <tbody class="bg-white text-cyan-950">

@@ -9,7 +9,7 @@
   <div class="order-page">
     <div class="flex mt-8 justify-between pb-6">
         <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3" />
-        <button @click="showModal=true" class="btn hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
+        <button @click="showModal=true" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
         Tambah
       </button>
     </div>
@@ -19,11 +19,11 @@
       <table class="table">
       <thead>
         <tr>
-          <th>No.</th>
-          <th>Nama Pemesan</th>
-          <th>Deadline</th>
-          <th>DP</th>
-          <th>Aksi</th>
+          <th class="text-white">No.</th>
+          <th class="text-white">Nama Pemesan</th>
+          <th class="text-white">Deadline</th>
+          <th class="text-white">DP</th>
+          <th class="text-white">Aksi</th>
         </tr>
       </thead>
       <tbody class="bg-white text-cyan-950">
