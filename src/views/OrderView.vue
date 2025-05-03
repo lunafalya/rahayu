@@ -26,7 +26,7 @@
           <th class="text-white">Aksi</th>
         </tr>
       </thead>
-      <tbody class="text-white bg-cyan-700">
+      <tbody class="text-white bg-cyan-600">
           <tr v-for="(order, index) in filteredorder" :key="index">
             <td>{{ index + 1 }}</td>
             <td>{{ order.namaPemesan }}</td>

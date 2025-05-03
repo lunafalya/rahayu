@@ -35,13 +35,13 @@
               <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2 shadow-lg">Aksi</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="bg-cyan-600 text-white px-4 py-2">
             <tr v-for="(item, index) in generalList" :key="index">
-              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.id_general }}</td>
-              <td class="text-white bg-cyan-700 px-4 py-2">{{totalHargaFormat(item.jumlah) }}</td>
-              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.keterangan }}</td>
-              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.tanggal }}</td>
-              <td class="text-white bg-cyan-700">
+              <td class="px-4 py-2">{{ item.id_general }}</td>
+              <td class="px-4 py-2">{{totalHargaFormat(item.jumlah) }}</td>
+              <td class="px-4 py-2">{{ item.keterangan }}</td>
+              <td class="px-4 py-2">{{ item.tanggal }}</td>
+              <td class="px-4 py-2">
                 <button @click="editGeneral(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Edit</button>
                 <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Detail</button>
               </td>
@@ -61,13 +61,13 @@
               <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Aksi</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="bg-cyan-600 text-white px-4 py-2">
             <tr v-for="(item, index) in gajiList" :key="index">
-              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.id_karyawan }}</td>
-              <td class="text-white bg-cyan-700 px-4 py-2">{{ totalHargaFormat(detailData.total) }}</td>
-              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.potongan }}</td>
-              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.tanggal_pengajuan }}</td>
-              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.status }}</td>
+              <td class="px-4 py-2">{{ item.id_karyawan }}</td>
+              <td class="px-4 py-2">{{ totalHargaFormat(detailData.total) }}</td>
+              <td class="px-4 py-2">{{ item.potongan }}</td>
+              <td class="px-4 py-2">{{ item.tanggal_pengajuan }}</td>
+              <td class="px-4 py-2">{{ item.status }}</td>
               <td>
                 <button @click="editGaji(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Edit</button>
                 <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Detail</button>
@@ -88,13 +88,13 @@
               <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Aksi</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="bg-cyan-600 text-white px-4 py-2">
             <tr v-for="(item, index) in pinjamList" :key="index">
-              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.id_karyawan}}</td>
-              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.nama }}</td>
-              <td class="text-white bg-cyan-700 px-4 py-2">{{ totalHargaFormat(item.jumlah) }}</td>
-              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.tanggal }}</td>
-              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.status }}</td>
+              <td class="px-4 py-2">{{ item.id_karyawan}}</td>
+              <td class="px-4 py-2">{{ item.nama }}</td>
+              <td class="px-4 py-2">{{ totalHargaFormat(item.jumlah) }}</td>
+              <td class="px-4 py-2">{{ item.tanggal }}</td>
+              <td class="px-4 py-2">{{ item.status }}</td>
               <td>
                 <button @click="editPinjam(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Edit</button>
                 <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Detail</button>
@@ -377,6 +377,7 @@ function addGaji() {
   gajiList.value.push({ ...gajiForm.value, total });
   resetGajiForm();
 }
+
 
 
 function editGaji(item) {
