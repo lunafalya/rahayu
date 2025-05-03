@@ -5,23 +5,23 @@
       
       <!-- Expense -->
       <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
-        <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
+        <div class="bg-cyan-950 rounded-2xl shadow-md flex-grow p-6">
         <div class="karyawan-page">      
             <div class="flex mt-8 justify-between pb-6">
-              <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3" />
-              <button @click="showModal=true" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
+              <input v-model="search" type="text" placeholder="Search ..." class="search-bar border px-3" />
+              <button @click="showModal=true" class="btn border-0 shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-700 text-white">
               Tambah
             </button>
           </div>
 
 
       <!-- Tabel Data Karyawan -->
-      <div class="overflow-x-auto w-full table-fixed rounded-box border border-base-content/5 bg-cyan-950">
+      <div class="overflow-x-auto w-full table-fixed rounded-box border border-base-content/5 bg-cyan-700">
         <table class="table text-left">
           <thead>
             <tr>
-              <th class="w-20">No.</th>
-              <th class="w-30 pl-9">Profile</th>
+              <th class="w-20 text-white">No.</th>
+              <th class="w-30 pl-9 text-white">Profile</th>
               <th class="text-white">ID</th>
               <th class="text-white">Nama</th>
               <th class="text-white">Jabatan</th>
@@ -29,17 +29,17 @@
               <th class="text-white">Aksi</th>
             </tr>
           </thead>
-          <tbody class="bg-white text-cyan-950">
+          <tbody class="bg-cyan-600 text-white">
             <tr v-for="(karyawan, index) in filteredKaryawan" :key="index">
               <td class="align-middle">{{ index + 1 }}</td>
               <td class="align-middle"><img :src="karyawan.imageUrl" alt="Profile" class="align-middle w-12 h-12 object-cover rounded-full mx-auto" /></td>
               <td class="align-middle">{{ karyawan.id }}</td>
               <td class="align-middle">{{ karyawan.nama }}</td>
               <td class="align-middle">{{ karyawan.jabatan }}</td>
-              <td class="flex items-center gap-2 align-middle">
+              <td class="align-middle">
                 <span class="align-middle" :class="['status-badge', karyawan.status.toLowerCase()]">{{ karyawan.status }}</span>
               </td>
-              <td class="align-middle"><button @click="editKaryawan(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button></td>
+              <td class="align-middle"><button @click="editKaryawan(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Edit</button></td>
             </tr>
           </tbody>
         </table>

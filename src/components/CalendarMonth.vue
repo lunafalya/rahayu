@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-7 gap-2">
     <!-- Header Hari -->
-    <div v-for="day in days" :key="day" class="text-center font-semibold text-sm text-gray-600">
+    <div v-for="day in days" :key="day" class="text-center font-semibold text-sm text-cyan-200">
       {{ day }}
     </div>
 
@@ -12,10 +12,10 @@
     <div
       v-for="day in daysInMonth"
       :key="'day-' + day"
-      class="relative p-2 text-center border rounded hover:bg-cyan-100 cursor-pointer"
+      class="relative p-2 text-center border rounded hover:bg-cyan-200 cursor-pointer"
       @click="handleDateClick(day)"
     >
-      <div class="font-semibold">{{ day }}</div>
+      <div class="font-semibold text-cyan-500">{{ day }}</div>
       <div v-if="getNote(day)" class="mt-1 text-xs text-cyan-700 truncate">
         {{ getNote(day) }}
       </div>

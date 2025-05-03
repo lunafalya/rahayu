@@ -16,6 +16,9 @@ const router = createRouter({
       path: '/',
       name: 'login',
       component: LoginView,
+      meta: {
+        title: 'Login',
+      },
     },
     {
       path: '/dashboard',
@@ -26,36 +29,46 @@ const router = createRouter({
       path: '/employee',
       name: 'employee',
       component: EmployeeView,
+      meta: {
+        title: 'Employee',
+      },
     },
     {
       path: '/income',
       name: 'income',
       component: IncomeView,
+      meta: {
+        title: 'Income',
+      },
     },
     {
       path: '/expense',
       name: 'expense',
       component: ExpenseView,
+      meta: {
+        title: 'Expense',
+      },
     },
     {
       path: '/order',
       name: 'order',
       component: OrderView,
+      meta: {
+        title: 'Order',
+      },
     },
     {
       path: '/product',
       name: 'product',
       component: ProductView,
+      meta: {
+        title: 'Product',
+      },
     },
     {
       path: '/forgotpassword',
       name: 'forgot',
       component: ForgotView,
-    },
-    {
-      path: '/exit',
-      name: 'exit',
-      component: LoginView,
     },
   ],
 })
