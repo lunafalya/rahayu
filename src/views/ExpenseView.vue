@@ -90,11 +90,11 @@
           </thead>
           <tbody>
             <tr v-for="(item, index) in pinjamList" :key="index">
-              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.id_karyawan}}</td>
-              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.nama }}</td>
-              <td class="bg-white text-cyan-700 px-4 py-2">{{ totalHargaFormat(item.jumlah) }}</td>
-              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.tanggal }}</td>
-              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.status }}</td>
+              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.id_karyawan}}</td>
+              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.nama }}</td>
+              <td class="text-white bg-cyan-700 px-4 py-2">{{ totalHargaFormat(item.jumlah) }}</td>
+              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.tanggal }}</td>
+              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.status }}</td>
               <td>
                 <button @click="editPinjam(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Edit</button>
                 <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Detail</button>
