@@ -37,13 +37,13 @@
           </thead>
           <tbody>
             <tr v-for="(item, index) in generalList" :key="index">
-              <td class="text-white border-cyan-200 bg-cyan-750 px-4 py-2">{{ item.id_general }}</td>
+              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.id_general }}</td>
               <td class="text-white bg-cyan-700 px-4 py-2">{{totalHargaFormat(item.jumlah) }}</td>
               <td class="text-white bg-cyan-700 px-4 py-2">{{ item.keterangan }}</td>
               <td class="text-white bg-cyan-700 px-4 py-2">{{ item.tanggal }}</td>
-              <td>
-                <button @click="editGeneral(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Edit</button>
-                <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Detail</button>
+              <td class="text-white bg-cyan-700">
+                <button @click="editGeneral(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Edit</button>
+                <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Detail</button>
               </td>
             </tr>
           </tbody>
