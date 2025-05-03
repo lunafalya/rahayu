@@ -5,21 +5,21 @@
 
 <!-- Income -->
   <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
-    <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
+    <div class="bg-cyan-950 rounded-2xl shadow-md flex-grow p-6">
     <div class="karyawan-page">      
       <div class="flex justify-between items-center mt-8 pb-6">
   <!-- Search Bar di kiri -->
-  <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3 py-2" />
+  <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-white border px-3 py-2" />
 
   <!-- Filter dan Tambah di kanan -->
   <div class="flex space-x-3">
-    <button class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">Filter</button>
-    <button @click="showModal = true" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">Tambah</button>
+    <button class="btn border-0 shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-700 text-white">Filter</button>
+    <button @click="showModal = true" class="btn border-0 shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-700 text-white">Tambah</button>
   </div>
 </div>
 
 <!-- Tabel Data Pemasukan -->
-<div class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950">
+<div class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-700">
     <table class="table">
         <thead>
           <tr>
@@ -30,14 +30,14 @@
             <th class="text-white">Aksi</th>
           </tr>
         </thead>
-          <tbody>
+          <tbody class="bg-cyan-600 text-white px-4 py-2">
             <tr v-for="(item, index) in filteredList" :key="index">
-              <td class="bg-white text-cyan-950 px-4 py-2">{{ index + 1 }}</td>
-              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.tanggal_kirim}}</td>
-              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.keterangan}}</td>
-              <td class="bg-white text-cyan-950 px-4 py-2">{{totalHargaFormat(item.total_masuk) }}</td>
+              <td>{{ index + 1 }}</td>
+              <td>{{ item.tanggal_kirim}}</td>
+              <td>{{ item.keterangan}}</td>
+              <td>{{totalHargaFormat(item.total_masuk) }}</td>
               <td>
-                <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Detail</button>
+                <button @click="showDetail(item)" class="btn btn-sm border-0 hover:bg-gray-300 hover:text-cyan-950 bg-cyan-700 text-white">Detail</button>
               </td>
             </tr>
           </tbody>
@@ -103,13 +103,13 @@
             <div class="modal-content max-w-xl w-full bg-white p-6 rounded-lg shadow-lg relative">
               <button class="absolute top-2 right-2 text-gray-500" @click="showDetailModal = false">✕</button>
               <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Detail Pemasukan</h2>
-              <h1 class="text-3xl font-bold mb-4">Nominal: {{ totalHargaFormat(detailData.total_masuk) }}</h1>
-              <p><strong>Pengirim :</strong> {{ detailData.nama }}</p>
-              <p><strong>Bank Pengirim :</strong> {{ detailData.bank }}</p>
-              <p><strong>No rek :</strong> {{ detailData.va }}</p>
-              <p><strong>Keterangan:</strong> {{ detailData.keterangan }}</p>
-              <p><strong>Tanggal:</strong> {{ detailData.tanggal_kirim }}</p>
-              <p><strong>Status:</strong> {{ detailData.status }}</p>
+              <h1 class="text-3xl font-bold mb-4 text-cyan-950">Nominal: {{ totalHargaFormat(detailData.total_masuk) }}</h1>
+              <p class="text-cyan-950"><strong>Pengirim :</strong> {{ detailData.nama }}</p>
+              <p class="text-cyan-950"><strong>Bank Pengirim :</strong> {{ detailData.bank }}</p>
+              <p class="text-cyan-950"><strong>No rek :</strong> {{ detailData.va }}</p>
+              <p class="text-cyan-950"><strong>Keterangan:</strong> {{ detailData.keterangan }}</p>
+              <p class="text-cyan-950"><strong>Tanggal:</strong> {{ detailData.tanggal_kirim }}</p>
+              <p class="text-cyan-950"><strong>Status:</strong> {{ detailData.status }}</p>
             </div>
             </div>
           </div>
