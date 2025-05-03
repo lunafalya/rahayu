@@ -26,7 +26,7 @@
           <th class="text-white">Aksi</th>
         </tr>
       </thead>
-      <tbody class="bg-white text-cyan-950">
+      <tbody class="text-white bg-cyan-700">
           <tr v-for="(order, index) in filteredorder" :key="index">
             <td>{{ index + 1 }}</td>
             <td>{{ order.namaPemesan }}</td>
@@ -34,6 +34,7 @@
             <td>{{ totalHargaFormat(order.totalHarga) }}</td>
             <td>
               <button @click="editOrder(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button>
+              <button @click="showDetail(order)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Detail</button>
               <button @click="bayarOrder(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Bayar</button>
             </td>
           </tr>
@@ -90,8 +91,15 @@
       <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.ukuran.lainnya" type="text" placeholder="Lainnya..." />
     </div>
 
-    <label class="text-cyan-950">Jenis Extra:</label>
-    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.jenisextra" type="text" placeholder="Extra" />
+    <label class="text-cyan-950 pr-6">Jenis Extra</label>
+    <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.jenisextra">
+      <option class="text-cyan-950" disabled value="">Pilih Extra</option>
+      <option>Kerah</option>
+      <option>Lengan Panjang</option>
+      <option>Jahit Nama</option>
+      <option>Karet</option>
+      <option>Kancing</option>
+    </select>
 
     <label class="text-cyan-950">Extra:</label>
     <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.extra" type="text" placeholder="Extra" />
@@ -121,6 +129,39 @@
   </div>
 </div>
 
+<!-- Detail Order Modal -->
+<div class="modal-overlay" v-if="isDetailVisible">
+  <div class="modal-content max-w-xl w-full">
+    <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Detail Pesanan</h2>
+    
+    <p><strong>Nama Pemesan:</strong> {{ detailData.namaPemesan }}</p>
+    <p><strong>Nomor Telepon:</strong> {{ detailData.nomorTelepon }}</p>
+    <p><strong>Nomor Pesanan:</strong> {{ detailData.nomorPesanan }}</p>
+    <p><strong>Jenis Produk:</strong> {{ detailData.jenisProduk }}</p>
+    <p><strong>Jumlah Produk:</strong> {{ detailData.jumlahProduk }}</p>
+    <p><strong>Ukuran:</strong></p>
+    <ul class="ml-4">
+      <li>S: {{ detailData.ukuran?.S }}</li>
+      <li>M: {{ detailData.ukuran?.M }}</li>
+      <li>L: {{ detailData.ukuran?.L }}</li>
+      <li>XL: {{ detailData.ukuran?.XL }}</li>
+      <li>XXL: {{ detailData.ukuran?.XXL }}</li>
+      <li>Lainnya: {{ detailData.ukuran?.lainnya }}</li>
+    </ul>
+    <p><strong>Jenis Extra:</strong> {{ detailData.jenisextra }}</p>
+    <p><strong>Extra:</strong> {{ detailData.extra }}</p>
+    <p><strong>Harga per Baju:</strong> {{ totalHargaFormat(detailData.hargaPerBaju) }}</p>
+    <p><strong>Total Harga:</strong> {{ totalHargaFormat(detailData.totalHarga) }}</p>
+    <p><strong>Metode Pembayaran:</strong> {{ detailData.metodePembayaran }}</p>
+    <p><strong>Tanggal Pengeluaran:</strong> {{ detailData.tanggalPengeluaran }}</p>
+
+    <div class="flex justify-end mt-4">
+      <button @click="closeDetail(order)" class="btn bg-gray-200 text-cyan-950">Tutup</button>
+    </div>
+  </div>
+</div>
+
+
 <!-- Bayar Modal Cash-->
 <div class="modal-overlay " v-if="showModalCash">
   <div class="modal-content">
@@ -129,7 +170,7 @@
     </div>
 </div>
 
-<!-- Bayar Modal Cash-->
+<!-- Bayar Modal Qris-->
 <div class="modal-overlay " v-if="showModalQris">
   <div class="modal-content">
     <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Bayar Pesanan</h2>
@@ -148,10 +189,13 @@
 import { ref, computed } from 'vue';
 import SideBar from '@/components/SideBar.vue'
 const showModal = ref(false);
-
 const daftarPesanan = ref([]);
-
+const showDetailModal = ref(false);
+const detailData = ref({});
 const search = ref('');
+const isEdit = ref(false);
+const editIndex = ref(null);
+const isDetailVisible = ref(false);
 
 const form = ref({
   namaPemesan: '',
@@ -185,14 +229,22 @@ const totalHargaFormatted = computed(() => {
   }).format(totalHarga.value);
 });
 
-const isEdit = ref(false);
-const editIndex = ref(null);
 
 function addOrder() {
 const newOrder = { ...form.value, totalHarga: totalHarga.value };
 daftarPesanan.value.push(newOrder);
 showModal.value = false;
 resetForm();
+}
+
+function showDetail(order) {
+  detailData.value = order;
+  isDetailVisible.value = true;
+}
+
+function closeDetail() {
+  isDetailVisible.value = false;
+  resetForm();
 }
 
 function editOrder(index) {

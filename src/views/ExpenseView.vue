@@ -37,10 +37,10 @@
           </thead>
           <tbody>
             <tr v-for="(item, index) in generalList" :key="index">
-              <td class="bg-white border-cyan-200 text-cyan-950 px-4 py-2">{{ item.id_general }}</td>
-              <td class="bg-white text-cyan-700 px-4 py-2">{{totalHargaFormat(item.jumlah) }}</td>
-              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.keterangan }}</td>
-              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.tanggal }}</td>
+              <td class="text-white border-cyan-200 bg-cyan-750 px-4 py-2">{{ item.id_general }}</td>
+              <td class="text-white bg-cyan-700 px-4 py-2">{{totalHargaFormat(item.jumlah) }}</td>
+              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.keterangan }}</td>
+              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.tanggal }}</td>
               <td>
                 <button @click="editGeneral(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Edit</button>
                 <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Detail</button>
@@ -63,11 +63,11 @@
           </thead>
           <tbody>
             <tr v-for="(item, index) in gajiList" :key="index">
-              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.id_karyawan }}</td>
-              <td class="bg-white text-cyan-700 px-4 py-2">{{ totalHargaFormat(detailData.total) }}</td>
-              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.potongan }}</td>
-              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.tanggal_pengajuan }}</td>
-              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.status }}</td>
+              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.id_karyawan }}</td>
+              <td class="text-white bg-cyan-700 px-4 py-2">{{ totalHargaFormat(detailData.total) }}</td>
+              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.potongan }}</td>
+              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.tanggal_pengajuan }}</td>
+              <td class="text-white bg-cyan-700 px-4 py-2">{{ item.status }}</td>
               <td>
                 <button @click="editGaji(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Edit</button>
                 <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Detail</button>
@@ -569,7 +569,7 @@ const filteredByCategory = computed(() => {
 
 
 function getTabClass(currentTab) {
-  return tab.value === currentTab ? 'btn bg-cyan-700 text-white' : 'btn bg-white text-cyan-950'
+  return tab.value === currentTab ? 'btn bg-cyan-700 text-white' : 'btn bg-cyan-200 text-cyan-950'
 }
 
 const uniqueCategories = computed(() => {

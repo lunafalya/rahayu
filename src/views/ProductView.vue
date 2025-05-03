@@ -23,14 +23,14 @@
           <div
             v-for="(item, index) in items"
             :key="index"
-            class="rounded-lg shadow hover:shadow-lg p-4 text-center bg-white"
+            class="rounded-lg shadow hover:shadow-lg p-4 text-center bg-cyan-700"
           >
             <img :src="item.imageUrl" alt="Produk" class="w-full h-48 object-cover rounded mb-2" />
-            <h3 class="font-semibold text-cyan-700">{{ item.name }}</h3>
-            <p class="text-sm text-gray-600 ">{{ item.priceRange }}</p>
+            <h3 class="font-semibold text-white">{{ item.name }}</h3>
+            <p class="text-sm text-white ">{{ item.priceRange }}</p>
             <button
               @click="editProduct(item.originalIndex)"
-              class="bg-cyan-700 text-white px-4 py-1 mt-2 rounded hover:bg-cyan-950"
+              class="bg-cyan-950 text-white px-4 py-1 mt-2 rounded hover:bg-cyan-800"
             >
               Edit
             </button>
