@@ -6,11 +6,11 @@
 <!-- Kontainer Utama -->
 <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
   <!-- Konten Putih -->
-  <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
+  <div class="bg-cyan-950 rounded-2xl shadow-md flex-grow p-6">
     <!-- Search bar dan tombol tambah -->
     <div class="flex mt-8 justify-between pb-6">
-      <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3" />
-      <button @click="showModal = true" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
+      <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-white border px-3 py-2" />
+      <button @click="showModal = true" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-700 bg-cyan-700 text-white">
         Tambah
       </button>
     </div>
@@ -26,11 +26,11 @@
             class="rounded-lg shadow hover:shadow-lg p-4 text-center bg-white"
           >
             <img :src="item.imageUrl" alt="Produk" class="w-full h-48 object-cover rounded mb-2" />
-            <h3 class="font-semibold text-cyan-950">{{ item.name }}</h3>
+            <h3 class="font-semibold text-cyan-700">{{ item.name }}</h3>
             <p class="text-sm text-gray-600 ">{{ item.priceRange }}</p>
             <button
               @click="editProduct(item.originalIndex)"
-              class="bg-cyan-950 text-white px-4 py-1 mt-2 rounded"
+              class="bg-cyan-700 text-white px-4 py-1 mt-2 rounded hover:bg-cyan-950"
             >
               Edit
             </button>

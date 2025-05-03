@@ -5,17 +5,17 @@
 
   <!-- Order -->
   <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
-  <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
+  <div class="bg-cyan-950 rounded-2xl shadow-md flex-grow p-6">
   <div class="order-page">
     <div class="flex mt-8 justify-between pb-6">
-        <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3" />
-        <button @click="showModal=true" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
+        <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-white border px-3 py-2" />
+        <button @click="showModal=true" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-700 text-white">
         Tambah
       </button>
     </div>
 
-     <!-- Tabel Data Karyawan -->
-     <div class="overflow-x-auto rounded-box border border-base-content/5 bg-cyan-950">
+     <!-- Tabel Data Order -->
+     <div class="overflow-x-auto rounded-box border border-base-content/5  bg-cyan-700">
       <table class="table">
       <thead>
         <tr>
@@ -32,8 +32,10 @@
             <td>{{ order.namaPemesan }}</td>
             <td >{{ order.tanggalPengeluaran }}</td>
             <td>{{ totalHargaFormat(order.totalHarga) }}</td>
-            <td><button @click="editKaryawan(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button></td>
-            
+            <td>
+              <button @click="editOrder(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button>
+              <button @click="bayarOrder(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Bayar</button>
+            </td>
           </tr>
       </tbody>
     </table>
@@ -46,6 +48,9 @@
   
     <label class="text-cyan-950">Nama Pemesan:</label>
     <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.namaPemesan" type="text" placeholder="Nama Pemesan" />
+
+    <label class="text-cyan-950">Nomor Telepon :</label>
+    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.nomorTelepon" type="text" placeholder="Nomor Telepon" />
 
     <label class="text-cyan-950">Nomor Pesanan:</label>
     <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.nomorPesanan" type="text" placeholder="Nomor Pesanan" />
@@ -62,14 +67,6 @@
 
     <label class="text-cyan-950">Jumlah Produk:</label>
     <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="form.jumlahProduk" type="number" placeholder="Jumlah Produk" />
-
-    <label class="text-cyan-950">Extra:</label>
-    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.extra" type="text" placeholder="Extra" />
-
-    <label class="text-cyan-950">Total Harga:</label>
-    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"  v-model.number="form.hargaPerBaju" type="number" placeholder="Harga per Baju" />
-
-    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" :value="totalHargaFormatted" type="text" placeholder="Total Seluruh Harga" disabled />
 
     <div class="ukuran-group">
       <label class="text-cyan-950">Ukuran:</label>
@@ -93,13 +90,23 @@
       <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.ukuran.lainnya" type="text" placeholder="Lainnya..." />
     </div>
 
+    <label class="text-cyan-950">Jenis Extra:</label>
+    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.jenisextra" type="text" placeholder="Extra" />
+
+    <label class="text-cyan-950">Extra:</label>
+    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.extra" type="text" placeholder="Extra" />
+
+    <label class="text-cyan-950">Total Harga:</label>
+    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"  v-model.number="form.hargaPerBaju" type="number" placeholder="Harga per Baju" />
+
+    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" :value="totalHargaFormatted" type="text" placeholder="Total Seluruh Harga" disabled />
+
     <label class="text-cyan-950 pr-6">Metode Pembayaran</label>
     <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.jenisProduk">
       <option class="text-cyan-950" disabled value="">Pilih Metode Pembayaran</option>
       <option>Cash</option>
-      <option>Dana</option>
-      <option>BCA</option>
-      <option>Lainnya</option>
+      <option>Transfer</option>
+      <option>Qris</option>
     </select>
 
     <label class="text-cyan-950 pr-6">Tenggat Waktu</label>
@@ -108,10 +115,26 @@
     
     <div class="flex justify-end space-x-2">
       <button @click="closeModal" class="btn bg-gray-200 text-white">Batal</button>
-      <button v-if="!isEdit" @click="addKaryawan" class="btn bg-cyan-950 text-white">Simpan</button>
-      <button v-else @click="updateKaryawan" class="btn bg-cyan-950 text-white">Update</button>
+      <button v-if="!isEdit" @click="addOrder" class="btn bg-cyan-950 text-white">Simpan</button>
+      <button v-else @click="updateOrder" class="btn bg-cyan-950 text-white">Update</button>
     </div>
   </div>
+</div>
+
+<!-- Bayar Modal Cash-->
+<div class="modal-overlay " v-if="showModalCash">
+  <div class="modal-content">
+    <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Bayar Pesanan</h2>
+
+    </div>
+</div>
+
+<!-- Bayar Modal Cash-->
+<div class="modal-overlay " v-if="showModalQris">
+  <div class="modal-content">
+    <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Bayar Pesanan</h2>
+
+    </div>
 </div>
 
   </div>
@@ -132,9 +155,11 @@ const search = ref('');
 
 const form = ref({
   namaPemesan: '',
+  nomorTelepon: '',
   nomorPesanan: '',
   jenisProduk: '',
   jumlahProduk: 0,
+  jenisextra: '',
   extra: '',
   hargaPerBaju: 0,
   ukuran: {
@@ -163,14 +188,14 @@ const totalHargaFormatted = computed(() => {
 const isEdit = ref(false);
 const editIndex = ref(null);
 
-function addKaryawan() {
+function addOrder() {
 const newOrder = { ...form.value, totalHarga: totalHarga.value };
 daftarPesanan.value.push(newOrder);
 showModal.value = false;
 resetForm();
 }
 
-function editKaryawan(index) {
+function editOrder(index) {
 const order = daftarPesanan.value[index];
 form.value = JSON.parse(JSON.stringify(order)); // clone object biar reaktif
 showModal.value = true;
@@ -178,7 +203,7 @@ isEdit.value = true;
 editIndex.value = index;
 }
 
-function updateKaryawan() {
+function updateOrder() {
 if (editIndex.value !== null) {
   daftarPesanan.value[editIndex.value] = {
     ...form.value,
@@ -215,9 +240,11 @@ resetForm();
 function resetForm() {
   form.value = {
     namaPemesan: '',
+    nomorTelepon: '',
     nomorPesanan: '',
     jenisProduk: '',
     jumlahProduk: 0,
+    jenisextra: '',
     extra: '',
     hargaPerBaju: 0,
     ukuran: { S: 0, M: 0, L: 0, XL: 0, XXL: 0, lainnya: '' },

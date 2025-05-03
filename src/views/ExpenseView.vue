@@ -5,10 +5,10 @@
 
     <!-- Expense -->
     <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
-    <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
+    <div class="bg-cyan-950 rounded-2xl shadow-md flex-grow p-6">
     <div class="karyawan-page">      
         <div class="flex mt-8 justify-between pb-6">
-            <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3" />
+            <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-white border px-3 py-2" />
       </div>
       
 
@@ -19,7 +19,7 @@
             <button class="shadow-lg" @click="tab = 'Gaji'" :class="getTabClass('Gaji')">Gaji Karyawan</button>
             <button class="shadow-lg" @click="tab = 'Peminjaman'" :class="getTabClass('Peminjaman')">Peminjaman</button>
             </div>
-            <button @click="openCategorySelector" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
+            <button @click="openCategorySelector" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-700 bg-cyan-700 text-white">
             Tambah
           </button>
         </div>
@@ -28,22 +28,22 @@
         <table v-if="tab === 'General'" class="w-full text-left border">
           <thead>
             <tr>
-              <th class="overflow-x-auto text-white bg-cyan-950 px-4 py-2 shadow-lg">ID Pengeluaran</th>
-              <th class="overflow-x-auto text-white bg-cyan-950 px-4 py-2 shadow-lg">Jumlah</th>
-              <th class="overflow-x-auto text-white bg-cyan-950 px-4 py-2 shadow-lg">Keterangan</th>
-              <th class="overflow-x-auto text-white bg-cyan-950 px-4 py-2 shadow-lg">Tanggal</th>
-              <th class="overflow-x-auto text-white bg-cyan-950 px-4 py-2 shadow-lg">Aksi</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2 shadow-lg">ID Pengeluaran</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2 shadow-lg">Jumlah</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2 shadow-lg">Keterangan</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2 shadow-lg">Tanggal</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2 shadow-lg">Aksi</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(item, index) in generalList" :key="index">
               <td class="bg-white border-cyan-200 text-cyan-950 px-4 py-2">{{ item.id_general }}</td>
-              <td class="bg-white text-cyan-950 px-4 py-2">{{totalHargaFormat(item.jumlah) }}</td>
-              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.keterangan }}</td>
-              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.tanggal }}</td>
+              <td class="bg-white text-cyan-700 px-4 py-2">{{totalHargaFormat(item.jumlah) }}</td>
+              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.keterangan }}</td>
+              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.tanggal }}</td>
               <td>
-                <button @click="editGeneral(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button>
-                <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Detail</button>
+                <button @click="editGeneral(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Edit</button>
+                <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Detail</button>
               </td>
             </tr>
           </tbody>
@@ -53,24 +53,24 @@
         <table v-if="tab === 'Gaji'" class="w-full text-left border">
           <thead>
             <tr>
-              <th class="overflow-x-auto text-white bg-cyan-950 px-4 py-2">ID Karyawan</th>
-              <th class="overflow-x-auto text-white bg-cyan-950 px-4 py-2">Total Gaji</th>
-              <th class="overflow-x-auto text-white bg-cyan-950 px-4 py-2">Potongan</th>
-              <th class="overflow-x-auto text-white bg-cyan-950 px-4 py-2">Tanggal</th>
-              <th class="overflow-x-auto text-white bg-cyan-950 px-4 py-2">Status</th>
-              <th class="overflow-x-auto text-white bg-cyan-950 px-4 py-2">Aksi</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">ID Karyawan</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Total Gaji</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Potongan</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Tanggal</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Status</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Aksi</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(item, index) in gajiList" :key="index">
-              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.id_karyawan }}</td>
-              <td class="bg-white text-cyan-950 px-4 py-2">{{ totalHargaFormat(detailData.total) }}</td>
-              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.potongan }}</td>
-              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.tanggal_pengajuan }}</td>
-              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.status }}</td>
+              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.id_karyawan }}</td>
+              <td class="bg-white text-cyan-700 px-4 py-2">{{ totalHargaFormat(detailData.total) }}</td>
+              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.potongan }}</td>
+              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.tanggal_pengajuan }}</td>
+              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.status }}</td>
               <td>
-                <button @click="editGaji(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button>
-                <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Detail</button>
+                <button @click="editGaji(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Edit</button>
+                <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Detail</button>
               </td>
             </tr>
           </tbody>
@@ -80,24 +80,24 @@
         <table v-if="tab === 'Peminjaman'" class="w-full text-left border">
           <thead>
             <tr>
-              <th class="overflow-x-auto text-white bg-cyan-950 px-4 py-2">ID Karyawan</th>
-              <th class="overflow-x-auto text-white bg-cyan-950 px-4 py-2">Nama</th>
-              <th class="overflow-x-auto text-white bg-cyan-950 px-4 py-2">Nominal</th>
-              <th class="overflow-x-auto text-white bg-cyan-950 px-4 py-2">Tanggal</th>
-              <th class="overflow-x-auto text-white bg-cyan-950 px-4 py-2">Status</th>
-              <th class="overflow-x-auto text-white bg-cyan-950 px-4 py-2">Aksi</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">ID Karyawan</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Nama</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Nominal</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Tanggal</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Status</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Aksi</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(item, index) in pinjamList" :key="index">
-              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.id_karyawan}}</td>
-              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.nama }}</td>
-              <td class="bg-white text-cyan-950 px-4 py-2">{{ totalHargaFormat(item.jumlah) }}</td>
-              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.tanggal }}</td>
-              <td class="bg-white text-cyan-950 px-4 py-2">{{ item.status }}</td>
+              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.id_karyawan}}</td>
+              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.nama }}</td>
+              <td class="bg-white text-cyan-700 px-4 py-2">{{ totalHargaFormat(item.jumlah) }}</td>
+              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.tanggal }}</td>
+              <td class="bg-white text-cyan-700 px-4 py-2">{{ item.status }}</td>
               <td>
-                <button @click="editPinjam(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button>
-                <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Detail</button>
+                <button @click="editPinjam(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Edit</button>
+                <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Detail</button>
               </td>
             </tr>
           </tbody>
@@ -108,11 +108,11 @@
           <div class="modal-content">
             <h2 class="text-xl font-bold text-cyan-950 mb-4">Pilih Kategori Pengeluaran</h2>
             <div class="flex gap-2 mb-4">
-              <button class="btn hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white" @click="selectCategory('General')">General</button>
-              <button class="btn hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white" @click="selectCategory('Gaji')">Gaji</button>
-              <button class="btn hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white" @click="selectCategory('Peminjaman')">Peminjaman</button>
+              <button class="btn hover:bg-gray-300 hover:text-cyan-700 bg-cyan-700 text-white" @click="selectCategory('General')">General</button>
+              <button class="btn hover:bg-gray-300 hover:text-cyan-700 bg-cyan-700 text-white" @click="selectCategory('Gaji')">Gaji</button>
+              <button class="btn hover:bg-gray-300 hover:text-cyan-700 bg-cyan-700 text-white" @click="selectCategory('Peminjaman')">Peminjaman</button>
             </div>
-            <button @click="showCategoryModal = false" class="mt-4 text-gray-500 hover:text-cyan-950">Batal</button>
+            <button @click="showCategoryModal = false" class="mt-4 text-gray-500 hover:text-cyan-700">Batal</button>
           </div>
         </div>
 
@@ -569,7 +569,7 @@ const filteredByCategory = computed(() => {
 
 
 function getTabClass(currentTab) {
-  return tab.value === currentTab ? 'btn bg-cyan-950 text-white' : 'btn bg-white text-cyan-950'
+  return tab.value === currentTab ? 'btn bg-cyan-700 text-white' : 'btn bg-white text-cyan-950'
 }
 
 const uniqueCategories = computed(() => {
