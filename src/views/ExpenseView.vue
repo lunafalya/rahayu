@@ -25,7 +25,7 @@
         </div>
 
         <!-- Tabel General -->
-        <table v-if="tab === 'General'" class="w-full text-left border">
+        <table v-if="tab === 'General'" class="w-full text-left">
           <thead>
             <tr>
               <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2 shadow-lg">ID Pengeluaran</th>
@@ -50,7 +50,7 @@
         </table>
 
         <!-- Tabel Gaji -->
-        <table v-if="tab === 'Gaji'" class="w-full text-left border">
+        <table v-if="tab === 'Gaji'" class="w-full text-left">
           <thead>
             <tr>
               <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">ID Karyawan</th>
@@ -77,7 +77,7 @@
         </table>
 
         <!-- Tabel Pinjam -->
-        <table v-if="tab === 'Peminjaman'" class="w-full text-left border">
+        <table v-if="tab === 'Peminjaman'" class="w-full text-left">
           <thead>
             <tr>
               <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">ID Karyawan</th>
