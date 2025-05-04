@@ -28,8 +28,7 @@
         <table v-if="tab === 'General'" class="w-full text-left">
           <thead>
             <tr>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2 shadow-lg">ID Pengeluaran</th>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2 shadow-lg">Jumlah</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2 shadow-lg">Nominal</th>
               <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2 shadow-lg">Keterangan</th>
               <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2 shadow-lg">Tanggal</th>
               <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2 shadow-lg">Aksi</th>
@@ -37,7 +36,6 @@
           </thead>
           <tbody class="bg-cyan-600 text-white px-4 py-2">
             <tr v-for="(item, index) in generalList" :key="index">
-              <td class="px-4 py-2">{{ item.id_general }}</td>
               <td class="px-4 py-2">{{totalHargaFormat(item.jumlah) }}</td>
               <td class="px-4 py-2">{{ item.keterangan }}</td>
               <td class="px-4 py-2">{{ item.tanggal }}</td>
@@ -53,7 +51,7 @@
         <table v-if="tab === 'Gaji'" class="w-full text-left">
           <thead>
             <tr>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">ID Karyawan</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Nama Karyawan</th>
               <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Total Gaji</th>
               <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Potongan</th>
               <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Tanggal</th>
@@ -63,7 +61,7 @@
           </thead>
           <tbody class="bg-cyan-600 text-white px-4 py-2">
             <tr v-for="(item, index) in gajiList" :key="index">
-              <td class="px-4 py-2">{{ item.id_karyawan }}</td>
+              <td class="px-4 py-2">{{ item.nama }}</td>
               <td class="px-4 py-2">{{ totalHargaFormat(detailData.total) }}</td>
               <td class="px-4 py-2">{{ item.potongan }}</td>
               <td class="px-4 py-2">{{ item.tanggal_pengajuan }}</td>
@@ -298,8 +296,7 @@
             <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Detail {{ tab }}</h2>
             
             <div v-if="tab === 'General'">
-              <h1 class="text-3xl font-bold mb-4">Jumlah: {{ totalHargaFormat(detailData.jumlah) }}</h1>
-              <p><strong>ID Pengeluaran:</strong> {{ detailData.id_general }}</p>
+              <h1 class="text-3xl font-bold mb-4">Nominal: {{ totalHargaFormat(detailData.jumlah) }}</h1>
               <p><strong>Penerima :</strong> {{ detailData.nama }}</p>
               <p><strong>Bank Tujuan :</strong> {{ detailData.bank }}</p>
               <p><strong>No rek :</strong> {{ detailData.va }}</p>
@@ -310,7 +307,7 @@
 
             <div v-else-if="tab === 'Gaji'">
               <h1 class="text-3xl font-bold mb-4">Jumlah: {{ totalHargaFormat(detailData.total) }}</h1>
-              <p><strong>ID Karyawan:</strong> {{ detailData.id_karyawan }}</p>
+              <p><strong>Nama Karyawan:</strong> {{ detailData.nama }}</p>
               <p><strong>Gaji awal :</strong> {{ totalHargaFormat(detailData.total_gaji) }}</p>
               <p><strong>Potongan:</strong> {{ totalHargaFormat(detailData.potongan) }}</p>
               <p><strong>Tanggal Pengajuan:</strong> {{ detailData.tanggal_pengajuan }}</p>
@@ -321,7 +318,6 @@
 
             <div v-else-if="tab === 'Peminjaman'">
               <h1 class="text-3xl font-bold mb-4">Nominal: {{ totalHargaFormat(detailData.jumlah) }}</h1>
-              <p><strong>ID Karyawan:</strong> {{ detailData.id_karyawan }}</p>
               <p><strong>Nama:</strong> {{ detailData.nama }}</p>
               <p>{{ detailData.va }}</p>
               <p><strong>Tanggal:</strong> {{ detailData.tanggal }}</p>

@@ -32,12 +32,12 @@
             <td>{{ index + 1 }}</td>
             <td>{{ order.namaPemesan }}</td>
             <td>{{ totalHargaFormat(order.totalHargapesanan) }}</td>
-            <td>{{ totalHargaFormat(order.dp) }}</td>
+            <td>{{ totalHargaFormat(order.sisabayar) }}</td>
             <td >{{ order.tanggalPengeluaran }}</td>
             <td>
               <button @click="editOrder(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button>
               <button @click="showDetail(order)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Detail</button>
-              <button @click="showModalBayar(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Bayar</button>
+              <button @click="showModalBayarFunc(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Bayar</button>
             </td>
           </tr>
       </tbody>
@@ -192,58 +192,45 @@
 </div>
 
 
-<!-- Bayar Modal Qris-->
-<div class="modal-overlay " v-if="showModalBayar">
-  <div class="modal-content">
-    <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Bayar Pesanan</h2>
-      <p><strong>Total Harga:</strong> {{ totalHargaFormat(detailData.totalHargaFormatted) }}</p>
-      
-      <label class="text-cyan-950">DP</label>
-      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"  v-model.number="form.dp" type="number" placeholder="DP Awal" />
+    <!-- Bayar Modal -->
+    <div class="modal-overlay" v-if="showModalBayar">
+      <div class="modal-content">
+        <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Bayar Pesanan</h2>
+        
+        <p><strong>Total Harga:</strong> Rp {{ form.totalHarga.toLocaleString() }}</p>
 
-      <label class="text-cyan-950">Sisa Pembayaran</label>
-      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"  v-model.number="form.sisabayar" type="number" placeholder="DP Awal" />
+        <label class="text-cyan-950">Jumlah yang dibayarkan</label>
+        <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"
+          v-model.number="form.dp"
+          type="number"
+          placeholder="DP Sekarang" />
 
-      <label class="text-cyan-950">Metode Pembayaran</label>
-        <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.metodepembayaran">
-          <option class="text-cyan-950" disabled value="">Pilih Metode</option>
+        <label class="text-cyan-950">Sisa Pembayaran</label>
+        <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"
+          :value="sisabayar"
+          type="number"
+          readonly />
+
+        <label class="text-cyan-950">Metode Pembayaran</label>
+        <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"
+          v-model="form.metodepembayaran">
+          <option disabled value="">Pilih Metode</option>
           <option>Cash</option>
+          <option>Transfer</option>
           <option>Qris</option>
-          <option>Cash</option>
-      </select>
+        </select>
 
-    <div class="flex justify-end space-x-2">
-      <button @click="closeModal" class="btn bg-gray-200 text-white">Batal</button>
-      <button v-if="!isEdit" @click="addOrder" class="btn bg-cyan-950 text-white">Generate Code</button>
-      <button v-else @click="updateOrder" class="btn bg-cyan-950 text-white">Simpan</button>
+        <div class="flex justify-end space-x-2">
+          <button @click="closeModalBayar" class="btn bg-gray-200 text-white">Batal</button>
+
+          <button @click="updateBayar" class="btn bg-cyan-950 text-white"
+            :disabled="form.metodepembayaran === 'Transfer' || form.metodepembayaran === 'Qris'">Simpan</button>
+
+          <button @click="addBayar" class="btn bg-cyan-950 text-white"
+            :disabled="form.metodepembayaran === 'Cash'">Generated Code</button>
+        </div>
+      </div>
     </div>
-
-    </div>
-</div>
-
-<!-- Bayar Modal Cash-->
-<div class="modal-overlay " v-if="showModalCash">
-  <div class="modal-content">
-    <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Bayar Pesanan</h2>
-      <p><strong>Total Harga:</strong> {{ totalHargaFormat(detailData.totalHarga) }}</p>
-
-      <label class="text-cyan-950">DP</label>
-      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"  v-model.number="form.dp" type="number" placeholder="DP Awal" />
-    </div>
-</div>
-
-
-<!-- Bayar Modal Transfer-->
-<div class="modal-overlay " v-if="showModalTransfer">
-  <div class="modal-content">
-    <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Bayar Pesanan</h2>
-    <p><strong>Total Harga:</strong> {{ totalHargaFormat(detailData.totalHarga) }}</p>
-
-    <label class="text-cyan-950">DP</label>
-    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"  v-model.number="form.dp" type="number" placeholder="DP Awal" />
-
-    </div>
-</div>
 
   </div>
   </div>
@@ -263,6 +250,8 @@ const search = ref('');
 const isEdit = ref(false);
 const editIndex = ref(null);
 const isDetailVisible = ref(false);
+const showModalBayar = ref(false);
+
 
 const form = ref({
   namaPemesan: '',
@@ -277,6 +266,10 @@ const form = ref({
   hargaPerBaju: 0,
   totalhargapesanan:'',
   dp: '',
+  sisabayar: '',
+  totalHarga: 0,
+  dp: 0,
+  metodepembayaran: '',
   ukuran: {
     S: 0,
     M: 0,
@@ -288,6 +281,7 @@ const form = ref({
   tanggalPengeluaran: '',
   extras:[]
 });
+
 
 function tambahExtra() {
   if (
@@ -403,19 +397,24 @@ form.value = JSON.parse(JSON.stringify(order)); // clone object biar reaktif
 showModal.value = true;
 isEdit.value = true;
 editIndex.value = index;
+this.isEdit = true;
+this.editIndex = index;
+  this.form = JSON.parse(JSON.stringify(this.orders[index])); // deep copy untuk menghindari reaktivitas langsung
+  this.showModal = true;
 }
 
 function updateOrder() {
-if (editIndex.value !== null) {
-  daftarPesanan.value[editIndex.value] = {
-    ...form.value,
-    totalHarga: totalHarga.value
-  };
-  showModal.value = false;
-  resetForm();
-  isEdit.value = false;
-  editIndex.value = null;
-}
+  const totalProduk = form.value.jumlahProduk * form.value.hargaPerBaju;
+  const totalExtra = form.value.extras.reduce((acc, extra) => acc + (extra.harga * extra.jumlah), 0);
+  const totalPesanan = totalProduk + totalExtra;
+
+  form.value.totalHargapesanan = totalPesanan; // <- ini yang penting
+
+  if (editIndex.value !== null) {
+    daftarPesanan.value[editIndex.value] = { ...form.value };
+  }
+
+  closeModal();
 }
 
 
@@ -432,6 +431,78 @@ showModal.value = false;
 resetForm();
 }
 
+
+// ✅ Function: Menampilkan modal dan mengisi form
+function showModalBayarFunc(index) {
+  const item = daftarPesanan.value[index];
+  detailData.value = item;
+
+  // Cek apakah nilai totalHargapesanan ada
+  const hargaAwal = item.totalhargapesanan?? 0;
+  const sisaBayar = item.sisabayar;
+
+  // Jika belum pernah bayar, pakai totalHargapesanan
+  // Kalau sudah ada sisabayar, pakai itu
+  form.value.totalHarga = (sisaBayar !== undefined && sisaBayar !== null)
+    ? sisaBayar
+    : hargaAwal;
+
+  form.value.dp = 0;
+  form.value.metodepembayaran = item.metodepembayaran ?? '';
+
+  showModalBayar.value = true;
+}
+
+
+function closeModalBayar() {
+  showModalBayar.value = false;
+}
+
+function updateBayar() {
+  if (form.value.metodepembayaran === 'Transfer' || form.value.metodepembayaran === 'Qris') {
+    alert("Metode pembayaran ini tidak bisa disimpan langsung.");
+    return;
+  }
+
+  if (form.value.dp > form.value.totalHarga) {
+    alert("DP tidak boleh lebih besar dari sisa pembayaran!");
+    return;
+  }
+
+  const index = daftarPesanan.value.findIndex(item => item === detailData.value);
+  if (index !== -1) {
+    const current = daftarPesanan.value[index];
+
+    const previousDP = current.dp ?? 0;
+    const previousSisa = current.sisabayar ?? current.totalhargapesanan;
+
+    const totalDP = previousDP + form.value.dp;
+    const newSisa = previousSisa - form.value.dp;
+
+    current.dp = totalDP;
+    current.sisabayar = newSisa;
+    current.metodepembayaran = form.value.metodepembayaran;
+  }
+
+  closeModalBayar();
+}
+
+function addBayar() {
+  if (form.value.metodepembayaran !== 'Cash') {
+    const kode = 'PAY-' + Math.floor(Math.random() * 1000000);
+    alert('Kode Pembayaran: ' + kode);
+    closeModalBayar();
+  }
+}
+
+const sisabayar = computed(() => {
+  return form.value.totalHarga - form.value.dp;
+});
+
+
+
+
+
 function resetForm() {
   form.value = {
     namaPemesan: '',
@@ -445,12 +516,19 @@ function resetForm() {
     totalextra:'',
     hargaPerBaju: 0,
     dp: '',
+    sisabayar:'',
     totalhargapesanan:'',
     ukuran: { S: 0, M: 0, L: 0, XL: 0, XXL: 0, lainnya: '' },
+    totalHarga: 0,
+    dp: 0,
+    metodepembayaran: '',
     tanggalPengeluaran: '',
     extras:[]
   };
 }
+
+
+
 const filteredorder = computed(() => {
 if (!search.value) return daftarPesanan.value;
 return daftarPesanan.value.filter(order =>
