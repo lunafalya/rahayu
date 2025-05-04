@@ -19,7 +19,7 @@
             <button class="shadow-lg" @click="tab = 'Gaji'" :class="getTabClass('Gaji')">Gaji Karyawan</button>
             <button class="shadow-lg" @click="tab = 'Peminjaman'" :class="getTabClass('Peminjaman')">Peminjaman</button>
             </div>
-            <button @click="openCategorySelector" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-700 bg-cyan-700 text-white">
+            <button @click="openCategorySelector" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-700 text-white">
             Tambah
           </button>
         </div>
@@ -80,9 +80,9 @@
         <table v-if="tab === 'Peminjaman'" class="w-full text-left">
           <thead>
             <tr>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">ID Karyawan</th>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Nama</th>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Nominal</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Nama Karyawan</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Nominal Pinjaman</th>
+              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Tunggakan</th>
               <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Tanggal</th>
               <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Status</th>
               <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Aksi</th>
@@ -90,8 +90,9 @@
           </thead>
           <tbody class="bg-cyan-600 text-white px-4 py-2">
             <tr v-for="(item, index) in pinjamList" :key="index">
-              <td class="px-4 py-2">{{ item.id_karyawan}}</td>
+              <td class="px-4 py-2">{{ item.nama}}</td>
               <td class="px-4 py-2">{{ item.nama }}</td>
+              <td class="px-4 py-2">{{ totalHargaFormat(item.jumlah) }}</td>
               <td class="px-4 py-2">{{ totalHargaFormat(item.jumlah) }}</td>
               <td class="px-4 py-2">{{ item.tanggal }}</td>
               <td class="px-4 py-2">{{ item.status }}</td>
@@ -136,10 +137,51 @@
             <label class="font-medium text-cyan-950">Virtual Account</label>
             <input v-model="gajiForm.vac" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"/>
 
-            <label class="font-medium text-cyan-950">Total Gaji</label>
-            <input v-model="gajiForm.total_gaji" type="number" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"/>
+               <!-- Tabel Input Jasa -->
+               <h3 class="text-lg font-semibold text-cyan-950 mb-2">Jasa</h3>
 
-            <label class="font-medium text-cyan-950">Potongan Pinjaman</label>
+                <!-- Tabel Daftar Extra Ditambahkan -->
+                <table class="w-full text-sm border border-gray-300 mb-4">
+                <thead class="bg-cyan-200">
+                <tr>
+                  <th class="p-2 border">Produk</th>
+                  <th class="p-2 border">Harga per item</th>
+                  <th class="p-2 border">Jumlah pengerjaan</th>
+                  <th class="p-2 border">Subtotal</th>
+                  <th class="p-2 border">Aksi</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(jasa, index) in gajiForm.jasa" :key="index">
+                    <td class="border p-2">{{ jasa.produk }}</td>
+                    <td class="border p-2">Rp{{ jasa.harga }}</td>
+                    <td class="border p-2">{{ jasa.jumlah }}</td>
+                    <td class="border p-2">Rp{{ jasa.harga * jasa.jumlah }}</td>
+                    <td class="border p-2">
+                      <button @click="hapusGaji(index)" class="text-red-600 hover:underline">Hapus</button>
+                    </td>
+                  </tr>
+                </tbody>
+                </table>
+
+                <!-- Form Tambah Extra -->
+                <div class="grid grid-cols-4 gap-2 mb-2">
+                <input class="border p-2 rounded" v-model="gajiInput.produk" type="text" placeholder="Nama Produk" />
+                <input class="border p-2 rounded" v-model.number="gajiInput.harga" type="number" placeholder="Harga/item" />
+                <input class="border p-2 rounded" v-model.number="gajiInput.jumlah" type="number" placeholder="Jumlah item" />
+                <input class="border p-2 rounded bg-gray-100" :value="gajiInput.harga * gajiInput.jumlah" type="text" placeholder="Subtotal" disabled />
+                </div>
+
+                <button @click="tambahJasa" class="bg-cyan-950 text-white px-3 py-1 rounded mb-4">+ Tambah Extra</button>
+                <br>
+
+                <label class="text-cyan-950">Total Gaji:</label>
+                <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" :value="totalHargaJasaFormatted" type="text" placeholder="Harga jasa" disabled />
+
+            <label class="font-medium text-cyan-950">Total Pinjaman</label>
+            <input v-model="gajiForm.potongan" type="number" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"/>
+            
+            <label class="font-medium text-cyan-950">Pinjaman yang ingin dibayar</label>
             <input v-model="gajiForm.potongan" type="number" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"/>
 
             <label class="font-medium text-cyan-950">Total yang dibayarkan</label>
@@ -148,11 +190,11 @@
             <label class="font-medium text-cyan-950">Tanggal Pengajuan</label>
             <input v-model="gajiForm.tanggal_pengajuan" type="date" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"/>
 
-            <label class="font-medium text-cyan-950">Status</label>
+            <!-- <label class="font-medium text-cyan-950">Status</label>
             <select v-model="gajiForm.status" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
               <option>Lunas</option>
               <option>Tunggak</option>
-            </select>
+            </select> -->
 
             <div class="flex justify-end gap-2">
               <button @click="resetGajiForm" class="btn bg-gray-500 text-white">Batal</button>
@@ -250,52 +292,52 @@
       
 
 
-      <!-- Modal Detail -->
-<div class="modal-overlay" v-if="showDetailModal">
-  <div class="modal-content max-w-xl w-full">
-    <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Detail {{ tab }}</h2>
-    
-    <div v-if="tab === 'General'">
-      <h1 class="text-3xl font-bold mb-4">Jumlah: {{ totalHargaFormat(detailData.jumlah) }}</h1>
-      <p><strong>ID Pengeluaran:</strong> {{ detailData.id_general }}</p>
-      <p><strong>Penerima :</strong> {{ detailData.nama }}</p>
-      <p><strong>Bank Tujuan :</strong> {{ detailData.bank }}</p>
-      <p><strong>No rek :</strong> {{ detailData.va }}</p>
-      <p><strong>Keterangan:</strong> {{ detailData.keterangan }}</p>
-      <p><strong>Tanggal:</strong> {{ detailData.tanggal }}</p>
-      <p><strong>Status:</strong> {{ detailData.status }}</p>
-    </div>
+        <!-- Modal Detail -->
+        <div class="modal-overlay" v-if="showDetailModal">
+          <div class="modal-content max-w-xl w-full">
+            <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Detail {{ tab }}</h2>
+            
+            <div v-if="tab === 'General'">
+              <h1 class="text-3xl font-bold mb-4">Jumlah: {{ totalHargaFormat(detailData.jumlah) }}</h1>
+              <p><strong>ID Pengeluaran:</strong> {{ detailData.id_general }}</p>
+              <p><strong>Penerima :</strong> {{ detailData.nama }}</p>
+              <p><strong>Bank Tujuan :</strong> {{ detailData.bank }}</p>
+              <p><strong>No rek :</strong> {{ detailData.va }}</p>
+              <p><strong>Keterangan:</strong> {{ detailData.keterangan }}</p>
+              <p><strong>Tanggal:</strong> {{ detailData.tanggal }}</p>
+              <p><strong>Status:</strong> {{ detailData.status }}</p>
+            </div>
 
-    <div v-else-if="tab === 'Gaji'">
-      <h1 class="text-3xl font-bold mb-4">Jumlah: {{ totalHargaFormat(detailData.total) }}</h1>
-      <p><strong>ID Karyawan:</strong> {{ detailData.id_karyawan }}</p>
-      <p><strong>Gaji awal :</strong> {{ totalHargaFormat(detailData.total_gaji) }}</p>
-      <p><strong>Potongan:</strong> {{ totalHargaFormat(detailData.potongan) }}</p>
-      <p><strong>Tanggal Pengajuan:</strong> {{ detailData.tanggal_pengajuan }}</p>
-      <p><strong>Pembayaran:</strong> {{ detailData.transaksi }}</p>
-      <p><strong>Rekening:</strong> {{ detailData.vac }}</p>
-      <p><strong>Status:</strong> {{ detailData.status }}</p>
-    </div>
+            <div v-else-if="tab === 'Gaji'">
+              <h1 class="text-3xl font-bold mb-4">Jumlah: {{ totalHargaFormat(detailData.total) }}</h1>
+              <p><strong>ID Karyawan:</strong> {{ detailData.id_karyawan }}</p>
+              <p><strong>Gaji awal :</strong> {{ totalHargaFormat(detailData.total_gaji) }}</p>
+              <p><strong>Potongan:</strong> {{ totalHargaFormat(detailData.potongan) }}</p>
+              <p><strong>Tanggal Pengajuan:</strong> {{ detailData.tanggal_pengajuan }}</p>
+              <p><strong>Pembayaran:</strong> {{ detailData.transaksi }}</p>
+              <p><strong>Rekening:</strong> {{ detailData.vac }}</p>
+              <p><strong>Status:</strong> {{ detailData.status }}</p>
+            </div>
 
-    <div v-else-if="tab === 'Peminjaman'">
-      <h1 class="text-3xl font-bold mb-4">Nominal: {{ totalHargaFormat(detailData.jumlah) }}</h1>
-      <p><strong>ID Karyawan:</strong> {{ detailData.id_karyawan }}</p>
-      <p><strong>Nama:</strong> {{ detailData.nama }}</p>
-      <p>{{ detailData.va }}</p>
-      <p><strong>Tanggal:</strong> {{ detailData.tanggal }}</p>
-      <p><strong>Pembayaran:</strong> {{ detailData.bayar }}</p>
-      <p><strong>Rekening:</strong> {{ detailData.vc }}</p>
-      <p><strong>Status:</strong> {{ detailData.status }}</p>
-    </div>
+            <div v-else-if="tab === 'Peminjaman'">
+              <h1 class="text-3xl font-bold mb-4">Nominal: {{ totalHargaFormat(detailData.jumlah) }}</h1>
+              <p><strong>ID Karyawan:</strong> {{ detailData.id_karyawan }}</p>
+              <p><strong>Nama:</strong> {{ detailData.nama }}</p>
+              <p>{{ detailData.va }}</p>
+              <p><strong>Tanggal:</strong> {{ detailData.tanggal }}</p>
+              <p><strong>Pembayaran:</strong> {{ detailData.bayar }}</p>
+              <p><strong>Rekening:</strong> {{ detailData.vc }}</p>
+              <p><strong>Status:</strong> {{ detailData.status }}</p>
+            </div>
 
-    <div class="flex justify-end mt-4">
-      <button @click="showDetailModal = false" class="btn bg-gray-500 text-white">Tutup</button>
+            <div class="flex justify-end mt-4">
+              <button @click="showDetailModal = false" class="btn bg-gray-500 text-white">Tutup</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-    </div>
-  </div>
-</div>
 </template>
 
 <script setup>
@@ -327,6 +369,8 @@ const pengeluaranList = ref([])
 
 const detailData= ref(null);
 
+const produkList = ref([])
+
 
 const form = ref({
   tanggal: '',
@@ -335,34 +379,76 @@ const form = ref({
   jumlah: null,
 })
 
+
 const karyawanList = ref([
   { id: 'K001', nama: 'Ani' },
   { id: 'K002', nama: 'Budi' },
   { id: 'K003', nama: 'Citra' }
-])
+]);
 
 // GAJI
 const gajiForm = ref({
   id_karyawan: '',
-  nama:'',
+  nama: '',
+  produk: '',
+  tambahan: '',
   total_gaji: 0,
   potongan: 0,
   tanggal_pengajuan: '',
   transaksi: '',
   total: '',
   vac: '',
-  status: 'Lunas'
+  status: 'Lunas',
+  jasa: []
 });
 
-const totalHarga = computed(() => { 
-  return (Number(gajiForm.value.total_gaji) || 0) - (Number(gajiForm.value.potongan) || 0);
+const gajiInput = ref({
+  produk: '',
+  harga: 0,
+  jumlah: 0
+});
+
+// Tambah Jasa
+function tambahJasa() {
+  if (!gajiInput.value.produk || !gajiInput.value.harga || !gajiInput.value.jumlah) {
+    alert("Mohon isi semua kolom jasa!");
+    return;
+  }
+
+  const jasaBaru = {
+    produk: gajiInput.value.produk,
+    harga: gajiInput.value.harga,
+    jumlah: gajiInput.value.jumlah,
+  };
+
+  gajiForm.value.jasa.push(jasaBaru);
+
+  gajiInput.value = {
+    produk: '',
+    harga: 0,
+    jumlah: 0,
+  };
+}
+
+// Hapus jasa dari daftar
+function hapusGaji(index) {
+  gajiForm.value.jasa.splice(index, 1);
+}
+
+// Hitung total
+const totalHargaJasa = computed(() => {
+  return gajiForm.value.jasa.reduce((total, item) => {
+    return total + (item.harga * item.jumlah);
+  }, 0);
+});
+
+const totalHargaJasaFormatted = computed(() => {
+  return 'Rp' + totalHargaJasa.value.toLocaleString('id-ID');
 });
 
 const totalGajiFormatted = computed(() => {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR'
-  }).format(totalHarga.value);
+  const total = totalHargaJasa.value - (gajiForm.value.potongan || 0);
+  return 'Rp' + total.toLocaleString('id-ID');
 });
 
 function totalHargaFormat(value) {
@@ -372,56 +458,66 @@ function totalHargaFormat(value) {
   }).format(value || 0);
 }
 
+// Tambah gaji
 function addGaji() {
-  const total = (Number(gajiForm.value.total_gaji) || 0) - (Number(gajiForm.value.potongan) || 0);
+  const total = totalHargaJasa.value - (gajiForm.value.potongan || 0);
   gajiList.value.push({ ...gajiForm.value, total });
   resetGajiForm();
 }
 
-
-
+// Edit gaji
 function editGaji(item) {
-  gajiForm.value = { ...item }
-  isEditGaji.value = true
-  showGajiModal.value = true
-  editIndexGaji.value = gajiList.value.indexOf(item)
+  gajiForm.value = { ...item };
+  isEditGaji.value = true;
+  showGajiModal.value = true;
+  editIndexGaji.value = gajiList.value.indexOf(item);
 }
 
+// Update gaji
 function updateGaji() {
   if (editIndexGaji.value !== null) {
-    const total = (Number(gajiForm.value.total_gaji) || 0) - (Number(gajiForm.value.potongan) || 0);
+    const total = totalHargaJasa.value - (gajiForm.value.potongan || 0);
     gajiList.value[editIndexGaji.value] = { ...gajiForm.value, total };
   }
   resetGajiForm();
 }
 
+// Reset form
 function resetGajiForm() {
   gajiForm.value = {
     id_karyawan: '',
     nama: '',
+    produk: '',
+    tambahan: '',
     total_gaji: 0,
     potongan: 0,
     tanggal_pengajuan: '',
     transaksi: '',
     total: '',
     vac: '',
-    status: 'Lunas'
+    status: 'Lunas',
+    jasa: []
+  };
+  gajiInput.value = {
+    produk: '',
+    harga: 0,
+    jumlah: 0
   };
   showGajiModal.value = false;
-  isEditGaji.value = false
-  editIndexGaji.value = null
+  isEditGaji.value = false;
+  editIndexGaji.value = null;
 }
 
+// Simpan gaji
 function simpanGaji() {
   if (isEditGaji.value) {
     updateGaji();
   } else {
-    // Simpan logika
-    const newGaji = { ...gajiForm.value };
-    gajiList.value.push(newGaji);
+    addGaji();
   }
-  resetGajiForm();
 }
+
+
 
 
 
@@ -570,7 +666,7 @@ const filteredByCategory = computed(() => {
 
 
 function getTabClass(currentTab) {
-  return tab.value === currentTab ? 'btn bg-cyan-700 text-white' : 'btn bg-cyan-200 text-cyan-950'
+  return tab.value === currentTab ? 'btn bg-cyan-700 text-white' : 'btn bg-cyan-950 text-white'
 }
 
 const uniqueCategories = computed(() => {

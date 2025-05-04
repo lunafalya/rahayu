@@ -22,7 +22,6 @@
             <tr>
               <th class="w-20 text-white">No.</th>
               <th class="w-30 pl-9 text-white">Profile</th>
-              <th class="text-white">ID</th>
               <th class="text-white">Nama</th>
               <th class="text-white">Jabatan</th>
               <th class="text-white">Status</th>
@@ -31,7 +30,6 @@
           </thead>
           <tbody class="bg-cyan-600 text-white">
             <tr v-for="(karyawan, index) in filteredKaryawan" :key="index">
-              <td class="align-middle">{{ index + 1 }}</td>
               <td class="align-middle"><img :src="karyawan.imageUrl" alt="Profile" class="align-middle w-12 h-12 object-cover rounded-full mx-auto" /></td>
               <td class="align-middle">{{ karyawan.id }}</td>
               <td class="align-middle">{{ karyawan.nama }}</td>
@@ -49,8 +47,6 @@
       <div class="modal-overlay" v-if="showModal">
         <div class="modal-content">
           <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Tambah Karyawan</h2>
-          <label class="font-medium text-cyan-950">ID Karyawan</label>
-          <input v-model="form.id" type="text" placeholder="ID Karyawan" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" />
 
           <label class="font-medium text-cyan-950">Nama Karyawan</label>
           <input v-model="form.nama" type="text" placeholder="Nama Karyawan" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" />
@@ -78,8 +74,6 @@
             <option>Passive</option>
           </select>
 
-        
-
           <div class="flex justify-end space-x-2">
             <button @click="resetForm" class="btn bg-gray-500 text-white">Batal</button>
             <button v-if="!isEdit" @click="addKaryawan" class="btn bg-cyan-950 text-white">Simpan</button>
@@ -106,7 +100,6 @@ import SideBar from '@/components/SideBar.vue'
         isEdit: false,
         editIndex: null,
         form: {
-          id: '',
           nama: '',
           imageUrl: '',
           jabatan: '',
@@ -127,13 +120,13 @@ import SideBar from '@/components/SideBar.vue'
 
   methods: {
   resetForm() {
-    this.form = { id: '', nama: '',  imageUrl: '', jabatan: '', status: 'Active'};
+    this.form = { nama: '',  imageUrl: '', jabatan: '', status: 'Active'};
     this.showModal = false;
     this.isEdit = false;
     this.editIndex = null;
   },
   addKaryawan() {
-    if (this.form.id && this.form.nama && this.form.imageUrl && this.form.jabatan  ) {
+    if (this.form.nama && this.form.imageUrl && this.form.jabatan  ) {
       this.karyawanList.push({ ...this.form });
       this.resetForm();
     } else {
@@ -147,7 +140,7 @@ import SideBar from '@/components/SideBar.vue'
     this.showModal = true;
   },
   updateKaryawan() {
-    if (this.editIndex !== null && this.form.id && this.form.nama && this.form.imageUrl && this.form.jabatan) {
+    if (this.editIndex !== null && this.form.nama && this.form.imageUrl && this.form.jabatan) {
       this.karyawanList.splice(this.editIndex, 1, { ...this.form });
       this.resetForm();
     } else {

@@ -18,7 +18,7 @@
     <!-- Scrollable Produk Grid -->
     <div class="overflow-y-auto mt-4 pr-2" style="max-height: calc(100vh - 250px);">
       <div v-for="(items, category) in groupedProducts" :key="category" class="mb-10">
-        <h2 class="text-xl font-bold mb-4 text-cyan-950">{{ category }}</h2>
+        <h2 class="text-xl font-bold mb-4 text-white">{{ category }}</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           <div
             v-for="(item, index) in items"
