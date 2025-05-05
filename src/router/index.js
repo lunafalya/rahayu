@@ -8,6 +8,10 @@ import ProductView from '../views/ProductView.vue'
 import OrderView from '../views/OrderView.vue'
 import ForgotView from '../views/ForgotView.vue'
 
+function isAuthenticated() {
+  const token = localStorage.getItem('token')
+  return !!token
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,12 +22,17 @@ const router = createRouter({
       component: LoginView,
       meta: {
         title: 'Login',
+        requiresAuth: false,
       },
     },
     {
       path: '/dashboard',
       name: 'dashboard',
       component: DashboardView,
+      meta: {
+        title: 'Dashboard',
+        requiresAuth: true,
+      },
     },
     {
       path: '/employee',
@@ -31,6 +40,7 @@ const router = createRouter({
       component: EmployeeView,
       meta: {
         title: 'Employee',
+        requiresAuth: true,
       },
     },
     {
@@ -39,6 +49,7 @@ const router = createRouter({
       component: IncomeView,
       meta: {
         title: 'Income',
+        requiresAuth: true,
       },
     },
     {
@@ -47,6 +58,7 @@ const router = createRouter({
       component: ExpenseView,
       meta: {
         title: 'Expense',
+        requiresAuth: true,
       },
     },
     {
@@ -55,6 +67,7 @@ const router = createRouter({
       component: OrderView,
       meta: {
         title: 'Order',
+        requiresAuth: true,
       },
     },
     {
@@ -63,14 +76,28 @@ const router = createRouter({
       component: ProductView,
       meta: {
         title: 'Product',
+        requiresAuth: true,
       },
     },
     {
       path: '/forgotpassword',
       name: 'forgot',
       component: ForgotView,
+      meta: {
+        title: 'Forgot Password',
+        requiresAuth: false,
+      },
     },
   ],
-})
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth && !isAuthenticated()) {
+    // If the route requires authentication and the user is not authenticated
+    next({ name: 'login' }); // Redirect to the login page
+  } else {
+    next(); // Proceed to the route
+  }
+});
 
 export default router
