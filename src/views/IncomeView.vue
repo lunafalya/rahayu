@@ -12,7 +12,8 @@
             <h2 class="text-xl font-bold mb-4 text-cyan-200">My Wallet</h2>
             <div class="mb-6">
               <p class="text-sm text-gray-300">Available Balance</p>
-              <p class="text-3xl font-bold mt-1 text-cyan-200">Rp. 5.208.100</p>
+              <p v-if="balance == null" class="skeleton h-9 w-56 mt-1 bg-gray-800"></p>
+              <p v-else class="text-3xl font-bold mt-1 text-cyan-200">Rp. {{ Intl.NumberFormat('id-ID').format(balance) }}</p>
             </div>
         
             <div class="flex gap-4 mb-6">
@@ -147,5 +148,63 @@ function totalHargaFormat(total_masuk) {
 function showDetail(item) {
   detailData.value = item
   showDetailModal.value = true
+}
+</script>
+
+<script>
+import axios from 'axios';
+export default {
+  data() {
+    return {
+      search: '',
+      showModal: false,
+      isEdit: false,
+      editIndex: null,
+      form: {
+        pengirim: '',
+        transaksi: '',
+        vac: '',
+        keterangan: '',
+        tanggalMasuk: '',
+        status: 'Active',
+        imageUrl: ''
+      },
+      inList: [],
+      balance: null
+    };
+  },
+
+  computed: {
+    filteredList() {
+      return this.inList.filter(item =>
+        item.keterangan.toLowerCase().includes(this.search.toLowerCase()) ||
+        item.nama?.toLowerCase().includes(this.search.toLowerCase())
+      );
+    },
+  },
+
+  methods: {
+    fetchBalance() {
+      const token = localStorage.getItem('token');
+      if (token) {
+        axios.get('https://great-distinctly-seasnail.ngrok-free.app/api/ewallet/balance', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(response => {
+          this.balance = response.data.balance; // Assuming the API returns balance in this format
+        })
+        .catch(error => {
+          console.error('Error fetching balance:', error);
+          alert('Failed to fetch balance. Please try again later.');
+        });
+      } 
+    },
+  },
+
+  mounted() {
+    this.fetchBalance()
+  },
 }
 </script>
