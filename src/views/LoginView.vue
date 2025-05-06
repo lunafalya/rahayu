@@ -4,11 +4,11 @@
         <fieldset class="fieldset w-xs bg-base-200 border border-base-300 p-5 rounded-xl">
 
             <label class="fieldset-label">Username</label>
-            <input type="text" class="input" placeholder="Username" />
+            <input type="text" class="input" placeholder="Username" v-model="username" />
             
             <label class="fieldset-label">Password</label>
             <div class="relative">
-                <input :type="showPassword ? 'text' : 'password'" class="input w-full" placeholder="Password" />
+                <input :type="showPassword ? 'text' : 'password'" class="input w-full" placeholder="Password" v-model="password" />
                 <button type="button" class="absolute right-3 top-3 bg-transparent" @click="togglePasswordVisibility">
                     <font-awesome-icon :icon="showPassword ? 'eye-slash' : 'eye'" />
                 </button>
@@ -18,7 +18,7 @@
                 Forgot Password?
             </a>
 
-            <button class="btn w-full my-4 hover:text-cyan-950 hover:bg-cyan-400 bg-cyan-950 text-white" type="button" @click="$router.push('/dashboard')">
+            <button class="btn w-full my-4 hover:text-cyan-950 hover:bg-cyan-400 bg-cyan-950 text-white" type="button" @click="Login()">
                 <p>Login</p>
             </button>
         </fieldset>
@@ -26,9 +26,13 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     data() {
         return {
+            username: '',
+            password: '',
             showPassword: false,
         };
     },
@@ -37,7 +41,20 @@ export default {
             this.showPassword = !this.showPassword;
         },
         Login() {
-            
+            axios.post('https://great-distinctly-seasnail.ngrok-free.app/api/auth/login', {
+                Username: this.username,
+                Password: this.password,
+            }).then(response => {
+                if (response.status === 200) {
+                    localStorage.setItem('token', response.data.token); 
+                    this.$router.push('/dashboard');
+                } else {
+                    alert('Login failed: ' + response.data.message);
+                }
+            }).catch(error => {
+                console.error('Login error:', error);
+                alert('An error occurred during login. Please try again later.');
+            });
         },
     },
 };
