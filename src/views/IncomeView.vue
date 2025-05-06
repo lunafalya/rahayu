@@ -5,53 +5,53 @@
 
       <!-- Income -->
         <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
-          <div class="bg-cyan-950 rounded-2xl shadow-md flex-grow p-6 max-h-[90vh] overflow-y-auto">
+          <div class="bg-white rounded-2xl shadow-md flex-grow p-6 max-h-[90vh] overflow-y-auto">
 
           
               <!-- WALLET  -->
-              <div class="bg-cyan-950 text-white rounded-2xl p-6 shadow-lg w-full">
-            <h2 class="text-xl font-bold mb-4 text-cyan-200">My Wallet</h2>
+              <div class="bg-white rounded-2xl p-6 shadow-lg w-full">
+            <h2 class="text-xl font-bold mb-4 text-cyan-950">My Wallet</h2>
             <div class="mb-6">
               <p class="text-sm text-gray-300">Available Balance</p>
               <p v-if="balance == null" class="skeleton h-9 w-56 mt-1 bg-gray-800"></p>
-              <p v-else class="text-3xl font-bold mt-1 text-cyan-200">Rp. {{ Intl.NumberFormat('id-ID').format(balance) }}</p>
+              <p v-else class="text-3xl font-bold mt-1 text-white">Rp. {{ Intl.NumberFormat('id-ID').format(balance) }}</p>
             </div>
         
             <div class="flex gap-4 mb-6">
-              <div class="flex items-center gap-2 bg-gray-800 rounded-xl px-4 py-2 shadow">
+              <div class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow">
                 <div class="bg-yellow-500 p-2 rounded-full">
-                  <svg class="w-4 h-4 text-white rotate-45" fill="currentColor" viewBox="0 0 20 20">
+                  <svg class="w-4 h-4 text-cyan-950 rotate-45" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 5v10m0 0l5-5m-5 5l-5-5" />
                   </svg>
                 </div>
                 <div>
                   <p class="text-xs text-gray-400">Expense</p>
-                  <p class="text-sm font-semibold text-cyan-200"></p>
+                  <p class="text-sm font-semibold text-cyan-950"></p>
                 </div>
               </div>
-              <div class="flex items-center gap-2 bg-gray-800 rounded-xl px-4 py-2 shadow">
+              <div class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow">
                 <div class="bg-blue-500 p-2 rounded-full">
-                  <svg class="w-4 h-4 text-white -rotate-45" fill="currentColor" viewBox="0 0 20 20">
+                  <svg class="w-4 h-4 text-cyan-950 -rotate-45" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 5v10m0 0l5-5m-5 5l-5-5" />
                   </svg>
                 </div>
                 <div>
                   <p class="text-xs text-gray-400">Income</p>
-                  <p class="text-sm font-semibold text-cyan-200"></p>
+                  <p class="text-sm font-semibold text-cyan-950"></p>
                 </div>
               </div>
             </div>
         
             <div>
         <div class="flex justify-between items-center mb-3">
-          <h3 class="font-semibold text-cyan-200">Recent Transactions</h3>
+          <h3 class="font-semibold text-cyan-950">Recent Transactions</h3>
           <a href="#" class="text-sm text-blue-400 hover:underline">View All</a>
         </div>
         <ul class="space-y-3 text-sm">
           <li class="flex justify-between items-center">
             <div>
-              <p class="font-semibold text-cyan-200">{{  }}</p>
-              <p class="text-gray-400 text-xs">{{  }}</p>
+              <p class="font-semibold text-cyan-950">PT SINGASANA</p>
+              <p class="text-gray-400 text-xs">22.23 20/04/2025</p>
             </div>
             <p class="text-orange-400">Rp. 240.000 ↑</p>
           </li>
@@ -158,33 +158,15 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      search: '',
       showModal: false,
-      isEdit: false,
-      editIndex: null,
-      form: {
-        pengirim: '',
-        transaksi: '',
-        vac: '',
-        keterangan: '',
-        tanggalMasuk: '',
-        status: 'Active',
-        imageUrl: ''
-      },
-      inList: [],
+      noteText: '',
+      monthInput: '',
+      dayInput: '',
+      yearInput: '',
+      notes: {},
       balance: null
     };
   },
-
-  computed: {
-    filteredList() {
-      return this.inList.filter(item =>
-        item.keterangan.toLowerCase().includes(this.search.toLowerCase()) ||
-        item.nama?.toLowerCase().includes(this.search.toLowerCase())
-      );
-    },
-  },
-
   methods: {
     fetchBalance() {
       const token = localStorage.getItem('token');
@@ -204,9 +186,8 @@ export default {
       } 
     },
   },
-
   mounted() {
-    this.fetchBalance()
+    this.fetchBalance();
   },
 }
 </script>

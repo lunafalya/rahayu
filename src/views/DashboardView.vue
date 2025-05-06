@@ -6,79 +6,79 @@
     <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
       <div class="flex flex-row items-start pt-6 w-full">
         <!-- WALLET  -->
-      <div class="bg-cyan-950 text-white rounded-2xl p-6 shadow-lg w-full">
-      <h2 class="text-xl font-bold mb-4 text-cyan-200">My Wallet</h2>
+      <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-lg w-full">
+      <h2 class="text-xl font-bold mb-4 text-cyan-950">My Wallet</h2>
       <div class="mb-6">
         <p class="text-sm text-gray-300">Available Balance</p>
         <p v-if="balance == null" class="skeleton h-9 w-56 mt-1 bg-gray-800"></p>
-        <p v-else class="text-3xl font-bold mt-1 text-cyan-200">Rp. {{ Intl.NumberFormat('id-ID').format(balance) }}</p>
+        <p v-else class="text-3xl font-bold mt-1 text-cyan-950">Rp. {{ Intl.NumberFormat('id-ID').format(balance) }}</p>
       </div>
   
       <div class="flex gap-4 mb-6">
-        <div class="flex items-center gap-2 bg-gray-800 rounded-xl px-4 py-2 shadow">
+        <div class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow">
           <div class="bg-yellow-500 p-2 rounded-full">
-            <svg class="w-4 h-4 text-white rotate-45" fill="currentColor" viewBox="0 0 20 20">
+            <svg class="w-4 h-4 text-cyan-950 rotate-45" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10 5v10m0 0l5-5m-5 5l-5-5" />
             </svg>
           </div>
           <div>
             <p class="text-xs text-gray-400">Expense</p>
-            <p class="text-sm font-semibold text-cyan-200">Rp. 240.000</p>
+            <p class="text-sm font-semibold text-cyan-950">Rp. 240.000</p>
           </div>
         </div>
-        <div class="flex items-center gap-2 bg-gray-800 rounded-xl px-4 py-2 shadow">
+        <div class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow">
           <div class="bg-blue-500 p-2 rounded-full">
-            <svg class="w-4 h-4 text-white -rotate-45" fill="currentColor" viewBox="0 0 20 20">
+            <svg class="w-4 h-4 text-cyan-950 -rotate-45" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10 5v10m0 0l5-5m-5 5l-5-5" />
             </svg>
           </div>
           <div>
             <p class="text-xs text-gray-400">Income</p>
-            <p class="text-sm font-semibold text-cyan-200">Rp. 500.000</p>
+            <p class="text-sm font-semibold text-cyan-950">Rp. 500.000</p>
           </div>
         </div>
       </div>
   
       <div>
         <div class="flex justify-between items-center mb-3">
-          <h3 class="font-semibold text-cyan-200">Recent Transactions</h3>
-          <a href="/income" class="text-sm text-blue-400 hover:underline">View All</a>
+          <h3 class="font-semibold text-cyan-950">Recent Transactions</h3>
+          <router-link to="/income" class="text-sm text-blue-400 hover:underline">View All</router-link>
         </div>
         <ul class="space-y-3 text-sm">
           <li class="flex justify-between items-center">
             <div>
-              <p class="font-semibold text-cyan-200">PT. SILATURAHMI</p>
+              <p class="font-semibold text-cyan-950">PT. SILATURAHMI</p>
               <p class="text-gray-400 text-xs">12.05 WIB • 22/04/2025</p>
             </div>
-            <p class="text-orange-400">Rp. 240.000 ↑</p>
+            <p class="text-red-500">Rp. 240.000 ↑</p>
           </li>
           <li class="flex justify-between items-center">
             <div>
-              <p class="font-semibold text-cyan-200">LUNA FALYA ISKANDAR</p>
+              <p class="font-semibold text-cyan-950">LUNA FALYA ISKANDAR</p>
               <p class="text-gray-400 text-xs">10.30 WIB • 19/04/2025</p>
             </div>
-            <p class="text-blue-400">Rp. 500.000 ↓</p>
+            <p class="text-cyan-400">Rp. 500.000 ↓</p>
           </li>
           <li class="flex justify-between items-center">
             <div>
-              <p class="font-semibold text-cyan-200">FALIANA ALIFIA</p>
+              <p class="font-semibold text-cyan-950">FALIANA ALIFIA</p>
               <p class="text-gray-400 text-xs">21.53 WIB • 18/04/2025</p>
             </div>
-            <p class="text-orange-400">Rp. 32.030 ↑</p>
+            <p class="text-red-500">Rp. 32.030 ↑</p>
           </li>
           <li class="flex justify-between items-center">
             <div>
-              <p class="font-semibold text-cyan-200">PT. SILATURAHMI</p>
+              <p class="font-semibold text-cyan-950">PT. SILATURAHMI</p>
               <p class="text-gray-400 text-xs">08.21 WIB • 14/04/2025</p>
             </div>
-            <p class="text-blue-400">Rp. 820.901 ↓</p>
+            <p class="text-cyan-400">Rp. 820.901 ↓</p>
           </li>
           <li class="flex justify-between items-center">
             <div>
-              <p class="font-semibold text-cyan-200">SD AMALINA</p>
+              <p class="font-semibold text-cyan-950">SD AMALINA</p>
               <p class="text-gray-400 text-xs">16.17 WIB • 10/04/2025</p>
             </div>
-            <p class="text-blue-400">Rp. 201.500 ↓</p>
+            <p class="text-cyan-400">Rp. 201.500 ↓</p>
           </li>
         </ul>
       </div>
@@ -113,32 +113,20 @@
         </div>
       </div>
     </div>
-
-      <!-- Deadline Cards -->
-       <!-- INI BUAT APAA?? -->
-      <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <DeadlineCard
-          v-for="(deadline, index) in deadlines"
-          :key="index"
-          :deadline="deadline"
-          @edit="editDeadline(index)"
-          @delete="deleteDeadline(index)"
-        />
-      </div> -->
     </div>
 
     <!-- Right Side: Notifications -->
     <div class="w-1/5 flex flex-col gap-4 mt-4 mr-4">
       <!-- Notifikasi -->
-      <div class="bg-cyan-950 rounded-2xl shadow-md p-4 h-80">
-        <h3 class="font-bold text-cyan-200">NOTIFIKASI</h3>
+      <div class="bg-white rounded-2xl shadow-md p-4 h-80">
+        <h3 class="font-bold text-cyan-950">NOTIFIKASI</h3>
         <p class="text-sm text-gray-400 mt-2">Belum ada notifikasi baru.</p>
       </div>
 
 
       <!-- Kalender Deadline -->
-      <div class="bg-cyan-950 rounded-2xl shadow-md pb-5 h-auto">
-        <h3 class="font-bold m-3 text-cyan-200">DEADLINE</h3>
+      <div class="bg-white rounded-2xl shadow-md pb-5 h-auto">
+        <h3 class="font-bold m-3 text-cyan-950">DEADLINE</h3>
         <div class="cally rounded-box w-full p-4">
           <div class="flex justify-between items-center mb-2">
             <button @click="prevMonth">
@@ -146,9 +134,9 @@
                 <path fill="currentColor" d="M15.75 19.5 8.25 12l7.5-7.5"></path>
               </svg>
             </button>
-            <h3 class="text-sm font-semibold text-cyan-200">{{ currentMonthName }} {{ currentYear }}</h3>
+            <h3 class="text-sm font-semibold text-cyan-950 hover:text-white">{{ currentMonthName }} {{ currentYear }}</h3>
             <button @click="nextMonth">
-              <svg class="fill-current size-4 text-cyan-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <svg class="fill-current size-4 text-cyan-950 hover:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path fill="currentColor" d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
               </svg>
             </button>

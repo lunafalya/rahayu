@@ -23,10 +23,10 @@
   background-color: #ffffff;
   padding: 2rem;
   border-radius: 1rem;
-  max-width: 500px;
+  max-width: 100vh;
   width: 90%;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  max-height: 90vh; /* tambahkan ini agar modal tidak lebih tinggi dari viewport */
+  max-height: 100vh; /* tambahkan ini agar modal tidak lebih tinggi dari viewport */
   overflow-y: auto;  /* tambahkan ini agar kontennya bisa discroll */
 }
 

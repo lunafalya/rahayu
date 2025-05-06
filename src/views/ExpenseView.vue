@@ -5,10 +5,10 @@
 
     <!-- Expense -->
     <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
-    <div class="bg-cyan-950 rounded-2xl shadow-md flex-grow p-6">
+    <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
     <div class="karyawan-page">      
         <div class="flex mt-8 justify-between pb-6">
-            <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-white border px-3 py-2" />
+            <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3 py-2" />
       </div>
       
 
@@ -19,22 +19,23 @@
             <button class="shadow-lg" @click="tab = 'Gaji'" :class="getTabClass('Gaji')">Gaji Karyawan</button>
             <button class="shadow-lg" @click="tab = 'Peminjaman'" :class="getTabClass('Peminjaman')">Peminjaman</button>
             </div>
-            <button @click="openCategorySelector" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-700 text-white">
+            <button @click="openCategorySelector" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
             Tambah
           </button>
         </div>
 
         <!-- Tabel General -->
+        <div class="overflow-x-auto rounded-box border border-base-content/5  bg-gray-400">
         <table v-if="tab === 'General'" class="w-full text-left">
           <thead>
             <tr>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2 shadow-lg">Nominal</th>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2 shadow-lg">Keterangan</th>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2 shadow-lg">Tanggal</th>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2 shadow-lg">Aksi</th>
+              <th class="overflow-x-auto bg-gray-400 text-white px-4 py-2 shadow-lg">Nominal</th>
+              <th class="overflow-x-auto bg-gray-400 text-white px-4 py-2 shadow-lg">Keterangan</th>
+              <th class="overflow-x-auto bg-gray-400 text-white px-4 py-2 shadow-lg">Tanggal</th>
+              <th class="overflow-x-auto bg-gray-400 text-white px-4 py-2 shadow-lg">Aksi</th>
             </tr>
           </thead>
-          <tbody class="bg-cyan-600 text-white px-4 py-2">
+          <tbody class="bg-white text-cyan-950 px-4 py-2">
             <tr v-for="(item, index) in generalList" :key="index">
               <td class="px-4 py-2">{{totalHargaFormat(item.jumlah) }}</td>
               <td class="px-4 py-2">{{ item.keterangan }}</td>
@@ -51,15 +52,15 @@
         <table v-if="tab === 'Gaji'" class="w-full text-left">
           <thead>
             <tr>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Nama Karyawan</th>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Total Gaji</th>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Potongan</th>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Tanggal</th>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Status</th>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Aksi</th>
+              <th class="overflow-x-auto text-white bg-gray-400  px-4 py-2">Nama Karyawan</th>
+              <th class="overflow-x-auto text-white bg-gray-400 px-4 py-2">Total Gaji</th>
+              <th class="overflow-x-auto text-white bg-gray-400 px-4 py-2">Potongan</th>
+              <th class="overflow-x-auto text-white bg-gray-400 px-4 py-2">Tanggal</th>
+              <th class="overflow-x-auto text-white bg-gray-400 px-4 py-2">Status</th>
+              <th class="overflow-x-auto text-white bg-gray-400 px-4 py-2">Aksi</th>
             </tr>
           </thead>
-          <tbody class="bg-cyan-600 text-white px-4 py-2">
+          <tbody class="bg-white text-cyan-950 px-4 py-2">
             <tr v-for="(item, index) in gajiList" :key="index">
               <td class="px-4 py-2">{{ item.nama }}</td>
               <td class="px-4 py-2">{{ totalHargaFormat(detailData.total) }}</td>
@@ -78,15 +79,15 @@
         <table v-if="tab === 'Peminjaman'" class="w-full text-left">
           <thead>
             <tr>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Nama Karyawan</th>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Nominal Pinjaman</th>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Tunggakan</th>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Tanggal</th>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Status</th>
-              <th class="overflow-x-auto text-white bg-cyan-700 px-4 py-2">Aksi</th>
+              <th class="overflow-x-auto text-white bg-gray-400 px-4 py-2">Nama Karyawan</th>
+              <th class="overflow-x-auto text-white bg-gray-400 px-4 py-2">Nominal Pinjaman</th>
+              <th class="overflow-x-auto text-white bg-gray-400 px-4 py-2">Tunggakan</th>
+              <th class="overflow-x-auto text-white bg-gray-400 px-4 py-2">Tanggal</th>
+              <th class="overflow-x-auto text-white bg-gray-400 px-4 py-2">Status</th>
+              <th class="overflow-x-auto text-white bg-gray-400 px-4 py-2">Aksi</th>
             </tr>
           </thead>
-          <tbody class="bg-cyan-600 text-white px-4 py-2">
+          <tbody class="bg-white text-cyan-950 px-4 py-2">
             <tr v-for="(item, index) in pinjamList" :key="index">
               <td class="px-4 py-2">{{ item.nama}}</td>
               <td class="px-4 py-2">{{ item.nama }}</td>
@@ -101,6 +102,7 @@
             </tr>
           </tbody>
         </table>
+        </div>
 
         <!-- Modal Pilih Kategori -->
         <div class="modal-overlay" v-if="showCategoryModal">
@@ -120,8 +122,8 @@
           <div class="modal-content max-w-xl w-full">
             <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Form Gaji Karyawan</h2>
             
-            <label class="font-medium text-cyan-950">ID Karyawan</label>
-            <select v-model="gajiForm.id_karyawan" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
+            <label class="font-medium text-cyan-950">Nama Karyawan</label>
+            <select v-model="gajiForm.nama" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
               <option v-for="k in karyawanList" :key="k.id" :value="k.id">{{ k.id }} - {{ k.nama }}</option>
             </select>
 
@@ -247,13 +249,12 @@
         <div class="modal-overlay" v-if="showPinjamModal">
           <div class="modal-content">
             <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Tambah Pengeluaran</h2>
-            <label class="font-medium text-cyan-950">ID Karyawan</label>
+
+            <label class="font-medium text-cyan-950">Nama Karyawan</label>
+            <!-- <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="pinjamForm.nama" type="text" /> -->
             <select v-model="pinjamForm.id" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
               <option v-for="k in karyawanList" :key="k.id" :value="k.id">{{ k.id }} - {{ k.nama }}</option>
             </select>
-
-            <label class="font-medium text-cyan-950">Nama Karyawan</label>
-            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="pinjamForm.nama" type="text" />
 
             <label class="font-medium text-cyan-950">Transaksi</label>
             <select v-model="pinjamForm.bayar" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-6">
@@ -291,39 +292,41 @@
 
 
         <!-- Modal Detail -->
-        <div class="modal-overlay" v-if="showDetailModal">
+        <div class="modal-overlay " v-if="showDetailModal">
           <div class="modal-content max-w-xl w-full">
-            <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Detail {{ tab }}</h2>
-            
+            <h2 class="text-3xl font-bold text-cyan-950 mb-6 text-center">Detail {{ tab }}</h2>
+
             <div v-if="tab === 'General'">
-              <h1 class="text-3xl font-bold mb-4">Nominal: {{ totalHargaFormat(detailData.jumlah) }}</h1>
-              <p><strong>Penerima :</strong> {{ detailData.nama }}</p>
-              <p><strong>Bank Tujuan :</strong> {{ detailData.bank }}</p>
-              <p><strong>No rek :</strong> {{ detailData.va }}</p>
-              <p><strong>Keterangan:</strong> {{ detailData.keterangan }}</p>
-              <p><strong>Tanggal:</strong> {{ detailData.tanggal }}</p>
-              <p><strong>Status:</strong> {{ detailData.status }}</p>
+              <h1 class="text-2xl mb-4 flex justify-between">Nominal <span>{{ totalHargaFormat(detailData.jumlah) }}</span></h1>
+              
+              <p class="flex justify-between">Penerima<strong><span>{{ detailData.nama }}</span></strong></p>
+              <p class="flex justify-between">Bank Tujuan<strong> <span>{{ detailData.bank }}</span></strong> </p>
+              <p class="flex justify-between">No rek<strong><span>{{ detailData.va }}</span></strong></p>
+              <p class="flex justify-between">Keterangan<strong> <span>{{ detailData.keterangan }}</span></strong></p>
+              <p class="flex justify-between">Tanggal<strong> <span>{{ detailData.tanggal }}</span></strong></p>
+              <p class="flex justify-between">Status<strong> <span>{{ detailData.status }}</span></strong></p>
             </div>
 
+
             <div v-else-if="tab === 'Gaji'">
-              <h1 class="text-3xl font-bold mb-4">Jumlah: {{ totalHargaFormat(detailData.total) }}</h1>
-              <p><strong>Nama Karyawan:</strong> {{ detailData.nama }}</p>
-              <p><strong>Gaji awal :</strong> {{ totalHargaFormat(detailData.total_gaji) }}</p>
-              <p><strong>Potongan:</strong> {{ totalHargaFormat(detailData.potongan) }}</p>
-              <p><strong>Tanggal Pengajuan:</strong> {{ detailData.tanggal_pengajuan }}</p>
-              <p><strong>Pembayaran:</strong> {{ detailData.transaksi }}</p>
-              <p><strong>Rekening:</strong> {{ detailData.vac }}</p>
-              <p><strong>Status:</strong> {{ detailData.status }}</p>
+              <h1 class="text-2xl mb-4 flex justify-between">Nominal: <strong><span>{{ totalHargaFormat(detailData.total) }}</span></strong></h1>
+              <p class="flex justify-between">Nama Karyawan<strong><span>{{ detailData.nama }}</span></strong></p>
+              <p class="flex justify-between">Gaji awal<strong><span>{{ totalHargaFormat(detailData.total_gaji) }}</span></strong></p>
+              <p class="flex justify-between">Potongan<strong><span>{{ totalHargaFormat(detailData.potongan) }}</span></strong></p>
+              <p class="flex justify-between">Tanggal Pengajuan<strong><span>{{ detailData.tanggal_pengajuan }}</span></strong></p>
+              <p class="flex justify-between">Pembayaran<strong><span>{{ detailData.transaksi }}</span></strong></p>
+              <p class="flex justify-between">Virtual Account<strong><span> {{ detailData.vac }}</span></strong></p>
+              <p class="flex justify-between">Status<strong><span>{{ detailData.status }}</span></strong></p>
             </div>
 
             <div v-else-if="tab === 'Peminjaman'">
-              <h1 class="text-3xl font-bold mb-4">Nominal: {{ totalHargaFormat(detailData.jumlah) }}</h1>
-              <p><strong>Nama:</strong> {{ detailData.nama }}</p>
-              <p>{{ detailData.va }}</p>
-              <p><strong>Tanggal:</strong> {{ detailData.tanggal }}</p>
-              <p><strong>Pembayaran:</strong> {{ detailData.bayar }}</p>
-              <p><strong>Rekening:</strong> {{ detailData.vc }}</p>
-              <p><strong>Status:</strong> {{ detailData.status }}</p>
+              <h1 class="text-2xl mb-4 flex justify-between">Nominal:  <strong><span>{{ totalHargaFormat(detailData.jumlah) }}</span></strong></h1>
+              <p class="flex justify-between">Nama<strong><span>{{ detailData.nama }}</span></strong></p>
+              <p class="flex justify-between">Virtual Account<strong><span>{{ detailData.va }}</span></strong></p>
+              <p class="flex justify-between">Tanggal<strong><span>{{ detailData.tanggal }}</span></strong></p>
+              <p class="flex justify-between">Pembayaran<strong><span>{{ detailData.bayar }}</span></strong></p>
+              <p class="flex justify-between">Rekening<strong><span>{{ detailData.vc }}</span></strong></p>
+              <p class="flex justify-between">Status<strong><span>{{ detailData.status }}</span></strong></p>
             </div>
 
             <div class="flex justify-end mt-4">
@@ -662,7 +665,7 @@ const filteredByCategory = computed(() => {
 
 
 function getTabClass(currentTab) {
-  return tab.value === currentTab ? 'btn bg-cyan-700 text-white' : 'btn bg-cyan-950 text-white'
+  return tab.value === currentTab ? 'btn bg-cyan-950 text-white' : 'btn text-cyan-950 bg-white'
 }
 
 const uniqueCategories = computed(() => {

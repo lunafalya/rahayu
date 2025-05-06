@@ -3,22 +3,35 @@
       <SideBar />
       
       
-      <!-- Expense -->
-      <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
-        <div class="bg-cyan-950 rounded-2xl shadow-md flex-grow p-6">
-        <div class="karyawan-page">      
-            <div class="flex mt-8 justify-between pb-6">
-              <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-white border px-3 py-2" />
-              <button @click="showModal=true" class="btn border-0 shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-700 text-white">
-              Tambah
-            </button>
-          </div>
+<!-- Container Utama -->
+<div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
+  <div class="bg-white rounded-2xl shadow-md flex-grow p-6 max-h-[90vh]">
 
+    <div class="karyawan-page mb-5">
 
-      <!-- Tabel Data Karyawan -->
-      <div class="overflow-x-auto w-full table-fixed rounded-box border border-base-content/5 bg-cyan-700">
-        <table class="table text-left">
-          <thead>
+      <!-- Sticky Search Bar + Button -->
+      <div class="flex justify-between bg-white sticky top-0 z-20 py-4">
+        <input 
+          v-model="search" 
+          type="text" 
+          placeholder="Search ..." 
+          class="search-bar text-cyan-950 border px-3 py-2 bg-white rounded" 
+        />
+        <button 
+          @click="showModal = true" 
+          class="btn border-0 shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white"
+        >
+          Tambah
+        </button>
+      </div>
+
+      <!-- Tabel Data -->
+      <div class="overflow-x-auto w-full table-fixed rounded-box border border-base-content/5 bg-white">
+
+        <!-- Table -->
+        <table class="table text-left w-full">
+          <!-- Sticky Table Head -->
+          <thead class="sticky top-[80px] bg-gray-400 z-10">
             <tr>
               <th class="w-20 text-white">No.</th>
               <th class="w-30 pl-9 text-white">Profile</th>
@@ -28,22 +41,32 @@
               <th class="text-white">Aksi</th>
             </tr>
           </thead>
-          <tbody class="bg-cyan-600 text-white">
-            <tr v-if="filteredKaryawan.length === 0">
-              <td colspan="6" class="text-center py-4">Tidak ada data ditemukan</td>
-            </tr>
-            <tr v-else v-for="(karyawan, index) in filteredKaryawan" :key="index">
-              <td class="align-middle">{{ index + 1 }}</td>
-              <td class="align-middle"><img :src="karyawan.imageUrl" alt="Profile" class="align-middle w-12 h-12 object-cover rounded-full mx-auto" /></td>
-              <td class="align-middle">{{ karyawan.name }}</td>
-              <td class="align-middle">{{ karyawan.position }}</td>
-              <td class="align-middle">
-                <span class="align-middle" :class="['status-badge', karyawan.status.toLowerCase()]">{{ karyawan.status }}</span>
-              </td>
-              <td class="align-middle"><button @click="editKaryawan(karyawan.id)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Edit</button></td>
-            </tr>
-          </tbody>
         </table>
+
+        <!-- Scrollable Table Body -->
+        <div class="max-h-[60vh] overflow-y-auto">
+          <table class="table text-left w-full">
+            <tbody class="bg-white text-cyan-950">
+              <tr v-if="filteredKaryawan.length === 0">
+                <td colspan="6" class="text-center py-4">Tidak ada data ditemukan</td>
+              </tr>
+              <tr v-else v-for="(karyawan, index) in filteredKaryawan" :key="index">
+                <td class="align-middle">{{ index + 1 }}</td>
+                <td class="align-middle">
+                  <img :src="karyawan.photo" alt="Profile" class="align-middle w-12 h-12 object-cover rounded-full mx-auto" />
+                </td>
+                <td class="align-middle">{{ karyawan.name }}</td>
+                <td class="align-middle">{{ karyawan.position }}</td>
+                <td class="align-middle">
+                  <span class="align-middle" :class="['status-badge', karyawan.status.toLowerCase()]">{{ karyawan.status }}</span>
+                </td>
+                <td class="align-middle">
+                  <button @click="editKaryawan(karyawan.id)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Edit</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
   
       <!-- Modal Form -->

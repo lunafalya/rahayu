@@ -5,17 +5,17 @@
 
   <!-- Order -->
   <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
-  <div class="bg-cyan-950 rounded-2xl shadow-md flex-grow p-6">
+  <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
   <div class="order-page">
     <div class="flex mt-8 justify-between pb-6">
-        <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-white border px-3 py-2" />
-        <button @click="showModal=true" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-700 text-white">
+        <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3 py-2" />
+        <button @click="showModal=true" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
         Tambah
       </button>
     </div>
 
      <!-- Tabel Data Order -->
-     <div class="overflow-x-auto rounded-box border border-base-content/5  bg-cyan-700">
+     <div class="overflow-x-auto rounded-box border border-base-content/5  bg-gray-400">
       <table class="table">
       <thead>
         <tr>
@@ -27,7 +27,7 @@
           <th class="text-white">Aksi</th>
         </tr>
       </thead>
-      <tbody class="text-white bg-cyan-600">
+      <tbody class="text-cyan-950 bg-white">
           <tr v-for="(order, index) in filteredorder" :key="index">
             <td>{{ index + 1 }}</td>
             <td>{{ order.namaPemesan }}</td>
@@ -97,7 +97,7 @@
 
                         <!-- Tabel Daftar Extra Ditambahkan -->
                     <table class="w-full text-sm border border-gray-300 mb-4">
-                      <thead class="bg-cyan-200">
+                      <thead class="bg-white">
                         <tr>
                           <th class="p-2 border">Jenis Extra</th>
                           <th class="p-2 border">Harga</th>
@@ -135,7 +135,7 @@
                       <input class="border p-2 rounded bg-gray-100" :value="extraInput.harga * extraInput.jumlah" type="text" placeholder="Total" disabled />
                     </div>
 
-                    <button @click="tambahExtra" class="bg-cyan-700 text-white px-3 py-1 rounded mb-4">+ Tambah Extra</button>
+                    <button @click="tambahExtra" class="bg-cyan-950 text-white px-3 py-1 rounded mb-4">+ Tambah Extra</button>
                     <br>
 
                     <label class="text-cyan-950">Total Harga Extra:</label>
@@ -193,7 +193,7 @@
 
 
     <!-- Bayar Modal -->
-    <!-- <div class="modal-overlay" v-if="showModalBayar">
+    <div class="modal-overlay" v-if="showModalBayar">
       <div class="modal-content">
         <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Bayar Pesanan</h2>
         
@@ -230,7 +230,7 @@
             :disabled="form.metodepembayaran === 'Cash'">Generated Code</button>
         </div>
       </div>
-    </div> -->
+    </div>
 
   </div>
   </div>

@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col gap-4 justify-center items-center w-screen mx-auto h-screen bg-cyan-950">
         <img src="../assets/rahayu.svg" alt="Rahayu Logo" class="w-32 h-32" />
-        <fieldset class="fieldset w-xs bg-base-200 border border-base-300 p-5 rounded-xl">
+        <fieldset class="fieldset w-xs bg-base-200 border bg-blue-200 border-base-300 p-5 rounded-xl">
 
             <label class="fieldset-label">Username</label>
             <input type="text" class="input" placeholder="Username" v-model="username" />
@@ -18,7 +18,7 @@
                 Forgot Password?
             </a>
 
-            <button class="btn w-full my-4 hover:text-cyan-950 hover:bg-cyan-400 bg-cyan-950 text-white" type="button" @click="Login()">
+            <button class="btn w-full my-4 hover:text-white hover:bg-cyan-900 bg-cyan-700 text-white" type="button" @click="Login()">
                 <p>Login</p>
             </button>
         </fieldset>
