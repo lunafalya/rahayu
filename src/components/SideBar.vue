@@ -62,7 +62,7 @@
   
   const menuItems = [
     { name: 'Dashboard', route: '/dashboard', icon: 'house' },
-    { name: 'Income', route: '/income', icon: 'sack-dollar' },
+    { name: 'Mutation', route: '/income', icon: 'sack-dollar' },
     { name: 'Order', route: '/order', icon: ['fab', 'shopify'] },
     { name: 'Product', route: '/product', icon: 'shirt' },
     { name: 'Expense', route: '/expense', icon: 'receipt' },

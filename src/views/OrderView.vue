@@ -193,11 +193,11 @@
 
 
     <!-- Bayar Modal -->
-    <div class="modal-overlay" v-if="showModalBayar">
+    <!-- <div class="modal-overlay" v-if="showModalBayar">
       <div class="modal-content">
         <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Bayar Pesanan</h2>
         
-        <p><strong>Total Harga:</strong> Rp {{ form.totalHarga.toLocaleString() }}</p>
+        <p><strong>Total Harga:</strong> Rp {{ totalHargaFormat(detailData.totalHargapesanan) }}</p>
 
         <label class="text-cyan-950">Jumlah yang dibayarkan</label>
         <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"
@@ -230,7 +230,7 @@
             :disabled="form.metodepembayaran === 'Cash'">Generated Code</button>
         </div>
       </div>
-    </div>
+    </div> -->
 
   </div>
   </div>
@@ -437,17 +437,8 @@ function showModalBayarFunc(index) {
   const item = daftarPesanan.value[index];
   detailData.value = item;
 
-  // Cek apakah nilai totalHargapesanan ada
-  const hargaAwal = item.totalhargapesanan?? 0;
-  const sisaBayar = item.sisabayar;
-
-  // Jika belum pernah bayar, pakai totalHargapesanan
-  // Kalau sudah ada sisabayar, pakai itu
-  form.value.totalHarga = (sisaBayar !== undefined && sisaBayar !== null)
-    ? sisaBayar
-    : hargaAwal;
-
-  form.value.dp = 0;
+  form.value.totalHarga = item.totalhargapesanan ?? 0;
+  form.value.dp = 0; // DP baru yang ingin ditambahkan
   form.value.metodepembayaran = item.metodepembayaran ?? '';
 
   showModalBayar.value = true;
@@ -464,23 +455,19 @@ function updateBayar() {
     return;
   }
 
-  if (form.value.dp > form.value.totalHarga) {
-    alert("DP tidak boleh lebih besar dari sisa pembayaran!");
-    return;
-  }
-
   const index = daftarPesanan.value.findIndex(item => item === detailData.value);
   if (index !== -1) {
     const current = daftarPesanan.value[index];
-
     const previousDP = current.dp ?? 0;
-    const previousSisa = current.sisabayar ?? current.totalhargapesanan;
+    const newTotalDP = previousDP + form.value.dp;
 
-    const totalDP = previousDP + form.value.dp;
-    const newSisa = previousSisa - form.value.dp;
+    if (newTotalDP > current.totalhargapesanan) {
+      alert("Total DP tidak boleh melebihi total harga!");
+      return;
+    }
 
-    current.dp = totalDP;
-    current.sisabayar = newSisa;
+    current.dp = newTotalDP;
+    current.sisabayar = current.totalhargapesanan - newTotalDP;
     current.metodepembayaran = form.value.metodepembayaran;
   }
 
@@ -496,9 +483,13 @@ function addBayar() {
 }
 
 const sisabayar = computed(() => {
-  return form.value.totalHarga - form.value.dp;
-});
+  const currentItem = detailData.value;
+  const previousDP = currentItem?.dp ?? 0;
+  const totalHarga = currentItem?.totalhargapesanan ?? 0;
+  const dpBaru = form.value.dp ?? 0;
 
+  return totalHarga - (previousDP + dpBaru);
+});
 
 
 

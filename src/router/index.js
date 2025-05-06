@@ -91,13 +91,12 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !isAuthenticated()) {
-    // If the route requires authentication and the user is not authenticated
-    next({ name: 'login' }); // Redirect to the login page
-  } else {
-    next(); // Proceed to the route
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   if (to.meta.requiresAuth && !isAuthenticated()) {
+//     next({ name: 'login' });
+//   } else {
+//     next();
+//   }
+// });
 
 export default router

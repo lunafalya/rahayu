@@ -5,7 +5,8 @@
 
       <!-- Income -->
         <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
-          <div class="bg-cyan-950 rounded-2xl shadow-md flex-grow p-6">
+          <div class="bg-cyan-950 rounded-2xl shadow-md flex-grow p-6 max-h-[90vh] overflow-y-auto">
+
           
               <!-- WALLET  -->
               <div class="bg-cyan-950 text-white rounded-2xl p-6 shadow-lg w-full">
@@ -24,7 +25,7 @@
                 </div>
                 <div>
                   <p class="text-xs text-gray-400">Expense</p>
-                  <p class="text-sm font-semibold text-cyan-200">Rp. 240.000</p>
+                  <p class="text-sm font-semibold text-cyan-200"></p>
                 </div>
               </div>
               <div class="flex items-center gap-2 bg-gray-800 rounded-xl px-4 py-2 shadow">
@@ -35,28 +36,29 @@
                 </div>
                 <div>
                   <p class="text-xs text-gray-400">Income</p>
-                  <p class="text-sm font-semibold text-cyan-200">Rp. 500.000</p>
+                  <p class="text-sm font-semibold text-cyan-200"></p>
                 </div>
               </div>
             </div>
         
             <div>
-              <div class="flex justify-between items-center mb-3">
-                <h3 class="font-semibold text-cyan-200">Recent Transactions</h3>
-                <a href="#" class="text-sm text-blue-400 hover:underline">View All</a>
-              </div>
-              <ul class="space-y-3 text-sm">
-                <li class="flex justify-between items-center">
-                  <div>
-                    <p class="font-semibold text-cyan-200">PT. SILATURAHMI</p>
-                    <p class="text-gray-400 text-xs">12.05 WIB • 22/04/2025</p>
-                  </div>
-                  <p class="text-orange-400">Rp. 240.000 ↑</p>
-                </li>
- 
-              </ul>
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="font-semibold text-cyan-200">Recent Transactions</h3>
+          <a href="#" class="text-sm text-blue-400 hover:underline">View All</a>
+        </div>
+        <ul class="space-y-3 text-sm">
+          <li class="flex justify-between items-center">
+            <div>
+              <p class="font-semibold text-cyan-200">{{  }}</p>
+              <p class="text-gray-400 text-xs">{{  }}</p>
             </div>
-          </div>
+            <p class="text-orange-400">Rp. 240.000 ↑</p>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+
 
       </div>
     </div>
