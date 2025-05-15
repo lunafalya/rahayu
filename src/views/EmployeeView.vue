@@ -60,8 +60,9 @@
                 <td class="align-middle">
                   <span class="align-middle" :class="['status-badge', karyawan.status.toLowerCase()]">{{ karyawan.status }}</span>
                 </td>
-                <td class="align-middle">
+                <td class="align-middle space-x-2">
                   <button @click="editKaryawan(karyawan.id)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Edit</button>
+                  <button @click="deleteKaryawan(karyawan.id)" class="btn btn-sm text-white bg-red-500 hover:bg-white hover:text-red-500">Hapus</button>
                 </td>
               </tr>
             </tbody>
@@ -80,7 +81,7 @@
           <label class="font-medium text-cyan-950">Foto Profil</label>
           <input type="file" @change="handleImageUpload" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" />
 
-          <div v-if="form.imageUrl" class="flex justify-center mb-4">
+          <div v-if="form.image" class="flex justify-center mb-4">
           <img :src="form.imageUrl" alt="Preview" class="w-24 h-24 rounded-full object-cover border" />
           </div>
 
@@ -128,9 +129,10 @@ import axios from 'axios';
         editIndex: null,
         form: {
           name: '',
-          imageUrl: '',
+          image: '',
           position: '',
-          status: ''
+          status: '',
+          imageUrl: ''
         },
         karyawanList: [],
         karyawan: null
@@ -149,7 +151,7 @@ import axios from 'axios';
     resetForm() {
       this.form = {
         name: '',
-        imageUrl: '',
+        image: '',
         position: '',
         status: 'Aktif'
       };
@@ -172,18 +174,34 @@ import axios from 'axios';
     },
 
     addKaryawan() {
-      if (this.form.nama && this.form.imageUrl && this.form.jabatan  ) {
-        this.karyawanList.push({ ...this.form });
-        this.resetForm();
+      if (this.form.name && this.form.image && this.form.position) {
+        const formData = new FormData();
+        formData.append('name', this.form.name);
+        formData.append('position', this.form.position);
+        formData.append('status', this.form.status);
+        formData.append('image', this.form.image);
+
+        axios.post('https://great-distinctly-seasnail.ngrok-free.app/api/employees', formData, {
+            headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('token'),
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+        ).then(() => {
+          alert('Data karyawan berhasil ditambahkan');
+          this.getKaryawan();
+          this.resetForm();
+        }).catch(error => {
+          console.error('Error adding karyawan data:', error);
+        });
       } else {
         alert('Lengkapi semua field!');
       }
     },
-
     editKaryawan(id) {
       axios.get(`https://great-distinctly-seasnail.ngrok-free.app/api/employees/${id}`, {
           headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
+            'Authorization': 'Bearer ' + localStorage.getItem('token'),
           }
         })
         .then(response => {
@@ -197,15 +215,48 @@ import axios from 'axios';
         });
     },
     updateKaryawan() {
-      if (this.editIndex !== null && this.form.name && this.form.imageUrl && this.form.position) {
-        axios.put(`https://great-distinctly-seasnail.ngrok-free.app/api/employees/${this.editIndex}`, this.form, {
+      if (this.editIndex !== null && this.form.name && this.form.image && this.form.position) {
+        const formData = new FormData();
+        formData.append('name', this.form.name);
+        formData.append('position', this.form.position);
+        formData.append('status', this.form.status);
+
+        // Check if the image is a file or a base64 string
+        if (this.form.image instanceof File) {
+          formData.append('image', this.form.image);
+        }
+        
+        axios.put(`https://great-distinctly-seasnail.ngrok-free.app/api/employees/${this.editIndex}`, formData, {
+            headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('token'),
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+        ).then(() => {
+          alert('Data karyawan berhasil diperbarui');
+          this.getKaryawan();
+          this.resetForm();
+        }).catch(error => {
+          console.error('Error updating karyawan data:', error);
+        });
+      } else {
+        alert('Lengkapi semua field!');
+      }
+    },
+    deleteKaryawan(id) {
+      if (confirm('Apakah Anda yakin ingin menghapus karyawan ini?')) {
+        axios.delete(`https://great-distinctly-seasnail.ngrok-free.app/api/employees/${id}`, {
             headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('token')
             }
-          }
-        );
-      } else {
-        alert('Lengkapi semua field!');
+          })
+          .then(() => {
+            alert('Data karyawan berhasil dihapus');
+            this.getKaryawan();
+          })
+          .catch(error => {
+            console.error('Error deleting karyawan data:', error);
+          });
       }
     },
     handleImageUpload(event) {
@@ -215,6 +266,7 @@ import axios from 'axios';
         reader.onload = () => {
           this.form.imageUrl = reader.result;
         };
+        this.form.image = file; // Store the file directly 
         reader.readAsDataURL(file);
       }
     }
@@ -230,7 +282,7 @@ import axios from 'axios';
 .status-badge {
   padding: 5px 12px;
   border-radius: 20px;
-  color: white;
+  color: black;
 }
 .status-badge.active {
   background-color: #28a745;
