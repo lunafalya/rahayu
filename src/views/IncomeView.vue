@@ -14,7 +14,7 @@
             <div class="mb-6">
               <p class="text-sm text-gray-300">Available Balance</p>
               <p v-if="balance == null" class="skeleton h-9 w-56 mt-1 bg-gray-800"></p>
-              <p v-else class="text-3xl font-bold mt-1 text-white">Rp. {{ Intl.NumberFormat('id-ID').format(balance) }}</p>
+              <p v-else class="text-3xl font-bold mt-1 text-black">Rp. {{ Intl.NumberFormat('id-ID').format(balance) }}</p>
             </div>
         
             <div class="flex gap-4 mb-6">
