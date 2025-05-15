@@ -55,8 +55,19 @@
     <label class="text-cyan-950">Nomor Telepon :</label>
     <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.nomorTelepon" type="text" placeholder="Nomor Telepon" />
 
+    <label class="text-cyan-950">Kota</label>
+    <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.kota">
+      <option class="text-cyan-950" disabled value="">Pilih Kota</option>
+      <option>Bogor</option>
+      <option>Bekasi</option>
+      <option>Cirebon</option>
+      <option>Bandung</option>
+      <option>Sukabum</option>
+    </select>
+
+
     <label class="text-cyan-950">Alamat:</label>
-    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.alamat" type="text" placeholder="alamat" />
+    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.alamat" type="text" placeholder="Masukkan Alamat" />
 
     <label class="text-cyan-950">Jenis Produk:</label>
     <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.jenisProduk">
@@ -162,28 +173,29 @@
   <div class="modal-content max-w-xl w-full">
     <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Detail Pesanan</h2>
     
-    <p><strong>Nama Pemesan:</strong> {{ detailData.namaPemesan }}</p>
-    <p><strong>Nomor Telepon:</strong> {{ detailData.nomorTelepon }}</p>
-    <p><strong>Alamat</strong> {{ detailData.alamat }}</p>
-    <p><strong>Jenis Produk:</strong> {{ detailData.jenisProduk }}</p>
-    <p><strong>Jumlah Produk:</strong> {{ detailData.jumlahProduk }}</p>
-    <p><strong>Ukuran:</strong></p>
+    <p class="flex justify-between"><strong>Nama Pemesan</strong> <span>{{ detailData.namaPemesan }}</span></p>
+    <p class="flex justify-between"><strong>Nomor Telepon</strong> <span>{{ detailData.nomorTelepon }}</span></p>
+    <p class="flex justify-between"><strong>Alamat</strong> <span>{{ detailData.alamat }}</span></p>
+    <p class="flex justify-between"><strong>Kota</strong> <span>{{ detailData.kota }}</span></p>
+    <p class="flex justify-between"><strong>Jenis Produk</strong> <span>{{ detailData.jenisProduk }}</span></p>
+    <p class="flex justify-between"><strong>Jumlah Produk</strong> <span>{{ detailData.jumlahProduk }}</span></p>
+    <p class="flex justify-between"><strong>Ukuran</strong></p>
     <ul class="ml-4">
-      <li>S: {{ detailData.ukuran?.S }}</li>
-      <li>M: {{ detailData.ukuran?.M }}</li>
-      <li>L: {{ detailData.ukuran?.L }}</li>
-      <li>XL: {{ detailData.ukuran?.XL }}</li>
-      <li>XXL: {{ detailData.ukuran?.XXL }}</li>
-      <li>Lainnya: {{ detailData.ukuran?.lainnya }}</li>
+      <li class="flex justify-between">S: <span>{{ detailData.ukuran?.S }}</span></li>
+      <li class="flex justify-between">M: <span>{{ detailData.ukuran?.M }}</span></li>
+      <li class="flex justify-between">L: <span>{{ detailData.ukuran?.L }}</span></li>
+      <li class="flex justify-between">XL: <span>{{ detailData.ukuran?.XL }}</span></li>
+      <li class="flex justify-between">XXL: <span>{{ detailData.ukuran?.XXL }}</span></li>
+      <li class="flex justify-between">Lainnya: <span>{{ detailData.ukuran?.lainnya }}</span></li>
     </ul>
-    <p><strong>Jenis Extra:</strong> {{ detailData.jenisextra }}</p>
-    <p><strong>Extra:</strong> {{ detailData.extra }}</p>
-    <p><strong>Extra:</strong> {{ detailData.jumlahextra }}</p>
-    <p><strong>Extra:</strong> {{ detailData.totalextra }}</p>
-    <p><strong>Harga per Baju:</strong> {{ totalHargaFormat(detailData.hargaPerBaju) }}</p>
-    <p><strong>Total Harga:</strong> {{ totalHargaFormat(detailData.totalHargapesanan) }} </p>
-    <p><strong>DP:</strong> {{ totalHargaFormat(detailData.dp) }}</p>
-    <p><strong>Tanggal Pengeluaran:</strong> {{ detailData.tanggalPengeluaran }}</p>
+    <p class="flex justify-between"><strong>Jenis Extra</strong> <span>{{ detailData.jenisextra }}</span></p>
+    <p class="flex justify-between"><strong>Extra</strong> <span>{{ detailData.extra }}</span></p>
+    <p class="flex justify-between"><strong>Extra</strong> <span>{{ detailData.jumlahextra }}</span></p>
+    <p class="flex justify-between"><strong>Extra</strong> <span>{{ detailData.totalextra }}</span></p>
+    <p class="flex justify-between"><strong>Harga per Baju</strong> <span>{{ totalHargaFormat(detailData.hargaPerBaju) }}</span></p>
+    <p class="flex justify-between"><strong>Total Harga</strong> <span>{{ totalHargaFormat(detailData.totalHargapesanan) }}</span> </p>
+    <p class="flex justify-between"><strong>DP</strong> <span>{{ totalHargaFormat(detailData.dp) }}</span></p>
+    <p class="flex justify-between"><strong>Tanggal Pengeluaran</strong> <span>{{ detailData.tanggalPengeluaran }}</span></p>
 
     <div class="flex justify-end mt-4">
       <button @click="closeDetail(order)" class="btn bg-gray-200 text-cyan-950">Tutup</button>
@@ -257,6 +269,7 @@ const form = ref({
   namaPemesan: '',
   nomorTelepon: '',
   alamat: '',
+  kota: '',
   jenisProduk: '',
   jumlahProduk: 0,
   jenisextra: '',
@@ -499,6 +512,7 @@ function resetForm() {
     namaPemesan: '',
     nomorTelepon: '',
     alamat: '',
+    kota: '',
     jenisProduk: '',
     jumlahProduk: 0,
     jenisextra: '',

@@ -3,88 +3,132 @@
     <!-- Sidebar -->
     <SideBar />
 
+    <!-- Main Content -->
     <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
-      <div class="flex flex-row items-start pt-6 w-full">
-        <!-- WALLET  -->
-      <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-lg w-full">
-      <h2 class="text-xl font-bold mb-4 text-cyan-950">My Wallet</h2>
-      <div class="mb-6">
-        <p class="text-sm text-gray-300">Available Balance</p>
-        <p v-if="balance == null" class="skeleton h-9 w-56 mt-1 bg-gray-800"></p>
-        <p v-else class="text-3xl font-bold mt-1 text-cyan-950">Rp. {{ Intl.NumberFormat('id-ID').format(balance) }}</p>
-      </div>
-  
-      <div class="flex gap-4 mb-6">
-        <div class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow">
-          <div class="bg-yellow-500 p-2 rounded-full">
-            <svg class="w-4 h-4 text-cyan-950 rotate-45" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 5v10m0 0l5-5m-5 5l-5-5" />
-            </svg>
+      <div class="flex flex-col items-start pt-6 w-full space-y-6">
+        
+        <!-- Wallet Section -->
+        <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-lg w-full">
+          <h2 class="text-2xl font-bold mb-4 text-cyan-950">My Wallet</h2>
+          <div class="mb-6">
+            <p class="text-sm text-gray-300">Available Balance</p>
+            <p v-if="balance == null" class="skeleton h-9 w-56 mt-1 bg-gray-800"></p>
+            <p v-else class="text-3xl font-bold mt-1 text-cyan-950">
+              Rp. {{ Intl.NumberFormat('id-ID').format(balance) }}
+            </p>
           </div>
-          <div>
-            <p class="text-xs text-gray-400">Expense</p>
-            <p class="text-sm font-semibold text-cyan-950">Rp. 240.000</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow">
-          <div class="bg-blue-500 p-2 rounded-full">
-            <svg class="w-4 h-4 text-cyan-950 -rotate-45" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 5v10m0 0l5-5m-5 5l-5-5" />
-            </svg>
-          </div>
-          <div>
-            <p class="text-xs text-gray-400">Income</p>
-            <p class="text-sm font-semibold text-cyan-950">Rp. 500.000</p>
-          </div>
-        </div>
-      </div>
-  
-      <div>
-        <div class="flex justify-between items-center mb-3">
-          <h3 class="font-semibold text-cyan-950">Recent Transactions</h3>
-          <router-link to="/income" class="text-sm text-blue-400 hover:underline">View All</router-link>
-        </div>
-        <ul class="space-y-3 text-sm">
-          <li class="flex justify-between items-center">
-            <div>
-              <p class="font-semibold text-cyan-950">PT. SILATURAHMI</p>
-              <p class="text-gray-400 text-xs">12.05 WIB • 22/04/2025</p>
-            </div>
-            <p class="text-red-500">Rp. 240.000 ↑</p>
-          </li>
-          <li class="flex justify-between items-center">
-            <div>
-              <p class="font-semibold text-cyan-950">LUNA FALYA ISKANDAR</p>
-              <p class="text-gray-400 text-xs">10.30 WIB • 19/04/2025</p>
-            </div>
-            <p class="text-cyan-400">Rp. 500.000 ↓</p>
-          </li>
-          <li class="flex justify-between items-center">
-            <div>
-              <p class="font-semibold text-cyan-950">FALIANA ALIFIA</p>
-              <p class="text-gray-400 text-xs">21.53 WIB • 18/04/2025</p>
-            </div>
-            <p class="text-red-500">Rp. 32.030 ↑</p>
-          </li>
-          <li class="flex justify-between items-center">
-            <div>
-              <p class="font-semibold text-cyan-950">PT. SILATURAHMI</p>
-              <p class="text-gray-400 text-xs">08.21 WIB • 14/04/2025</p>
-            </div>
-            <p class="text-cyan-400">Rp. 820.901 ↓</p>
-          </li>
-          <li class="flex justify-between items-center">
-            <div>
-              <p class="font-semibold text-cyan-950">SD AMALINA</p>
-              <p class="text-gray-400 text-xs">16.17 WIB • 10/04/2025</p>
-            </div>
-            <p class="text-cyan-400">Rp. 201.500 ↓</p>
-          </li>
-        </ul>
-      </div>
-    </div>
-    </div>
 
+          <!-- Income & Expense -->
+          <div class="flex gap-4 mb-6">
+            <div class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow">
+              <div class="bg-yellow-500 p-2 rounded-full">
+                <svg class="w-4 h-4 text-cyan-950 rotate-45" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 5v10m0 0l5-5m-5 5l-5-5" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-xs text-gray-400">Expense</p>
+                <p class="text-sm font-semibold text-cyan-950">Rp. 240.000</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow">
+              <div class="bg-blue-500 p-2 rounded-full">
+                <svg class="w-4 h-4 text-cyan-950 -rotate-45" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 5v10m0 0l5-5m-5 5l-5-5" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-xs text-gray-400">Income</p>
+                <p class="text-sm font-semibold text-cyan-950">Rp. 500.000</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Transactions -->
+          <div>
+            <div class="flex justify-between items-center mb-3">
+              <h3 class="font-semibold text-cyan-950">Recent Transactions</h3>
+              <router-link to="/income" class="text-sm text-blue-400 hover:underline">View All</router-link>
+            </div>
+            <ul class="space-y-3 text-sm">
+              <li class="flex justify-between items-center">
+                <div>
+                  <p class="font-semibold text-cyan-950">PT. SILATURAHMI</p>
+                  <p class="text-gray-400 text-xs">12.05 WIB • 22/04/2025</p>
+                </div>
+                <p class="text-red-500">Rp. 240.000 ↑</p>
+              </li>
+              <li class="flex justify-between items-center">
+                <div>
+                  <p class="font-semibold text-cyan-950">LUNA FALYA ISKANDAR</p>
+                  <p class="text-gray-400 text-xs">10.30 WIB • 19/04/2025</p>
+                </div>
+                <p class="text-cyan-400">Rp. 500.000 ↓</p>
+              </li>
+              <li class="flex justify-between items-center">
+                <div>
+                  <p class="font-semibold text-cyan-950">FALIANA ALIFIA</p>
+                  <p class="text-gray-400 text-xs">21.53 WIB • 18/04/2025</p>
+                </div>
+                <p class="text-red-500">Rp. 32.030 ↑</p>
+              </li>
+              <li class="flex justify-between items-center">
+                <div>
+                  <p class="font-semibold text-cyan-950">PT. SILATURAHMI</p>
+                  <p class="text-gray-400 text-xs">08.21 WIB • 14/04/2025</p>
+                </div>
+                <p class="text-cyan-400">Rp. 820.901 ↓</p>
+              </li>
+              <li class="flex justify-between items-center">
+                <div>
+                  <p class="font-semibold text-cyan-950">SD AMALINA</p>
+                  <p class="text-gray-400 text-xs">16.17 WIB • 10/04/2025</p>
+                </div>
+                <p class="text-cyan-400">Rp. 201.500 ↓</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+<!-- Map Section -->
+            <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-lg w-full">
+                <div class="flex mt-8 justify-between items-center pb-6 relative">
+                  <h2 class="text-xl font-bold text-cyan-950">Map Overview</h2>
+
+                  <div
+                    class="relative"
+                    @mouseenter="showDropdown = true"
+                    @mouseleave="showDropdown = false">
+                    <button
+                      class="bg-white text-cyan-950 px-4 py-2 rounded-lg shadow hover:bg-cyan-950 hover:text-white transition">Filter Kota</button>
+
+                    <div
+                      v-show="showDropdown"
+                      class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow z-10 border">
+                      <ul>
+                        <li
+                          v-for="city in cities"
+                          :key="city"
+                          @click="selectCity(city)"
+                          class="px-4 py-2 hover:bg-cyan-100 cursor-pointer text-sm">
+                          {{ city }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="map" class="w-full h-64 rounded-xl overflow-hidden">
+                <VMap style="height: 100%; width: 100%;">
+                  <VMapOsmTileLayer />
+                  <VMapZoomControl />
+                </VMap>
+              </div>
+              </div>
+
+
+
+      </div>
 
     <!-- Modal -->
     <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
@@ -155,19 +199,53 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import axios from 'axios'
+
 import SideBar from '@/components/SideBar.vue'
+
 import CalendarMonth from '@/components/CalendarMonth.vue'
 
+
+// Data
 const currentMonth = ref(new Date().getMonth())
 const currentYear = ref(new Date().getFullYear())
 const notes = ref({})
-
 const showModal = ref(false)
 const noteText = ref('')
 const monthInput = ref('')
 const dayInput = ref('')
 const yearInput = ref('')
+const balance = ref(null)
+
+const showDropdown = ref(false)
+const selectedCity = ref("")
+const cities = ["Bogor", "Bekasi", "Cirebon", "Bandung", "Sukabumi"]
+
+// Methods
+function fetchBalance() {
+  const token = localStorage.getItem('token')
+  if (token) {
+    axios.get('https://great-distinctly-seasnail.ngrok-free.app/api/ewallet/balance', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(response => {
+      balance.value = response.data.balance
+    })
+    .catch(error => {
+      console.error('Error fetching balance:', error)
+      alert('Failed to fetch balance. Please try again later.')
+    })
+  }
+}
+
+function selectCity(city) {
+  selectedCity.value = city
+  showDropdown.value = false
+  // Tambahkan logika untuk peta jika diperlukan
+}
 
 function handleDateClick(date) {
   dayInput.value = String(date.day).padStart(2, '0')
@@ -225,10 +303,16 @@ function nextMonth() {
 const currentMonthName = computed(() =>
   new Date(currentYear.value, currentMonth.value).toLocaleString('default', { month: 'long' })
 )
+
+onMounted(() => {
+  fetchBalance()
+})
 </script>
 
 <script>
 import axios from 'axios';
+
+
 export default {
   data() {
     return {
@@ -238,7 +322,10 @@ export default {
       dayInput: '',
       yearInput: '',
       notes: {},
-      balance: null
+      balance: null,
+      showDropdown: false,
+      selectedCity: "",
+      cities: ["Bogor", "Bekasi", "Cirebon", "Bandung", "Sukabumi"],
     };
   },
   methods: {
@@ -251,17 +338,23 @@ export default {
           }
         })
         .then(response => {
-          this.balance = response.data.balance; // Assuming the API returns balance in this format
+          this.balance = response.data.balance;
         })
         .catch(error => {
           console.error('Error fetching balance:', error);
           alert('Failed to fetch balance. Please try again later.');
         });
-      } 
+      }
+    },
+    selectCity(city) {
+      this.selectedCity = city;
+      this.showDropdown = false;
+      // Tambahkan logika map jika diperlukan
     },
   },
   mounted() {
     this.fetchBalance();
   },
-}
+};
 </script>
+
