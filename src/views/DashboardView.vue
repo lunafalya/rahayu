@@ -90,45 +90,50 @@
           </div>
         </div>
 
-<!-- Map Section -->
-            <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-lg w-full">
-                <div class="flex mt-8 justify-between items-center pb-6 relative">
-                  <h2 class="text-xl font-bold text-cyan-950">Map Overview</h2>
+      <!-- Map Section -->
+        <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-lg w-full">
+          <div class="flex mt-8 justify-between items-center pb-6 relative">
+            <h2 class="text-xl font-bold text-cyan-950">Map Overview</h2>
 
-                  <div
-                    class="relative"
-                    @mouseenter="showDropdown = true"
-                    @mouseleave="showDropdown = false">
-                    <button
-                      class="bg-white text-cyan-950 px-4 py-2 rounded-lg shadow hover:bg-cyan-950 hover:text-white transition">Filter Kota</button>
+            <!-- Button with Dropdown -->
+            <div
+              class="relative"
+              @mouseenter="showDropdown = true"
+              @mouseleave="showDropdown = false"
+            >
+              <button
+                class="bg-white text-cyan-950 px-4 py-2 rounded-lg shadow hover:bg-cyan-950 hover:text-white transition"
+              >
+                Filter Kota
+              </button>
 
-                    <div
-                      v-show="showDropdown"
-                      class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow z-10 border">
-                      <ul>
-                        <li
-                          v-for="city in cities"
-                          :key="city"
-                          @click="selectCity(city)"
-                          class="px-4 py-2 hover:bg-cyan-100 cursor-pointer text-sm">
-                          {{ city }}
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                <div id="map" class="w-full h-64 rounded-xl overflow-hidden">
-                <VMap style="height: 100%; width: 100%;">
-                  <VMapOsmTileLayer />
-                  <VMapZoomControl />
-                </VMap>
+              <!-- Dropdown Menu -->
+              <div
+                v-show="showDropdown"
+                class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow z-10 border">
+                <ul>
+                  <li
+                    v-for="city in cities"
+                    :key="city"
+                    @click="selectCity(city)"
+                    class="px-4 py-2 hover:bg-cyan-100 cursor-pointer text-sm">
+                    {{ city }}
+                  </li>
+                </ul>
               </div>
-              </div>
+            </div>
+          </div>
 
-
-
+          <!-- Map Content -->
+          <div
+            id="map"
+            class="w-full h-64 rounded-xl bg-gray-200 flex items-center justify-center text-gray-500"
+          >
+            Showing map for: <strong class="ml-1">{{ selectedCity || "All Cities" }}</strong>
+          </div>
+        </div>
       </div>
+
 
     <!-- Modal -->
     <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
@@ -203,8 +208,9 @@ import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
 
 import SideBar from '@/components/SideBar.vue'
-
 import CalendarMonth from '@/components/CalendarMonth.vue'
+import 'leaflet/dist/leaflet.css';
+
 
 
 // Data
