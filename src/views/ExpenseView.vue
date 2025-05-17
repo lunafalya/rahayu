@@ -63,13 +63,13 @@
           <tbody class="bg-white text-cyan-950 px-4 py-2">
             <tr v-for="(item, index) in gajiList" :key="index">
               <td class="px-4 py-2">{{ item.nama }}</td>
-              <td class="px-4 py-2">{{ totalHargaFormat(detailData.total) }}</td>
+              <td class="px-4 py-2">{{ totalHargaFormat(item.total) }}</td>
               <td class="px-4 py-2">{{ item.potongan }}</td>
               <td class="px-4 py-2">{{ item.tanggal_pengajuan }}</td>
               <td class="px-4 py-2">{{ item.status }}</td>
               <td>
-                <button @click="editGaji(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Edit</button>
-                <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Detail</button>
+                <button @click="editGaji(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Edit</button>
+                <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Detail</button>
               </td>
             </tr>
           </tbody>
@@ -89,15 +89,14 @@
           </thead>
           <tbody class="bg-white text-cyan-950 px-4 py-2">
             <tr v-for="(item, index) in pinjamList" :key="index">
-              <td class="px-4 py-2">{{ item.nama}}</td>
               <td class="px-4 py-2">{{ item.nama }}</td>
               <td class="px-4 py-2">{{ totalHargaFormat(item.jumlah) }}</td>
               <td class="px-4 py-2">{{ totalHargaFormat(item.jumlah) }}</td>
               <td class="px-4 py-2">{{ item.tanggal }}</td>
               <td class="px-4 py-2">{{ item.status }}</td>
               <td>
-                <button @click="editPinjam(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Edit</button>
-                <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-700 hover:bg-white hover:text-cyan-700">Detail</button>
+                <button @click="editPinjam(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Edit</button>
+                <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Detail</button>
               </td>
             </tr>
           </tbody>
@@ -134,8 +133,7 @@
               <option>Transfer</option>
             </select>
 
-            <label class="font-medium text-cyan-950">Virtual Account</label>
-            <input v-model="gajiForm.vac" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"/>
+            
 
                <!-- Tabel Input Jasa -->
                <h3 class="text-lg font-semibold text-cyan-950 mb-2">Jasa</h3>
@@ -190,12 +188,6 @@
             <label class="font-medium text-cyan-950">Tanggal Pengajuan</label>
             <input v-model="gajiForm.tanggal_pengajuan" type="date" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"/>
 
-            <!-- <label class="font-medium text-cyan-950">Status</label>
-            <select v-model="gajiForm.status" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
-              <option>Lunas</option>
-              <option>Tunggak</option>
-            </select> -->
-
             <div class="flex justify-end gap-2">
               <button @click="resetGajiForm" class="btn bg-gray-500 text-white">Batal</button>
               <button v-if="!isEditGaji" @click="addGaji" class="btn bg-cyan-950 text-white">Simpan</button>
@@ -209,9 +201,6 @@
         <div class="modal-overlay" v-if="showGeneralModal">
           <div class="modal-content">
             <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Tambah Pengeluaran</h2>
-
-            <label class="text-cyan-950">ID Pengeluaran</label>
-            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="generalForm.id_general" type="text" />
             
             <label class="text-cyan-950">Nama</label>
             <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="generalForm.nama" type="text" />
@@ -263,8 +252,6 @@
               <option>Transfer</option>
             </select>
 
-            <label class="font-medium text-cyan-950">Virtual Account</label>
-            <input v-model="pinjamForm.vc" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"/>
 
             <label class="text-cyan-950">Nominal</label>
             <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="pinjamForm.jumlah" type="number" />
@@ -296,17 +283,110 @@
           <div class="modal-content max-w-xl w-full">
             <h2 class="text-3xl font-bold text-cyan-950 mb-6 text-center">Detail {{ tab }}</h2>
 
-            <div v-if="tab === 'General'">
-              <h1 class="text-2xl mb-4 flex justify-between">Nominal <span>{{ totalHargaFormat(detailData.jumlah) }}</span></h1>
-              
-              <p class="flex justify-between">Penerima<strong><span>{{ detailData.nama }}</span></strong></p>
-              <p class="flex justify-between">Bank Tujuan<strong> <span>{{ detailData.bank }}</span></strong> </p>
-              <p class="flex justify-between">No rek<strong><span>{{ detailData.va }}</span></strong></p>
-              <p class="flex justify-between">Keterangan<strong> <span>{{ detailData.keterangan }}</span></strong></p>
-              <p class="flex justify-between">Tanggal<strong> <span>{{ detailData.tanggal }}</span></strong></p>
-              <p class="flex justify-between">Status<strong> <span>{{ detailData.status }}</span></strong></p>
+
+            <div v-if="tab === 'General'" class="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow">
+              <h1 class="text-2xl font-bold mb-6 border-b pb-4">Detail Transaksi</h1>
+
+              <div class="flex justify-between text-sm text-gray-600 mb-1">
+                <p>Transaksi dikirim ke <strong>{{ detailData.nama }}</strong></p>
+                <p>ID Transaksi: {{ detailData.id_transaksi }}</p>
+              </div>
+              <div class="flex justify-between text-sm text-gray-600 mb-4">
+                <p>{{ detailData.tanggal }}</p>
+                <p class="text-xl font-semibold text-right text-black">Jumlah<br><span class="text-2xl text-black">{{ totalHargaFormat(detailData.jumlah) }}</span></p>
+              </div>
+
+              <p class="text-sm mb-2">Status Transaksi: 
+                <span
+                  class="inline-block px-3 py-1 rounded-full text-xs font-semibold"
+                  :class="{
+                    'bg-green-100 text-green-800': detailData.status === 'Selesai',
+                    'bg-yellow-100 text-yellow-800': detailData.status === 'Pending',
+                    'bg-red-100 text-red-800': detailData.status === 'Gagal'
+                  }"
+                >
+                  {{ detailData.status }}
+                </span>
+              </p>
+
+              <table class="w-full text-sm text-left border-t mt-4">
+                <thead>
+                  <tr class="text-gray-500">
+                    <th class="py-2">Keterangan</th>
+                    <th class="py-2">Bank</th>
+                    <th class="py-2">No. Rekening</th>
+                    <th class="py-2 text-right">Jumlah</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-t text-black">
+                    <td class="py-2">{{ detailData.keterangan }}</td>
+                    <td class="py-2">{{ detailData.bank }}</td>
+                    <td class="py-2">{{ detailData.va }}</td>
+                    <td class="py-2 text-right">{{ totalHargaFormat(detailData.jumlah) }}</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr class="border-t font-semibold">
+                    <td colspan="3" class="py-2 text-right">Total</td>
+                    <td class="py-2 text-right">{{ totalHargaFormat(detailData.jumlah) }}</td>
+                  </tr>
+                </tfoot>
+              </table>
             </div>
 
+
+            
+              <div v-else-if="tab === 'Gaji'" class="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow">
+              <h1 class="text-2xl font-bold mb-6 border-b pb-4">Detail Transaksi</h1>
+              
+              <div class="flex justify-between text-sm text-gray-600 mb-1">
+                <p>Transaksi dikirim ke <strong>{{ detailData.nama }}</strong></p>
+                <p>ID Transaksi: {{ detailData.id_transaksi }}</p>
+              </div>
+              <div class="flex justify-between text-sm text-gray-600 mb-4">
+                <p>{{ detailData.tanggal }}</p>
+                <p class="text-xl font-semibold text-right text-black">Jumlah<br><span class="text-2xl text-black">{{ totalHargaFormat(detailData.jumlah) }}</span></p>
+              </div>
+
+              <p class="text-sm mb-2">Status Transaksi: 
+                <span
+                  class="inline-block px-3 py-1 rounded-full text-xs font-semibold"
+                  :class="{
+                    'bg-green-100 text-green-800': detailData.status === 'Selesai',
+                    'bg-yellow-100 text-yellow-800': detailData.status === 'Pending',
+                    'bg-red-100 text-red-800': detailData.status === 'Gagal'
+                  }"
+                >
+                  {{ detailData.status }}
+                </span>
+              </p>
+
+              <table class="w-full text-sm text-left border-t mt-4">
+                <thead>
+                  <tr class="text-gray-500">
+                    <th class="py-2">Keterangan</th>
+                    <th class="py-2">Bank</th>
+                    <th class="py-2">No. Rekening</th>
+                    <th class="py-2 text-right">Jumlah</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-t text-black">
+                    <td class="py-2">{{ detailData.keterangan }}</td>
+                    <td class="py-2">{{ detailData.bank }}</td>
+                    <td class="py-2">{{ detailData.va }}</td>
+                    <td class="py-2 text-right">{{ totalHargaFormat(detailData.jumlah) }}</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr class="border-t font-semibold">
+                    <td colspan="3" class="py-2 text-right">Total</td>
+                    <td class="py-2 text-right">{{ totalHargaFormat(detailData.jumlah) }}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
 
             <div v-else-if="tab === 'Gaji'">
               <h1 class="text-2xl mb-4 flex justify-between">Nominal: <strong><span>{{ totalHargaFormat(detailData.total) }}</span></strong></h1>
@@ -526,7 +606,6 @@ function simpanGaji() {
 // GENERAL
 
 const generalForm = ref({
-  id:'',
   kategori: '',
   jumlah: 0,
   tanggal: '',
@@ -544,7 +623,6 @@ function addGeneral() {
 
 function resetGeneralForm() {
   generalForm.value = {
-    id:'',
     kategori: '',
     jumlah: 0,
     tanggal: '',

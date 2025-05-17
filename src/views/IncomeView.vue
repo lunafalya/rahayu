@@ -45,7 +45,6 @@
             <div>
         <div class="flex justify-between items-center mb-3">
           <h3 class="font-semibold text-cyan-950">Recent Transactions</h3>
-          <a href="#" class="text-sm text-blue-400 hover:underline">View All</a>
         </div>
         <ul class="space-y-3 text-sm">
           <li class="flex justify-between items-center">
