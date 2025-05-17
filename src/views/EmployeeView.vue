@@ -285,7 +285,7 @@ import axios from 'axios';
   color: black;
 }
 .status-badge.active {
-  background-color: #28a745;
+  background-color: #82bd90;
 }
 .status-badge.passive {
   background-color: #6c757d;

@@ -1,73 +1,121 @@
 <template>
-  <div class="flex h-screen">
+    <div class="flex h-screen">
     <!-- Sidebar -->
     <SideBar />
-
-  <!-- Order -->
-  <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
-  <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
-  <div class="order-page">
-    <div class="flex mt-8 justify-between pb-6">
+  <div class="ml-30 p-8 flex-grow px-6 pt-12 flex flex-col gap-6 main-content">
+  <div class="bg-white rounded-2xl shadow-md p-6">
+    <!-- Order Page Content -->
+    <div class="order-page">
+      <div class="flex mt-8 justify-between pb-6">
         <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3 py-2" />
         <button @click="showModal=true" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
-        Tambah
-      </button>
-    </div>
+          Tambah
+        </button>
+      </div>
 
-     <!-- Tabel Data Order -->
-     <div class="overflow-x-auto rounded-box border border-base-content/5  bg-gray-400">
-      <table class="table">
-      <thead>
-        <tr>
-          <th class="text-white">No.</th>
-          <th class="text-white">Nama Pemesan</th>
-          <th class="text-white">Total Harga</th>
-          <th class="text-white">Sisa Pembayaran</th>
-          <th class="text-white">Deadline</th>
-          <th class="text-white">Aksi</th>
-        </tr>
-      </thead>
-      <tbody class="text-cyan-950 bg-white">
-          <tr v-for="(order, index) in filteredorder" :key="index">
-            <td>{{ index + 1 }}</td>
-            <td>{{ order.namaPemesan }}</td>
-            <td>{{ totalHargaFormat(order.totalHargapesanan) }}</td>
-            <td>{{ totalHargaFormat(order.sisabayar) }}</td>
-            <td >{{ order.tanggalPengeluaran }}</td>
-            <td>
-              <button @click="editOrder(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button>
-              <button @click="showDetail(order)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Detail</button>
-              <button @click="showModalBayarFunc(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Bayar</button>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+      <!-- Tabel Data Order -->
+      <div class="overflow-x-auto rounded-box border border-base-content/5">
+        <table class="table bg-gray-400">
+          <thead>
+            <tr>
+              <th class="text-white">No.</th>
+              <th class="text-white">Nama Pemesan</th>
+              <th class="text-white">Total Harga</th>
+              <th class="text-white">Sisa Pembayaran</th>
+              <th class="text-white">Deadline</th>
+              <th class="text-white">Aksi</th>
+            </tr>
+          </thead>
+          <tbody class="text-cyan-950 bg-white">
+            <tr v-for="(order, index) in paginatedOrders" :key="index">
+              <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
+              <td>{{ order.namaPemesan }}</td>
+              <td>{{ totalHargaFormat(order.totalHargapesanan) }}</td>
+              <td>{{ totalHargaFormat(order.sisabayar) }}</td>
+              <td>{{ order.tanggalPengeluaran }}</td>
+              <td>
+                <button @click="editOrder(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button>
+                <button @click="showDetail(order)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Detail</button>
+                <button @click="showModalBayarFunc(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Bayar</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="flex bg-white justify-center items-center mt-4 gap-4">
+          <button @click="prevPage" :disabled="currentPage === 1" class="px-3 py-1 text-white rounded hover:bg-gray-300 hover:text-cyan-950 disabled:opacity-50">◀</button>
+          <span class="text-cyan-950 font-semibold">{{ currentPage }} dari {{ totalPages }}</span>
+          <button @click="nextPage" :disabled="currentPage === totalPages" class="px-3 py-1 text-white rounded hover:bg-gray-300 hover:text-cyan-950 disabled:opacity-50">▶</button>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- Map Section -->
+  <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-md">
+    <div class="flex justify-between items-center pb-6 relative">
+      <h2 class="text-2xl font-bold text-cyan-950">Map Overview</h2>
+      
+
+      <!-- Dropdown Button -->
+      <div class="relative" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">
+        <button class="bg-white text-cyan-950 px-4 py-2 rounded-lg shadow hover:bg-cyan-950 hover:text-white transition">
+          Filter Kota
+        </button>
+
+
+        <!-- Dropdown Menu -->
+        <div v-show="showDropdown" class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow z-10 border">
+          <ul>
+            <li v-for="city in cities" :key="city" @click="selectCity(city)" class="px-4 py-2 hover:bg-cyan-100 cursor-pointer text-sm">
+              {{ city }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <p>Pesanan dari kota berjumlah </p>
+
+    <!-- Map Box -->
+    <div id="map" class="w-full h-64 rounded-xl bg-gray-200 flex items-center justify-center text-gray-500">
+      Showing map for: <strong class="ml-1">{{ selectedCity || "All Cities" }}</strong>
+    </div>
+  </div>
+</div>
+
+
 
     <!-- OrderModal -->
     <div class="modal-overlay " v-if="showModal">
     <div class="modal-content">
-    <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Tambah Pesanan</h2>
+    <h2 class="text-2xl font-bold text-cyan-950 mb-6 text-center">Tambah Pesanan</h2>
   
     <label class="text-cyan-950">Nama Pemesan:</label>
     <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.namaPemesan" type="text" placeholder="Nama Pemesan" />
 
     <label class="text-cyan-950">Nomor Telepon :</label>
-    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.nomorTelepon" type="text" placeholder="Nomor Telepon" />
-
-    <label class="text-cyan-950">Kota</label>
-    <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.kota">
-      <option class="text-cyan-950" disabled value="">Pilih Kota</option>
-      <option>Bogor</option>
-      <option>Bekasi</option>
-      <option>Cirebon</option>
-      <option>Bandung</option>
-      <option>Sukabum</option>
-    </select>
+    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.nomorTelepon" type="number" placeholder="Nomor Telepon" />
 
 
     <label class="text-cyan-950">Alamat:</label>
     <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.alamat" type="text" placeholder="Masukkan Alamat" />
+
+    <div class="flex gap-6">
+  <!-- Longitude -->
+  <div class="flex flex-col w-full">
+    <label class="text-cyan-950 mb-1">Longitude</label>
+    <input class="text-cyan-950 border p-2 w-full rounded mb-5" v-model="form.longitude" type="text" placeholder="Masukkan Longitude"/>
+  </div>
+
+  <!-- Latitude -->
+  <div class="flex flex-col w-full">
+    <label class="text-cyan-950 mb-1">Latitude</label>
+    <input class="text-cyan-950 border p-2 w-full rounded mb-5" v-model="form.latitude" type="text" placeholder="Masukkan Latitude"/>
+  </div>
+</div>
+    
+
 
     <label class="text-cyan-950">Jenis Produk:</label>
     <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.jenisProduk">
@@ -163,8 +211,7 @@
       <button v-if="!isEdit" @click="addOrder" class="btn bg-cyan-950 text-white">Simpan</button>
       <button v-else @click="updateOrder" class="btn bg-cyan-950 text-white">Update</button>
     </div>
-  </div>
-</div>
+
 
 
 
@@ -176,7 +223,6 @@
     <p class="flex justify-between"><strong>Nama Pemesan</strong> <span>{{ detailData.namaPemesan }}</span></p>
     <p class="flex justify-between"><strong>Nomor Telepon</strong> <span>{{ detailData.nomorTelepon }}</span></p>
     <p class="flex justify-between"><strong>Alamat</strong> <span>{{ detailData.alamat }}</span></p>
-    <p class="flex justify-between"><strong>Kota</strong> <span>{{ detailData.kota }}</span></p>
     <p class="flex justify-between"><strong>Jenis Produk</strong> <span>{{ detailData.jenisProduk }}</span></p>
     <p class="flex justify-between"><strong>Jumlah Produk</strong> <span>{{ detailData.jumlahProduk }}</span></p>
     <p class="flex justify-between"><strong>Ukuran</strong></p>
@@ -244,8 +290,7 @@
       </div>
     </div>
 
-  </div>
-  </div>
+    </div>
   </div>
   </div>
 </template>
@@ -263,13 +308,36 @@ const isEdit = ref(false);
 const editIndex = ref(null);
 const isDetailVisible = ref(false);
 const showModalBayar = ref(false);
+const currentPage = ref(1);
+const itemsPerPage = 6;
+
+const paginatedOrders = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return filteredorder.value.slice(start, end);
+});
+
+const totalPages = computed(() => {
+  return Math.ceil(filteredorder.value.length / itemsPerPage);
+});
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) currentPage.value++;
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--;
+};
+
+
 
 
 const form = ref({
   namaPemesan: '',
   nomorTelepon: '',
   alamat: '',
-  kota: '',
+  longitude:'',
+  latitude: '',
   jenisProduk: '',
   jumlahProduk: 0,
   jenisextra: '',
@@ -512,7 +580,8 @@ function resetForm() {
     namaPemesan: '',
     nomorTelepon: '',
     alamat: '',
-    kota: '',
+    longitude:'',
+    latitude: '',
     jenisProduk: '',
     jumlahProduk: 0,
     jenisextra: '',
