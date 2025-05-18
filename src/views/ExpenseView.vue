@@ -388,17 +388,6 @@
               </table>
             </div>
 
-            <div v-else-if="tab === 'Gaji'">
-              <h1 class="text-2xl mb-4 flex justify-between">Nominal: <strong><span>{{ totalHargaFormat(detailData.total) }}</span></strong></h1>
-              <p class="flex justify-between">Nama Karyawan<strong><span>{{ detailData.nama }}</span></strong></p>
-              <p class="flex justify-between">Gaji awal<strong><span>{{ totalHargaFormat(detailData.total_gaji) }}</span></strong></p>
-              <p class="flex justify-between">Potongan<strong><span>{{ totalHargaFormat(detailData.potongan) }}</span></strong></p>
-              <p class="flex justify-between">Tanggal Pengajuan<strong><span>{{ detailData.tanggal_pengajuan }}</span></strong></p>
-              <p class="flex justify-between">Pembayaran<strong><span>{{ detailData.transaksi }}</span></strong></p>
-              <p class="flex justify-between">Virtual Account<strong><span> {{ detailData.vac }}</span></strong></p>
-              <p class="flex justify-between">Status<strong><span>{{ detailData.status }}</span></strong></p>
-            </div>
-
             <div v-else-if="tab === 'Peminjaman'">
               <h1 class="text-2xl mb-4 flex justify-between">Nominal:  <strong><span>{{ totalHargaFormat(detailData.jumlah) }}</span></strong></h1>
               <p class="flex justify-between">Nama<strong><span>{{ detailData.nama }}</span></strong></p>

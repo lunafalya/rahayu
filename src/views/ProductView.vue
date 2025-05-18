@@ -202,6 +202,22 @@ export default {
         alert('Please fill in all fields.')
       }
     },
+    deleteProduct(id) {
+      if (confirm('Are you sure you want to delete this product?')) {
+        axios
+          .delete(`https://great-distinctly-seasnail.ngrok-free.app/api/products/${id}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          })
+          .then(() => {
+            this.getProducts()
+          })
+          .catch(error => {
+            console.error('Error deleting product:', error)
+          })
+      }
+    },
     closeModal() {
       this.showModal = false
       this.editing = false
