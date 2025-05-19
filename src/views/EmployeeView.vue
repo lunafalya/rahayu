@@ -174,7 +174,7 @@ import axios from 'axios';
     },
 
     addKaryawan() {
-      if (this.form.name && this.form.image && this.form.position) {
+      if (this.form.name && this.form.image && this.form.position && this.form.status) {
         const formData = new FormData();
         formData.append('name', this.form.name);
         formData.append('position', this.form.position);

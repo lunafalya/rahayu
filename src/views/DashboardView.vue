@@ -222,31 +222,13 @@ const noteText = ref('')
 const monthInput = ref('')
 const dayInput = ref('')
 const yearInput = ref('')
-const balance = ref(null)
+// const balance = ref(null)
 
 const showDropdown = ref(false)
 const selectedCity = ref("")
 const cities = ["Bogor", "Bekasi", "Cirebon", "Bandung", "Sukabumi"]
 
 // Methods
-function fetchBalance() {
-  const token = localStorage.getItem('token')
-  if (token) {
-    axios.get('https://great-distinctly-seasnail.ngrok-free.app/api/ewallet/balance', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then(response => {
-      balance.value = response.data.balance
-    })
-    .catch(error => {
-      console.error('Error fetching balance:', error)
-      alert('Failed to fetch balance. Please try again later.')
-    })
-  }
-}
-
 function selectCity(city) {
   selectedCity.value = city
   showDropdown.value = false
@@ -311,15 +293,10 @@ function nextMonth() {
 const currentMonthName = computed(() =>
   new Date(currentYear.value, currentMonth.value).toLocaleString('default', { month: 'long' })
 )
-
-onMounted(() => {
-  fetchBalance()
-})
 </script>
 
 <script>
 import axios from 'axios';
-
 
 export default {
   data() {
