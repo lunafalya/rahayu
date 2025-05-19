@@ -253,6 +253,8 @@ function selectCity(city) {
   // Tambahkan logika untuk peta jika diperlukan
 }
 
+
+
 function handleDateClick(date) {
   dayInput.value = String(date.day).padStart(2, '0')
   monthInput.value = String(date.month).padStart(2, '0')

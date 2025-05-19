@@ -68,7 +68,7 @@
         <!-- Dropdown Menu -->
         <div v-show="showDropdown" class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow z-10 border">
           <ul>
-            <li v-for="city in cities" :key="city" @click="selectCity(city)" class="px-4 py-2 hover:bg-cyan-100 cursor-pointer text-sm">
+            <li v-for="city in cities" :key="city" @click="selectCity(city)" class="px-4 py-2 hover:bg-cyan-950 hover:text-white cursor-pointer text-sm">
               {{ city }}
             </li>
           </ul>
@@ -83,6 +83,11 @@
     </div>
   </div>
 </div>
+
+
+
+
+
 
 
 
@@ -299,6 +304,8 @@
 <script setup>
 import { ref, computed } from 'vue';
 import SideBar from '@/components/SideBar.vue'
+import 'leaflet/dist/leaflet.css';
+
 const showModal = ref(false);
 const daftarPesanan = ref([]);
 const showDetailModal = ref(false);
@@ -310,6 +317,17 @@ const isDetailVisible = ref(false);
 const showModalBayar = ref(false);
 const currentPage = ref(1);
 const itemsPerPage = 6;
+
+const showDropdown = ref(false)
+const selectedCity = ref("")
+const cities = ["Bogor", "Bekasi", "Cirebon", "Bandung", "Sukabumi"]
+
+function selectCity(city) {
+  selectedCity.value = city
+  showDropdown.value = false
+  // Tambahkan logika untuk peta jika diperlukan
+}
+
 
 const paginatedOrders = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
