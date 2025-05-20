@@ -70,6 +70,7 @@
               <option value="seragam jas">Seragam Jas</option>
               <option value="jaket">Jaket</option>
               <option value="jersey">Jersey</option>
+              <option value="jersey">Extra</option>
             </select>
 
             <label class="block mb-2 text-cyan-950">Nama Produk</label>

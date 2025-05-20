@@ -2,6 +2,8 @@
 @plugin "daisyui";
 
 
+
+
 .menu:hover .menu-text {
   opacity: 1; /* Make text visible when the menu is hovered */
 }

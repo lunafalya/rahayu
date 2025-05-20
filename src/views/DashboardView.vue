@@ -9,7 +9,7 @@
         
         <!-- Wallet Section -->
         <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-lg w-full">
-          <h2 class="text-2xl font-bold mb-4 text-cyan-950">My Wallet</h2>
+          <h2 class="font-poppins text-3xl font-bold mb-4 text-cyan-950">MY WALLET</h2>
           <div class="mb-6">
             <p class="text-sm text-gray-300">Available Balance</p>
             <p v-if="balance == null" class="skeleton h-9 w-56 mt-1 bg-gray-800"></p>
@@ -138,8 +138,22 @@
     <!-- Modal -->
     <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
       <div class="bg-white p-6 rounded-lg w-96 shadow-lg">
-        <h3 class="text-xl font-semibold text-center mb-6 text-black">Tambah Deadline Baru</h3>
+        <h3 class="text-xl font-semibold text-center mb-6 text-black">
+        {{ modalNote ? 'Detail Deadline' : 'Tambah Deadline Baru' }}
+      </h3>
 
+      <!-- Tampilkan detail jika ada note -->
+      <div v-if="modalNote" class="text-cyan-950 space-y-2">
+        <p><strong>Nama Pesanan:</strong> {{ modalNote }}</p>
+        <p><strong>Deadline:</strong> {{ selectedDate }}</p>
+        <div class="flex justify-end mt-4">
+          <button @click="closeModal" class="px-4 py-2 bg-cyan-950 text-white rounded hover:bg-cyan-700">Tutup</button>
+        </div>
+      </div>
+
+      <!-- Jika tidak ada data, tampilkan form -->
+      <div v-else>
+        <!-- Form input tanggal dan note -->
         <div class="mb-4">
           <label class="font-medium text-black">Target Penyelesaian</label>
           <div class="flex gap-2 mt-1">
@@ -163,9 +177,12 @@
       </div>
     </div>
     </div>
+      </div>
+
+        
 
     <!-- Right Side: Notifications -->
-    <div class="w-1/5 flex flex-col gap-4 mt-4 mr-4">
+    <div class="w-1.5/5 flex flex-col gap-4 mt-4 mr-5">
       <!-- Notifikasi -->
       <div class="bg-white rounded-2xl shadow-md p-4 h-80">
         <h3 class="font-bold text-cyan-950">NOTIFIKASI</h3>
@@ -206,10 +223,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
-
+import 'leaflet/dist/leaflet.css';
 import SideBar from '@/components/SideBar.vue'
 import CalendarMonth from '@/components/CalendarMonth.vue'
-import 'leaflet/dist/leaflet.css';
+
 
 
 
@@ -228,6 +245,33 @@ const showDropdown = ref(false)
 const selectedCity = ref("")
 const cities = ["Bogor", "Bekasi", "Cirebon", "Bandung", "Sukabumi"]
 
+const selectedDate = ref('')
+const modalNote = ref('')
+
+function handleDateClick(date) {
+  const dateKey = `${date.year}-${String(date.month).padStart(2, '0')}-${String(date.day).padStart(2, '0')}`
+  const note = notes.value[dateKey]
+
+  if (note) {
+    modalNote.value = note
+    selectedDate.value = dateKey
+  } else {
+    noteText.value = ''
+    monthInput.value = String(date.month).padStart(2, '0')
+    dayInput.value = String(date.day).padStart(2, '0')
+    yearInput.value = String(date.year).slice(-2)
+    modalNote.value = ''
+  }
+
+  showModal.value = true
+}
+
+function closeModal() {
+  showModal.value = false
+  modalNote.value = ''
+  selectedDate.value = ''
+}
+
 // Methods
 function selectCity(city) {
   selectedCity.value = city
@@ -237,12 +281,6 @@ function selectCity(city) {
 
 
 
-function handleDateClick(date) {
-  dayInput.value = String(date.day).padStart(2, '0')
-  monthInput.value = String(date.month).padStart(2, '0')
-  yearInput.value = String(date.year).slice(-2)
-  showModal.value = true
-}
 
 function openModal() {
   noteText.value = ''
@@ -252,9 +290,6 @@ function openModal() {
   showModal.value = true
 }
 
-function closeModal() {
-  showModal.value = false
-}
 
 function saveNoteFromForm() {
   const mm = parseInt(monthInput.value)

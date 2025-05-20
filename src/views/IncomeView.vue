@@ -10,7 +10,7 @@
           
               <!-- WALLET  -->
               <div class="bg-white rounded-2xl p-6 shadow-lg w-full">
-            <h2 class="text-xl font-bold mb-4 text-cyan-950">My Wallet</h2>
+            <h2 class="text-3xl font-bold mb-4 text-cyan-950">MY WALLET</h2>
             <div class="mb-6">
               <p class="text-sm text-gray-300">Available Balance</p>
               <p v-if="balance == null" class="skeleton h-9 w-56 mt-1 bg-gray-800"></p>

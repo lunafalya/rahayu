@@ -84,13 +84,6 @@
   </div>
 </div>
 
-
-
-
-
-
-
-
     <!-- OrderModal -->
     <div class="modal-overlay " v-if="showModal">
     <div class="modal-content">
@@ -107,20 +100,16 @@
     <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.alamat" type="text" placeholder="Masukkan Alamat" />
 
     <div class="flex gap-6">
-  <!-- Longitude -->
   <div class="flex flex-col w-full">
     <label class="text-cyan-950 mb-1">Longitude</label>
     <input class="text-cyan-950 border p-2 w-full rounded mb-5" v-model="form.longitude" type="text" placeholder="Masukkan Longitude"/>
   </div>
 
-  <!-- Latitude -->
   <div class="flex flex-col w-full">
     <label class="text-cyan-950 mb-1">Latitude</label>
     <input class="text-cyan-950 border p-2 w-full rounded mb-5" v-model="form.latitude" type="text" placeholder="Masukkan Latitude"/>
   </div>
 </div>
-    
-
 
     <label class="text-cyan-950">Jenis Produk:</label>
     <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.jenisProduk">
@@ -130,12 +119,13 @@
       <option>Seragam Jas</option>
       <option>Jaket</option>
       <option>Jersey</option>
+      <option>Extra</option>
     </select>
 
     <label class="text-cyan-950">Jumlah Produk:</label>
     <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="form.jumlahProduk" type="number" placeholder="Jumlah Produk" />
 
-    <label class="text-cyan-950">Total harga Produk (tanpa extra):</label>
+    <label class="text-cyan-950">Harga Produk (tanpa extra):</label>
     <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"  v-model.number="form.hargaPerBaju" type="number" placeholder="Harga per Baju" />
 
     <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" :value="totalHargaFormatted" type="text" placeholder="Total Seluruh Harga" disabled />
@@ -216,47 +206,110 @@
       <button v-if="!isEdit" @click="addOrder" class="btn bg-cyan-950 text-white">Simpan</button>
       <button v-else @click="updateOrder" class="btn bg-cyan-950 text-white">Update</button>
     </div>
+    </div>
+    </div>
 
 
 
 
 <!-- Detail Order Modal -->
-<div class="modal-overlay" v-if="isDetailVisible">
-  <div class="modal-content max-w-xl w-full">
-    <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Detail Pesanan</h2>
-    
-    <p class="flex justify-between"><strong>Nama Pemesan</strong> <span>{{ detailData.namaPemesan }}</span></p>
-    <p class="flex justify-between"><strong>Nomor Telepon</strong> <span>{{ detailData.nomorTelepon }}</span></p>
-    <p class="flex justify-between"><strong>Alamat</strong> <span>{{ detailData.alamat }}</span></p>
-    <p class="flex justify-between"><strong>Jenis Produk</strong> <span>{{ detailData.jenisProduk }}</span></p>
-    <p class="flex justify-between"><strong>Jumlah Produk</strong> <span>{{ detailData.jumlahProduk }}</span></p>
-    <p class="flex justify-between"><strong>Ukuran</strong></p>
-    <ul class="ml-4">
-      <li class="flex justify-between">S: <span>{{ detailData.ukuran?.S }}</span></li>
-      <li class="flex justify-between">M: <span>{{ detailData.ukuran?.M }}</span></li>
-      <li class="flex justify-between">L: <span>{{ detailData.ukuran?.L }}</span></li>
-      <li class="flex justify-between">XL: <span>{{ detailData.ukuran?.XL }}</span></li>
-      <li class="flex justify-between">XXL: <span>{{ detailData.ukuran?.XXL }}</span></li>
-      <li class="flex justify-between">Lainnya: <span>{{ detailData.ukuran?.lainnya }}</span></li>
-    </ul>
-    <p class="flex justify-between"><strong>Jenis Extra</strong> <span>{{ detailData.jenisextra }}</span></p>
-    <p class="flex justify-between"><strong>Extra</strong> <span>{{ detailData.extra }}</span></p>
-    <p class="flex justify-between"><strong>Extra</strong> <span>{{ detailData.jumlahextra }}</span></p>
-    <p class="flex justify-between"><strong>Extra</strong> <span>{{ detailData.totalextra }}</span></p>
-    <p class="flex justify-between"><strong>Harga per Baju</strong> <span>{{ totalHargaFormat(detailData.hargaPerBaju) }}</span></p>
-    <p class="flex justify-between"><strong>Total Harga</strong> <span>{{ totalHargaFormat(detailData.totalHargapesanan) }}</span> </p>
-    <p class="flex justify-between"><strong>DP</strong> <span>{{ totalHargaFormat(detailData.dp) }}</span></p>
-    <p class="flex justify-between"><strong>Tanggal Pengeluaran</strong> <span>{{ detailData.tanggalPengeluaran }}</span></p>
+<div class="modal-overlay"  v-if="isDetailVisible">
+  <div class="modal-content max-w-3xl w-full bg-white rounded-xl shadow p-6">
+    <h1 class="text-2xl font-bold mb-6 border-b pb-4 text-cyan-950 text-center">Detail Pesanan</h1>
 
-    <div class="flex justify-end mt-4">
-      <button @click="closeDetail(order)" class="btn bg-gray-200 text-cyan-950">Tutup</button>
+    <div class="flex justify-between text-sm text-gray-600 mb-1">
+      <p>Pesanan atas nama <strong>{{ detailData.namaPemesan }}</strong></p>
+      <p>No. Telp: {{ detailData.nomorTelepon }}</p>
+    </div>
+
+    <div class="flex justify-between text-sm text-gray-600 mb-4">
+      <p>Alamat: {{ detailData.alamat }}</p>
+      <p class="text-xl font-semibold text-right text-black">
+        Jumlah Produk<br><span class="text-2xl">{{ detailData.jumlahProduk }}</span>
+      </p>
+    </div>
+
+    <p class="text-sm mb-2">Status Pembayaran: 
+      <span
+        class="inline-block px-3 py-1 rounded-full text-xs font-semibold"
+        :class="{
+          'bg-green-100 text-green-800': detailData.status === 'Lunas',
+          'bg-yellow-100 text-yellow-800': detailData.status === 'DP',
+          'bg-red-100 text-red-800': detailData.status === 'Belum Bayar'
+        }"
+      >
+        {{ detailData.status }}
+      </span>
+    </p>
+
+    <table class="w-full text-sm text-left border-t mt-4">
+      <thead>
+        <tr class="text-gray-500">
+          <th class="py-2">Jenis Produk</th>
+          <th class="py-2">Ukuran (S/M/L/XL/XXL/Lainnya)</th>
+          <th class="py-2 text-right">Harga Satuan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-t text-black">
+          <td class="py-2">{{ detailData.jenisProduk }}</td>
+          <td class="py-2">
+            S: {{ detailData.ukuran?.S }},
+            M: {{ detailData.ukuran?.M }},
+            L: {{ detailData.ukuran?.L }},
+            XL: {{ detailData.ukuran?.XL }},
+            XXL: {{ detailData.ukuran?.XXL }},
+            lainnya: {{ detailData.ukuran?.lainnya }}
+          </td>
+          <td class="py-2 text-right">{{ totalHargaFormat(detailData.hargaPerBaju) }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="w-full text-sm text-left border-t mt-4" v-if="detailData.extras && detailData.extras.length">
+      <thead>
+        <tr class="text-gray-500">
+          <th class="py-2">Jenis Extra</th>
+          <th class="py-2">Harga</th>
+          <th class="py-2">Jumlah</th>
+          <th class="py-2 text-right">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(extra, index) in detailData.extras" :key="index" class="border-t text-black">
+          <td class="py-2">{{ extra.jenis }}</td>
+          <td class="py-2">Rp{{ extra.harga }}</td>
+          <td class="py-2">{{ extra.jumlah }}</td>
+          <td class="py-2 text-right">Rp{{ extra.harga * extra.jumlah }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="w-full text-sm text-left border-t mt-4">
+      <thead>
+        <tr class="text-gray-500">
+          <th class="py-2">DP</th>
+          <th class="py-2">Total Harga</th>
+          <th class="py-2">Tenggat Waktu</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-t text-black">
+          <td class="py-2">{{ totalHargaFormat(detailData.dp) }}</td>
+          <td class="py-2">{{ totalHargaFormat(detailData.totalHargapesanan) }}</td>
+          <td class="py-2">{{ detailData.tanggalPengeluaran }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="flex justify-end mt-6">
+      <button @click="isDetailVisible = false" class="btn bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 text-sm">Tutup</button>
     </div>
   </div>
 </div>
 
-
     <!-- Bayar Modal -->
-    <div class="modal-overlay" v-if="showModalBayar">
+    <div class="modal-overlay" v-if="showModalBayar" >
       <div class="modal-content">
         <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Bayar Pesanan</h2>
         
@@ -296,12 +349,11 @@
     </div>
 
     </div>
-  </div>
-  </div>
+
 </template>
 
 
-<script setup>
+<script setup> 
 import { ref, computed } from 'vue';
 import SideBar from '@/components/SideBar.vue'
 import 'leaflet/dist/leaflet.css';
@@ -328,6 +380,12 @@ function selectCity(city) {
   // Tambahkan logika untuk peta jika diperlukan
 }
 
+const filteredorder = computed(() => {
+if (!search.value) return daftarPesanan.value;
+return daftarPesanan.value.filter(order =>
+  order.namaPemesan.toLowerCase().includes(search.value.toLowerCase())
+);
+});
 
 const paginatedOrders = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
@@ -359,12 +417,8 @@ const form = ref({
   jenisProduk: '',
   jumlahProduk: 0,
   jenisextra: '',
-  extra: 0,
-  jumlahextra:0,
-  totalextra:'',
   hargaPerBaju: 0,
-  totalhargapesanan:'',
-  dp: '',
+  totalHargapesanan:'',
   sisabayar: '',
   totalHarga: 0,
   dp: 0,
@@ -466,13 +520,6 @@ return new Intl.NumberFormat('id-ID', {
 }).format(value);
 }
 
-function totalHargaExtraFormat(value) {
-return new Intl.NumberFormat('id-ID', {
-  style: 'currency',
-  currency: 'IDR'
-}).format(value);
-}
-
 function addOrder() {
 const newOrder = { ...form.value, totalHarga: totalHarga.value, totalHargapesanan: totalHargaPesanan.value, };
 daftarPesanan.value.push(newOrder);
@@ -487,7 +534,6 @@ function showDetail(order) {
 
 function closeDetail() {
   isDetailVisible.value = false;
-  resetForm();
 }
 
 function editOrder(index) {
@@ -496,10 +542,6 @@ form.value = JSON.parse(JSON.stringify(order)); // clone object biar reaktif
 showModal.value = true;
 isEdit.value = true;
 editIndex.value = index;
-this.isEdit = true;
-this.editIndex = index;
-  this.form = JSON.parse(JSON.stringify(this.orders[index])); // deep copy untuk menghindari reaktivitas langsung
-  this.showModal = true;
 }
 
 function updateOrder() {
@@ -523,20 +565,19 @@ resetForm();
   }
 
 
-function simpanPesanan() {
-const newOrder = { ...form.value, totalHarga: totalHarga.value };
-daftarPesanan.value.push(newOrder);
-showModal.value = false;
-resetForm();
-}
+// function simpanPesanan() {
+// const newOrder = { ...form.value, totalHarga: totalHarga.value };
+// daftarPesanan.value.push(newOrder);
+// showModal.value = false;
+// resetForm();
+// }
 
 
-// ✅ Function: Menampilkan modal dan mengisi form
 function showModalBayarFunc(index) {
   const item = daftarPesanan.value[index];
   detailData.value = item;
 
-  form.value.totalHarga = item.totalhargapesanan ?? 0;
+  form.value.totalHarga = item.totalHargapesanan ?? 0;
   form.value.dp = 0; // DP baru yang ingin ditambahkan
   form.value.metodepembayaran = item.metodepembayaran ?? '';
 
@@ -560,13 +601,13 @@ function updateBayar() {
     const previousDP = current.dp ?? 0;
     const newTotalDP = previousDP + form.value.dp;
 
-    if (newTotalDP > current.totalhargapesanan) {
+    if (newTotalDP > current.totalHargapesanan) {
       alert("Total DP tidak boleh melebihi total harga!");
       return;
     }
 
     current.dp = newTotalDP;
-    current.sisabayar = current.totalhargapesanan - newTotalDP;
+    current.sisabayar = current.totalHargapesanan - newTotalDP;
     current.metodepembayaran = form.value.metodepembayaran;
   }
 
@@ -584,7 +625,7 @@ function addBayar() {
 const sisabayar = computed(() => {
   const currentItem = detailData.value;
   const previousDP = currentItem?.dp ?? 0;
-  const totalHarga = currentItem?.totalhargapesanan ?? 0;
+  const totalHarga = currentItem?.totalHargapesanan ?? 0;
   const dpBaru = form.value.dp ?? 0;
 
   return totalHarga - (previousDP + dpBaru);
@@ -603,13 +644,9 @@ function resetForm() {
     jenisProduk: '',
     jumlahProduk: 0,
     jenisextra: '',
-    extra: '',
-    jumlahextra:'',
-    totalextra:'',
     hargaPerBaju: 0,
-    dp: '',
     sisabayar:'',
-    totalhargapesanan:'',
+    totalHargapesanan:'',
     ukuran: { S: 0, M: 0, L: 0, XL: 0, XXL: 0, lainnya: '' },
     totalHarga: 0,
     dp: 0,
@@ -618,14 +655,5 @@ function resetForm() {
     extras:[]
   };
 }
-
-
-
-const filteredorder = computed(() => {
-if (!search.value) return daftarPesanan.value;
-return daftarPesanan.value.filter(order =>
-  order.namaPemesan.toLowerCase().includes(search.value.toLowerCase())
-);
-});
 
 </script>
