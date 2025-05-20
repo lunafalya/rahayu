@@ -9,9 +9,9 @@
         
         <!-- Wallet Section -->
         <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-lg w-full">
-          <h2 class="font-poppins text-3xl font-bold mb-4 text-cyan-950">MY WALLET</h2>
+          <h2 class="font-poppins text-3xl font-bold mb-4 text-cyan-950">REKENING</h2>
           <div class="mb-6">
-            <p class="text-sm text-gray-300">Available Balance</p>
+            <p class="text-sm text-gray-300">Saldo Tersedia</p>
             <p v-if="balance == null" class="skeleton h-9 w-56 mt-1 bg-gray-800"></p>
             <p v-else class="text-3xl font-bold mt-1 text-cyan-950">
               Rp. {{ Intl.NumberFormat('id-ID').format(balance) }}
@@ -27,7 +27,7 @@
                 </svg>
               </div>
               <div>
-                <p class="text-xs text-gray-400">Expense</p>
+                <p class="text-xs text-gray-400">Pemasukan</p>
                 <p class="text-sm font-semibold text-cyan-950">Rp. 240.000</p>
               </div>
             </div>
@@ -38,7 +38,7 @@
                 </svg>
               </div>
               <div>
-                <p class="text-xs text-gray-400">Income</p>
+                <p class="text-xs text-gray-400">Pemasukan</p>
                 <p class="text-sm font-semibold text-cyan-950">Rp. 500.000</p>
               </div>
             </div>
@@ -47,8 +47,8 @@
           <!-- Transactions -->
           <div>
             <div class="flex justify-between items-center mb-3">
-              <h3 class="font-semibold text-cyan-950">Recent Transactions</h3>
-              <router-link to="/income" class="text-sm text-blue-400 hover:underline">View All</router-link>
+              <h3 class="font-semibold text-cyan-950">Riwayat Transaksi</h3>
+              <router-link to="/income" class="text-sm text-blue-400 hover:underline">Lihat Semua</router-link>
             </div>
             <ul class="space-y-3 text-sm">
               <li class="flex justify-between items-center">
@@ -93,7 +93,7 @@
       <!-- Map Section -->
         <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-lg w-full">
           <div class="flex mt-8 justify-between items-center pb-6 relative">
-            <h2 class="text-xl font-bold text-cyan-950">Map Overview</h2>
+            <h2 class="text-xl font-bold text-cyan-950">MAP</h2>
 
             <!-- Button with Dropdown -->
             <div
@@ -136,7 +136,7 @@
 
 
     <!-- Modal -->
-    <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div v-if="showModal" class="fixed inset-0 bg-[rgba(0,0,0,0.43)] flex items-center justify-center z-50">
       <div class="bg-white p-6 rounded-lg w-96 shadow-lg">
         <h3 class="text-xl font-semibold text-center mb-6 text-black">
         {{ modalNote ? 'Detail Deadline' : 'Tambah Deadline Baru' }}
@@ -145,7 +145,7 @@
       <!-- Tampilkan detail jika ada note -->
       <div v-if="modalNote" class="text-cyan-950 space-y-2">
         <p><strong>Nama Pesanan:</strong> {{ modalNote }}</p>
-        <p><strong>Deadline:</strong> {{ selectedDate }}</p>
+        <p><strong>Tenggat Waktu:</strong> {{ selectedDate }}</p>
         <div class="flex justify-end mt-4">
           <button @click="closeModal" class="px-4 py-2 bg-cyan-950 text-white rounded hover:bg-cyan-700">Tutup</button>
         </div>
@@ -169,7 +169,7 @@
         </div>
 
         <div class="flex justify-end gap-3">
-          <button @click="closeModal" class="px-4 py-2 rounded text-sm font-semibold bg-gray-400">Batal</button>
+          <button @click="closeModal" class="px-4 py-2 rounded text-sm text-white font-semibold bg-gray-400">Batal</button>
           <button @click="saveNoteFromForm" class="text-white px-4 py-2 rounded text-sm font-semibold hover:bg-cyan-700 bg-cyan-950">
             Tambah
           </button>
@@ -192,7 +192,7 @@
 
       <!-- Kalender Deadline -->
       <div class="bg-white rounded-2xl shadow-md pb-5 h-auto">
-        <h3 class="font-bold m-3 text-cyan-950">DEADLINE</h3>
+        <h3 class="font-bold m-3 text-cyan-950">KALENDAR</h3>
         <div class="cally rounded-box w-full p-4">
           <div class="flex justify-between items-center mb-2">
             <button @click="prevMonth">

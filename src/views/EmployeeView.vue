@@ -9,12 +9,11 @@
 
     <div class="karyawan-page mb-5">
 
-      <!-- Sticky Search Bar + Button -->
       <div class="flex justify-between bg-white sticky top-0 z-20 py-4">
         <input 
           v-model="search" 
           type="text" 
-          placeholder="Search ..." 
+          placeholder="Cari disini..." 
           class="search-bar text-cyan-950 border px-3 py-2 bg-white rounded" 
         />
         <button 

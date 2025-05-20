@@ -8,7 +8,7 @@
     <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
     <div class="karyawan-page">      
         <div class="flex mt-8 justify-between pb-6">
-            <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3 py-2" />
+            <input v-model="search" type="text" placeholder="Cari disini..." class="search-bar text-cyan-950 border px-3 py-2" />
       </div>
       
 

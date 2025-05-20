@@ -7,7 +7,7 @@
     <!-- Order Page Content -->
     <div class="order-page">
       <div class="flex mt-8 justify-between pb-6">
-        <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3 py-2" />
+        <input v-model="search" type="text" placeholder="Cari disini..." class="search-bar text-cyan-950 border px-3 py-2" />
         <button @click="showModal=true" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
           Tambah
         </button>
@@ -22,7 +22,7 @@
               <th class="text-white">Nama Pemesan</th>
               <th class="text-white">Total Harga</th>
               <th class="text-white">Sisa Pembayaran</th>
-              <th class="text-white">Deadline</th>
+              <th class="text-white">Tanggal</th>
               <th class="text-white">Aksi</th>
             </tr>
           </thead>
@@ -55,7 +55,7 @@
   <!-- Map Section -->
   <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-md">
     <div class="flex justify-between items-center pb-6 relative">
-      <h2 class="text-2xl font-bold text-cyan-950">Map Overview</h2>
+      <h2 class="text-2xl font-bold text-cyan-950">MAP</h2>
       
 
       <!-- Dropdown Button -->
@@ -75,7 +75,7 @@
         </div>
       </div>
     </div>
-    <p>Pesanan dari kota berjumlah </p>
+    <p>Pesanan dari kota<strong class="ml-1">{{ selectedCity || "All Cities" }}</strong> berjumlah </p>
 
     <!-- Map Box -->
     <div id="map" class="w-full h-64 rounded-xl bg-gray-200 flex items-center justify-center text-gray-500">
@@ -87,7 +87,7 @@
     <!-- OrderModal -->
     <div class="modal-overlay " v-if="showModal">
     <div class="modal-content">
-    <h2 class="text-2xl font-bold text-cyan-950 mb-6 text-center">Tambah Pesanan</h2>
+    <h2 class="text-2xl font-bold text-cyan-950 mb-6 text-center">TAMBAH PESANAN</h2>
   
     <label class="text-cyan-950">Nama Pemesan:</label>
     <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.namaPemesan" type="text" placeholder="Nama Pemesan" />

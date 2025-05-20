@@ -10,9 +10,9 @@
           
               <!-- WALLET  -->
               <div class="bg-white rounded-2xl p-6 shadow-lg w-full">
-            <h2 class="text-3xl font-bold mb-4 text-cyan-950">MY WALLET</h2>
+            <h2 class="text-3xl font-bold mb-4 text-cyan-950">REKENING</h2>
             <div class="mb-6">
-              <p class="text-sm text-gray-300">Available Balance</p>
+              <p class="text-sm text-gray-300">Saldo Tersedia</p>
               <p v-if="balance == null" class="skeleton h-9 w-56 mt-1 bg-gray-800"></p>
               <p v-else class="text-3xl font-bold mt-1 text-black">Rp. {{ Intl.NumberFormat('id-ID').format(balance) }}</p>
             </div>
@@ -25,7 +25,7 @@
                   </svg>
                 </div>
                 <div>
-                  <p class="text-xs text-gray-400">Expense</p>
+                  <p class="text-xs text-gray-400">Pengeluaran</p>
                   <p class="text-sm font-semibold text-cyan-950"></p>
                 </div>
               </div>
@@ -36,7 +36,7 @@
                   </svg>
                 </div>
                 <div>
-                  <p class="text-xs text-gray-400">Income</p>
+                  <p class="text-xs text-gray-400">Pemasukan</p>
                   <p class="text-sm font-semibold text-cyan-950"></p>
                 </div>
               </div>
@@ -44,7 +44,7 @@
         
             <div>
         <div class="flex justify-between items-center mb-3">
-          <h3 class="font-semibold text-cyan-950">Recent Transactions</h3>
+          <h3 class="font-semibold text-cyan-950">Riwayat Transaksi</h3>
         </div>
         <ul class="space-y-3 text-sm">
           <li class="flex justify-between items-center">

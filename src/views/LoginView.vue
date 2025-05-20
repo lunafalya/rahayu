@@ -3,10 +3,12 @@
         <img src="../assets/rahayu.svg" alt="Rahayu Logo" class="w-32 h-32" />
         <fieldset class="fieldset w-xs bg-base-200 border bg-blue-200 border-base-300 p-5 rounded-xl">
 
-            <label class="fieldset-label">Username</label>
+            <h2 class="text-center text-xl font-bold mb-4">MASUK KE RAHAYU KONVEKSI</h2>
+
+            <label class="fieldset-label">Nama Pengguna</label>
             <input type="text" class="input" placeholder="Username" v-model="username" />
             
-            <label class="fieldset-label">Password</label>
+            <label class="fieldset-label">Kata Sandi</label>
             <div class="relative">
                 <input :type="showPassword ? 'text' : 'password'" class="input w-full" placeholder="Password" v-model="password" />
                 <button type="button" class="absolute right-3 top-3 bg-transparent" @click="togglePasswordVisibility">
@@ -15,11 +17,11 @@
             </div>
 
             <a href="/forgotpassword" class="text-sm text-blue-500 hover:underline block text-end">
-                Forgot Password?
+                Lupa Sandi?
             </a>
 
             <button class="btn w-full my-4 hover:text-white hover:bg-cyan-900 bg-cyan-700 text-white" type="button" @click="Login()">
-                <p>Login</p>
+                <p>Masuk</p>
             </button>
         </fieldset>
     </div>
