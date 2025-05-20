@@ -110,6 +110,8 @@
     <input class="text-cyan-950 border p-2 w-full rounded mb-5" v-model="form.latitude" type="text" placeholder="Masukkan Latitude"/>
   </div>
 </div>
+    
+
 
     <label class="text-cyan-950">Jenis Produk:</label>
     <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.jenisProduk">
@@ -206,9 +208,8 @@
       <button v-if="!isEdit" @click="addOrder" class="btn bg-cyan-950 text-white">Simpan</button>
       <button v-else @click="updateOrder" class="btn bg-cyan-950 text-white">Update</button>
     </div>
-    </div>
-    </div>
-
+  </div>
+  </div>
 
 
 
@@ -534,6 +535,7 @@ function showDetail(order) {
 
 function closeDetail() {
   isDetailVisible.value = false;
+  resetForm();
 }
 
 function editOrder(index) {
@@ -542,6 +544,8 @@ form.value = JSON.parse(JSON.stringify(order)); // clone object biar reaktif
 showModal.value = true;
 isEdit.value = true;
 editIndex.value = index;
+form.value = JSON.parse(JSON.stringify(daftarPesanan.value[index]));
+showModal.value = true;
 }
 
 function updateOrder() {
@@ -565,14 +569,15 @@ resetForm();
   }
 
 
-// function simpanPesanan() {
-// const newOrder = { ...form.value, totalHarga: totalHarga.value };
-// daftarPesanan.value.push(newOrder);
-// showModal.value = false;
-// resetForm();
-// }
+function simpanPesanan() {
+const newOrder = { ...form.value, totalHarga: totalHarga.value };
+daftarPesanan.value.push(newOrder);
+showModal.value = false;
+resetForm();
+}
 
 
+// ✅ Function: Menampilkan modal dan mengisi form
 function showModalBayarFunc(index) {
   const item = daftarPesanan.value[index];
   detailData.value = item;
