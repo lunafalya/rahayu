@@ -203,17 +203,8 @@
             <label class="text-cyan-950">Nama</label>
             <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="generalForm.nama" type="text" />
 
-            <label class="text-cyan-950">Bank Tujuan</label>
-            <select v-model="generalForm.bank" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
-              <option class="text-cyan-950" disabled value="">Pilih Bank</option>
-              <option>BCA</option>
-              <option>BNI</option>
-              <option>BRI</option>
-            </select>
-
-
-            <label class="text-cyan-950">Virtual Account</label>
-            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="generalForm.va" type="text" />
+            <label class="text-cyan-950">Email</label>
+            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="generalForm.email" type="text" />
 
             <label class="font-medium text-cyan-950">Tanggal Pengeluaran</label>
             <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="generalForm.tanggal" type="date" />
@@ -309,16 +300,14 @@
                 <thead>
                   <tr class="text-gray-500">
                     <th class="py-2">Keterangan</th>
-                    <th class="py-2">Bank</th>
-                    <th class="py-2">No. Rekening</th>
+                    <th class="py-2">Alamat Email</th>
                     <th class="py-2 text-right">Jumlah</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr class="border-t text-black">
                     <td class="py-2">{{ detailData.keterangan }}</td>
-                    <td class="py-2">{{ detailData.bank }}</td>
-                    <td class="py-2">{{ detailData.va }}</td>
+                    <td class="py-2">{{ detailData.email }}</td>
                     <td class="py-2 text-right">{{ totalHargaFormat(detailData.jumlah) }}</td>
                   </tr>
                 </tbody>
@@ -366,8 +355,7 @@
                 <thead>
                   <tr class="text-gray-500">
                     <th class="py-2">Keterangan</th>
-                    <th class="py-2">Bank</th>
-                    <th class="py-2">No. Rekening</th>
+                    <th class="py-2">Transaksi</th>
                     <th class="py-2 text-right">Jumlah</th>
                   </tr>
                 </thead>
@@ -375,7 +363,6 @@
                   <tr class="border-t text-black">
                     <td class="py-2">Gaji Awal - Potongan</td>
                     <td class="py-2">{{ detailData.transaksi }}</td>
-                    <td class="py-2">{{ detailData.vac }}</td>
                     <td class="py-2 text-right">{{ totalHargaFormat(detailData.total) }}</td>
                   </tr>
                 </tbody>
@@ -423,16 +410,12 @@
                   <thead>
                     <tr class="text-gray-500">
                       <th class="py-2">Keterangan</th>
-                      <th class="py-2">Bank</th>
-                      <th class="py-2">No. Rekening</th>
                       <th class="py-2 text-right">Jumlah</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr class="border-t text-black">
                       <td class="py-2">Peminjaman Dana</td>
-                      <td class="py-2">{{ detailData.bayar }}</td>
-                      <td class="py-2">{{ detailData.vc }}</td>
                       <td class="py-2 text-right">{{ totalHargaFormat(detailData.jumlah) }}</td>
                     </tr>
                   </tbody>
@@ -512,7 +495,6 @@ const gajiForm = ref({
   tanggal_pengajuan: '',
   transaksi: '',
   total: '',
-  vac: '',
   status: 'Lunas',
   jasa: []
 });
@@ -609,7 +591,6 @@ function resetGajiForm() {
     tanggal_pengajuan: '',
     transaksi: '',
     total: '',
-    vac: '',
     status: 'Lunas',
     jasa: []
   };
@@ -646,8 +627,7 @@ const generalForm = ref({
   jumlah: 0,
   tanggal: '',
   nama: '',
-  bank: '',
-  va: '',
+  email: '',
   keterangan: '',
   status: 'sukses'
 });
@@ -663,8 +643,7 @@ function resetGeneralForm() {
     jumlah: 0,
     tanggal: '',
     nama: '',
-    bank: '',
-    va: '',
+    email: '',
     keterangan: '',
     status: 'sukses'
   };
@@ -791,7 +770,6 @@ function showDetail(item) {
   this.showDetailModal = true;
 }
 
-// Tambahan: Fungsi format rupiah
 function formatRupiah(angka) {
   return new Intl.NumberFormat('id-ID').format(angka)
 }

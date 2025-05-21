@@ -77,6 +77,9 @@
           <label class="font-medium text-cyan-950">Nama Karyawan</label>
           <input v-model="form.name" type="text" placeholder="Nama Karyawan" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" />
           
+          <label class="font-medium text-cyan-950">Alamat Email</label>
+          <input v-model="form.email" type="text" placeholder="Masukkan Alamat Email" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" />
+
           <label class="font-medium text-cyan-950">Foto Profil</label>
           <input type="file" @change="handleImageUpload" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" />
 
@@ -128,6 +131,7 @@ import axios from 'axios';
         editIndex: null,
         form: {
           name: '',
+          email:'',
           image: '',
           position: '',
           status: '',
@@ -150,6 +154,7 @@ import axios from 'axios';
     resetForm() {
       this.form = {
         name: '',
+        email: '',
         image: '',
         position: '',
         status: 'Aktif'
@@ -176,6 +181,7 @@ import axios from 'axios';
       if (this.form.name && this.form.image && this.form.position && this.form.status) {
         const formData = new FormData();
         formData.append('name', this.form.name);
+        formData.append('email', this.form.email);
         formData.append('position', this.form.position);
         formData.append('status', this.form.status);
         formData.append('image', this.form.image);
@@ -217,6 +223,7 @@ import axios from 'axios';
       if (this.editIndex !== null && this.form.name && this.form.image && this.form.position) {
         const formData = new FormData();
         formData.append('name', this.form.name);
+        formData.append('email', this.form.email);
         formData.append('position', this.form.position);
         formData.append('status', this.form.status);
 

@@ -21,25 +21,23 @@
           <!-- Income & Expense -->
           <div class="flex gap-4 mb-6">
             <div class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow">
-              <div class="bg-yellow-500 p-2 rounded-full">
-                <svg class="w-4 h-4 text-cyan-950 rotate-45" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 5v10m0 0l5-5m-5 5l-5-5" />
+              <div class="bg-red-400 p-2 rounded-full">
+                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m0 0l-6-6m6 6l6-6" />
                 </svg>
               </div>
               <div>
-                <p class="text-xs text-gray-400">Pemasukan</p>
-                <p class="text-sm font-semibold text-cyan-950">Rp. 240.000</p>
+                <p class="text-xs text-gray-400">Pengeluaran</p>
               </div>
             </div>
             <div class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow">
-              <div class="bg-blue-500 p-2 rounded-full">
-                <svg class="w-4 h-4 text-cyan-950 -rotate-45" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 5v10m0 0l5-5m-5 5l-5-5" />
+              <div class="bg-blue-400 p-2 rounded-full">
+                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 19V5m0 0l-6 6m6-6l6 6" />
                 </svg>
               </div>
               <div>
                 <p class="text-xs text-gray-400">Pemasukan</p>
-                <p class="text-sm font-semibold text-cyan-950">Rp. 500.000</p>
               </div>
             </div>
           </div>

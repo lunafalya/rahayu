@@ -3,8 +3,6 @@
         <img src="../assets/rahayu.svg" alt="Rahayu Logo" class="w-32 h-32" />
         <fieldset class="fieldset w-xs bg-base-200 border bg-blue-200 border-base-300 p-5 rounded-xl">
 
-            <h2 class="text-center text-xl font-bold mb-4">MASUK KE RAHAYU KONVEKSI</h2>
-
             <label class="fieldset-label">Nama Pengguna</label>
             <input type="text" class="input" placeholder="Username" v-model="username" />
             
