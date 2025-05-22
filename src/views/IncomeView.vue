@@ -46,7 +46,7 @@
         <div class="flex justify-between items-center mb-3">
           <h3 class="font-semibold text-cyan-950">Recent Transactions</h3>
         </div>
-        <ul class="space-y-3 text-sm">
+        <ul v-for="n in 100" :key="n" class="space-y-3 text-sm">
           <li class="flex justify-between items-center">
             <div>
               <p class="font-semibold text-cyan-950">PT SINGASANA</p>
@@ -66,90 +66,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
 import SideBar from '@/components/SideBar.vue'
-
-
-const search = ref('')
-const showModal = ref(false)
-const showDetailModal = ref(false)
-const detailData = ref({})
-const isEdit = ref(false)
-const inList = ref([])
-
-const inForm = ref({
-  pengirim: '',
-  transaksi: '',
-  vac: '',
-  keterangan: '',
-  tanggalMasuk: '',
-  status: '',
-  imageUrl: ''
-})
-
-
-function handleImageUpload(event) {
-  const file = event.target.files[0]
-  if (file) {
-    const reader = new FileReader()
-    reader.onload = () => {
-      inForm.value.imageUrl = reader.result
-    }
-    reader.readAsDataURL(file)
-  }
-}
-
-
-function addIncome() {
-  inList.value.push({
-    ...inForm.value,
-    total_masuk: '',
-    tanggal_kirim: inForm.value.tanggalMasuk,
-    nama: inForm.value.pengirim,
-    bank: inForm.value.transaksi,
-    va: inForm.value.vac
-  })
-  resetForm()
-}
-
-function updateIncome() {
-  // logika update data bisa disesuaikan
-  resetForm()
-}
-
-function resetForm() {
-  inForm.value = {
-    pengirim: '',
-    transaksi: '',
-    vac: '',
-    keterangan: '',
-    tanggalMasuk: '',
-    status: ''
-  }
-  inForm.imageUrl = ''
-  showModal.value = false
-  isEdit.value = false
-}
-
-const filteredList = computed(() => {
-  if (!search.value) return inList.value
-  return inList.value.filter(item =>
-    item.keterangan.toLowerCase().includes(search.value.toLowerCase()) ||
-    item.nama?.toLowerCase().includes(search.value.toLowerCase())
-  )
-})
-
-function totalHargaFormat(total_masuk) {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR'
-  }).format(total_masuk)
-}
-
-function showDetail(item) {
-  detailData.value = item
-  showDetailModal.value = true
-}
 </script>
 
 <script>
@@ -182,7 +99,7 @@ export default {
           console.error('Error fetching balance:', error);
           alert('Failed to fetch balance. Please try again later.');
         });
-      } 
+      }
     },
   },
   mounted() {
