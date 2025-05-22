@@ -8,7 +8,7 @@
     <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
     <div class="karyawan-page">      
         <div class="flex mt-8 justify-between pb-6">
-            <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3 py-2" />
+            <input v-model="search" type="text" placeholder="Cari disini..." class="search-bar text-cyan-950 border px-3 py-2" />
       </div>
       
 
@@ -108,9 +108,9 @@
           <div class="modal-content">
             <h2 class="text-xl font-bold text-cyan-950 mb-4">Pilih Kategori Pengeluaran</h2>
             <div class="flex gap-2 mb-4">
-              <button class="btn hover:bg-gray-300 hover:text-cyan-700 bg-cyan-700 text-white" @click="selectCategory('General')">General</button>
-              <button class="btn hover:bg-gray-300 hover:text-cyan-700 bg-cyan-700 text-white" @click="selectCategory('Gaji')">Gaji</button>
-              <button class="btn hover:bg-gray-300 hover:text-cyan-700 bg-cyan-700 text-white" @click="selectCategory('Peminjaman')">Peminjaman</button>
+              <button class="btn hover:bg-gray-300 hover:text-cyan-700 bg-cyan-950 text-white" @click="selectCategory('General')">General</button>
+              <button class="btn hover:bg-gray-300 hover:text-cyan-700 bg-cyan-950 text-white" @click="selectCategory('Gaji')">Gaji</button>
+              <button class="btn hover:bg-gray-300 hover:text-cyan-700 bg-cyan-950 text-white" @click="selectCategory('Peminjaman')">Peminjaman</button>
             </div>
             <button @click="showCategoryModal = false" class="mt-4 text-gray-500 hover:text-cyan-700">Batal</button>
           </div>
@@ -132,8 +132,6 @@
               <option>Cash</option>
               <option>Transfer</option>
             </select>
-
-            
 
                <!-- Tabel Input Jasa -->
                <h3 class="text-lg font-semibold text-cyan-950 mb-2">Jasa</h3>
@@ -205,17 +203,8 @@
             <label class="text-cyan-950">Nama</label>
             <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="generalForm.nama" type="text" />
 
-            <label class="text-cyan-950">Bank Tujuan</label>
-            <select v-model="generalForm.bank" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
-              <option class="text-cyan-950" disabled value="">Pilih Bank</option>
-              <option>BCA</option>
-              <option>BNI</option>
-              <option>BRI</option>
-            </select>
-
-
-            <label class="text-cyan-950">Virtual Account</label>
-            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="generalForm.va" type="text" />
+            <label class="text-cyan-950">Email</label>
+            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="generalForm.email" type="text" />
 
             <label class="font-medium text-cyan-950">Tanggal Pengeluaran</label>
             <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="generalForm.tanggal" type="date" />
@@ -240,8 +229,7 @@
             <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Tambah Pengeluaran</h2>
 
             <label class="font-medium text-cyan-950">Nama Karyawan</label>
-            <!-- <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="pinjamForm.nama" type="text" /> -->
-            <select v-model="pinjamForm.id" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
+            <select v-model="pinjamForm.nama" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
               <option v-for="k in karyawanList" :key="k.id" :value="k.id">{{ k.id }} - {{ k.nama }}</option>
             </select>
 
@@ -251,7 +239,6 @@
               <option>Cash</option>
               <option>Transfer</option>
             </select>
-
 
             <label class="text-cyan-950">Nominal</label>
             <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="pinjamForm.jumlah" type="number" />
@@ -313,16 +300,14 @@
                 <thead>
                   <tr class="text-gray-500">
                     <th class="py-2">Keterangan</th>
-                    <th class="py-2">Bank</th>
-                    <th class="py-2">No. Rekening</th>
+                    <th class="py-2">Alamat Email</th>
                     <th class="py-2 text-right">Jumlah</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr class="border-t text-black">
                     <td class="py-2">{{ detailData.keterangan }}</td>
-                    <td class="py-2">{{ detailData.bank }}</td>
-                    <td class="py-2">{{ detailData.va }}</td>
+                    <td class="py-2">{{ detailData.email }}</td>
                     <td class="py-2 text-right">{{ totalHargaFormat(detailData.jumlah) }}</td>
                   </tr>
                 </tbody>
@@ -333,20 +318,22 @@
                   </tr>
                 </tfoot>
               </table>
+              <div class="flex mt-4">
+              <button @click="showDetailModal = false" class="btn bg-gray-500 text-white">Tutup</button>
+            </div>
             </div>
-
-
             
-              <div v-else-if="tab === 'Gaji'" class="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow">
-              <h1 class="text-2xl font-bold mb-6 border-b pb-4">Detail Transaksi</h1>
-              
+
+            <div v-else-if="tab === 'Gaji'" class="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow">
+              <h1 class="text-2xl font-bold mb-6 border-b pb-4">Detail Transaksi Gaji</h1>
+
               <div class="flex justify-between text-sm text-gray-600 mb-1">
                 <p>Transaksi dikirim ke <strong>{{ detailData.nama }}</strong></p>
                 <p>ID Transaksi: {{ detailData.id_transaksi }}</p>
               </div>
               <div class="flex justify-between text-sm text-gray-600 mb-4">
-                <p>{{ detailData.tanggal }}</p>
-                <p class="text-xl font-semibold text-right text-black">Jumlah<br><span class="text-2xl text-black">{{ totalHargaFormat(detailData.jumlah) }}</span></p>
+                <p>{{ detailData.tanggal_pengajuan }}</p>
+                <p class="text-xl font-semibold text-right text-black">Jumlah<br><span class="text-2xl text-black">{{ totalHargaFormat(detailData.total) }}</span></p>
               </div>
 
               <p class="text-sm mb-2">Status Transaksi: 
@@ -362,45 +349,88 @@
                 </span>
               </p>
 
+
+              <!-- Tabel -->
               <table class="w-full text-sm text-left border-t mt-4">
                 <thead>
                   <tr class="text-gray-500">
                     <th class="py-2">Keterangan</th>
-                    <th class="py-2">Bank</th>
-                    <th class="py-2">No. Rekening</th>
+                    <th class="py-2">Transaksi</th>
                     <th class="py-2 text-right">Jumlah</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr class="border-t text-black">
-                    <td class="py-2">{{ detailData.keterangan }}</td>
-                    <td class="py-2">{{ detailData.bank }}</td>
-                    <td class="py-2">{{ detailData.va }}</td>
-                    <td class="py-2 text-right">{{ totalHargaFormat(detailData.jumlah) }}</td>
+                    <td class="py-2">Gaji Awal - Potongan</td>
+                    <td class="py-2">{{ detailData.transaksi }}</td>
+                    <td class="py-2 text-right">{{ totalHargaFormat(detailData.total) }}</td>
                   </tr>
                 </tbody>
                 <tfoot>
                   <tr class="border-t font-semibold">
                     <td colspan="3" class="py-2 text-right">Total</td>
-                    <td class="py-2 text-right">{{ totalHargaFormat(detailData.jumlah) }}</td>
+                    <td class="py-2 text-right">{{ totalHargaFormat(detailData.total) }}</td>
                   </tr>
                 </tfoot>
               </table>
+              <div class="flex mt-4">
+                <button @click="showDetailModal = false" class="btn bg-gray-500 text-white">Tutup</button>
+              </div>
             </div>
 
-            <div v-else-if="tab === 'Peminjaman'">
-              <h1 class="text-2xl mb-4 flex justify-between">Nominal:  <strong><span>{{ totalHargaFormat(detailData.jumlah) }}</span></strong></h1>
-              <p class="flex justify-between">Nama<strong><span>{{ detailData.nama }}</span></strong></p>
-              <p class="flex justify-between">Virtual Account<strong><span>{{ detailData.va }}</span></strong></p>
-              <p class="flex justify-between">Tanggal<strong><span>{{ detailData.tanggal }}</span></strong></p>
-              <p class="flex justify-between">Pembayaran<strong><span>{{ detailData.bayar }}</span></strong></p>
-              <p class="flex justify-between">Rekening<strong><span>{{ detailData.vc }}</span></strong></p>
-              <p class="flex justify-between">Status<strong><span>{{ detailData.status }}</span></strong></p>
-            </div>
+            
 
-            <div class="flex justify-end mt-4">
-              <button @click="showDetailModal = false" class="btn bg-gray-500 text-white">Tutup</button>
-            </div>
+              <div v-else-if="tab === 'Peminjaman'" class="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow">
+                <h1 class="text-2xl font-bold mb-6 border-b pb-4">Detail Transaksi Peminjaman</h1>
+
+                <div class="flex justify-between text-sm text-gray-600 mb-1">
+                  <p>Transaksi dikirim ke <strong>{{ detailData.nama }}</strong></p>
+                  <p>ID Transaksi: {{ detailData.id_transaksi }}</p>
+                </div>
+                <div class="flex justify-between text-sm text-gray-600 mb-4">
+                  <p>{{ detailData.tanggal }}</p>
+                  <p class="text-xl font-semibold text-right text-black">Jumlah<br><span class="text-2xl text-black">{{ totalHargaFormat(detailData.jumlah) }}</span></p>
+                </div>
+
+                <p class="text-sm mb-2">Status Transaksi: 
+                  <span
+                    class="inline-block px-3 py-1 rounded-full text-xs font-semibold"
+                    :class="{
+                      'bg-green-100 text-green-800': detailData.status === 'Selesai',
+                      'bg-yellow-100 text-yellow-800': detailData.status === 'Pending',
+                      'bg-red-100 text-red-800': detailData.status === 'Gagal'
+                    }"
+                  >
+                    {{ detailData.status }}
+                  </span>
+                </p>
+
+                <!-- Tabel -->
+                <table class="w-full text-sm text-left border-t mt-4">
+                  <thead>
+                    <tr class="text-gray-500">
+                      <th class="py-2">Keterangan</th>
+                      <th class="py-2 text-right">Jumlah</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="border-t text-black">
+                      <td class="py-2">Peminjaman Dana</td>
+                      <td class="py-2 text-right">{{ totalHargaFormat(detailData.jumlah) }}</td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr class="border-t font-semibold">
+                      <td colspan="3" class="py-2 text-right">Total</td>
+                      <td class="py-2 text-right">{{ totalHargaFormat(detailData.jumlah) }}</td>
+                    </tr>
+                  </tfoot>
+                </table>
+                <div class="flex mt-4">
+                  <button @click="showDetailModal = false" class="btn bg-gray-500 text-white">Tutup</button>
+                </div>
+              </div>
+
           </div>
         </div>
       </div>

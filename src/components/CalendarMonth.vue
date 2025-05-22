@@ -5,20 +5,22 @@
       {{ day }}
     </div>
 
-    <!-- Offset kosong untuk awal bulan -->
+    <!-- Offset kosong -->
     <div v-for="n in startOffset" :key="'offset-' + n"></div>
 
-<!-- Tanggal -->
+    <!-- Tanggal -->
     <div
       v-for="day in daysInMonth"
       :key="'day-' + day"
-      class="relative p-2 text-center border rounded hover:bg-cyan-700 cursor-pointer"
+      class="relative border rounded p-4 cursor-pointer hover:bg-cyan-700"
+      :class="{ 'bg-red-800 text-white': hasNote(day) }"
       @click="handleDateClick(day)"
     >
-      <div class="font-semibold text-cyan-950 hover:text-white">{{ day }}</div>
-      <div v-if="getNote(day)" class="mt-1 text-xs text-cyan-950 truncate hover:text-white">
-        {{ getNote(day) }}
-      </div>
+      <!-- Tanggal di pojok kiri atas -->
+      <div class="absolute top-1 left-1 text-xs font-bold">{{ day }}</div>
+
+      <!-- Jika ada note -->
+
     </div>
   </div>
 </template>
@@ -40,7 +42,7 @@ const daysInMonth = computed(() =>
 
 const startOffset = computed(() => {
   const firstDay = new Date(props.currentYear, props.currentMonth, 1)
-  return (firstDay.getDay() + 6) % 7 // agar Senin = 0
+  return (firstDay.getDay() + 6) % 7 // Adjust agar Senin = 0
 })
 
 const emit = defineEmits(['date-clicked'])
@@ -54,10 +56,12 @@ function handleDateClick(day) {
   emit('date-clicked', clickedDate)
 }
 
-
-// Ambil isi catatan untuk tanggal tertentu
 function getNote(day) {
   const dateKey = `${props.currentYear}-${String(props.currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
   return props.notes[dateKey] || ''
+}
+
+function hasNote(day) {
+  return !!getNote(day)
 }
 </script>

@@ -9,7 +9,7 @@
   <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
     <!-- Search bar dan tombol tambah -->
     <div class="flex mt-8 justify-between pb-6">
-      <input v-model="search" type="text" placeholder="Search ..." class="search-bar text-cyan-950 border px-3 py-2" />
+      <input v-model="search" type="text" placeholder="Cari disini..." class="search-bar text-cyan-950 border px-3 py-2" />
       <button @click="showModal = true" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
         Tambah
       </button>
@@ -60,7 +60,7 @@
       <!-- Modal Form -->
       <div class="modal-overlay" v-if="showModal">
         <div class="modal-content">
-          <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Tambah Produk</h2>
+          <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">TAMBAH PRODUK</h2>
           <label class="block mb-2  text-cyan-950">Kategori Produk</label>
             <select v-model="form.category" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
               <option disabled value="">Pilih Kategori</option>
@@ -70,6 +70,7 @@
               <option value="seragam jas">Seragam Jas</option>
               <option value="jaket">Jaket</option>
               <option value="jersey">Jersey</option>
+              <option value="jersey">Extra</option>
             </select>
 
             <label class="block mb-2 text-cyan-950">Nama Produk</label>

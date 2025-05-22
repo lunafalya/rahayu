@@ -61,12 +61,12 @@
   const isHovering = ref(false)
   
   const menuItems = [
-    { name: 'Dashboard', route: '/dashboard', icon: 'house' },
-    { name: 'Mutation', route: '/income', icon: 'sack-dollar' },
-    { name: 'Order', route: '/order', icon: ['fab', 'shopify'] },
-    { name: 'Product', route: '/product', icon: 'shirt' },
-    { name: 'Expense', route: '/expense', icon: 'receipt' },
-    { name: 'Employee', route: '/employee', icon: 'user-group' },
+    { name: 'Beranda', route: '/dashboard', icon: 'house' },
+    { name: 'Mutasi', route: '/income', icon: 'sack-dollar' },
+    { name: 'Pesanan', route: '/order', icon: ['fab', 'shopify'] },
+    { name: 'Produk', route: '/product', icon: 'shirt' },
+    { name: 'Pengeluaran', route: '/expense', icon: 'receipt' },
+    { name: 'Karyawan', route: '/employee', icon: 'user-group' },
   ]
   
   const isActive = (menuRoute) => route.path === menuRoute
