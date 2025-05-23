@@ -29,18 +29,21 @@
               <img :src="item.photo" alt="Produk" class="w-full h-48 object-cover rounded mb-2" />
               <h3 class="font-semibold text-cyan-950">{{ item.name }}</h3>
               <p class="text-sm text-cyan-950 ">{{ Intl.NumberFormat('id-ID').format(item.price) }}</p>
+              <div class="justify-between gap-2">
               <button
                 @click="editProduct(item.originalIndex)"
-                class="bg-cyan-950 text-white px-4 py-1 mt-2 rounded-full hover:bg-cyan-300"
+                class="btn btn-sm bg-cyan-950 text-white px-4 py-1 mt-2 rounded hover:bg-cyan-300"
               >
                 Edit
               </button>
               <button
                 @click="deleteProduct(item.id)"
-                class="bg-red-500 text-white px-4 py-1 mt-2 rounded-full hover:bg-red-300"
+                class="btn btn-sm bg-red-500 text-white px-4 py-1 mt-2 rounded hover:bg-red-300"
               >
                 Hapus
               </button>
+              </div>
+
             </div>
           </div>
         </div>

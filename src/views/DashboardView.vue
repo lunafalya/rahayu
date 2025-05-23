@@ -5,7 +5,7 @@
 
     <!-- Main Content -->
     <div class="ml-30 p-8 flex-grow px-6 pt-12 flex gap-6 main-content">
-      <div class="flex flex-col items-start pt-6 w-full space-y-6">
+      <div class="flex flex-col items-start w-full space-y-6">
         
         <!-- Wallet Section -->
         <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-lg w-full">
