@@ -23,6 +23,7 @@
               <th class="text-white">Total Harga</th>
               <th class="text-white">Sisa Pembayaran</th>
               <th class="text-white">Tanggal</th>
+              <th class="text-white">Status</th>
               <th class="text-white">Aksi</th>
             </tr>
           </thead>
@@ -33,6 +34,7 @@
               <td>{{ totalHargaFormat(order.totalHargapesanan) }}</td>
               <td>{{ totalHargaFormat(order.sisabayar) }}</td>
               <td>{{ order.tanggalPengeluaran }}</td>
+              <td>{{ order.status}}</td>
               <td>
                 <button @click="editOrder(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button>
                 <button @click="showDetail(order)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Detail</button>
@@ -110,7 +112,7 @@
         </LCircleMarker>
       </LMap>
     </div>
-</div>
+  </div>
 
     <!-- OrderModal -->
     <div class="modal-overlay " v-if="showModal">
@@ -132,7 +134,15 @@
     </div>
 
     <label class="text-cyan-950">Kota:</label>
-    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.kota" type="text" placeholder="Masukkan Kota" />
+    <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.kota">
+      <option class="text-cyan-950" disabled value="">Pilih Kota</option>
+      <option>Bogor</option>
+      <option>Bekasi</option>
+      <option>Jakarta</option>
+      <option>Depok</option>
+      <option>Tanggerang</option>
+      <option>Cirebon</option>
+    </select>
 
     <label class="text-cyan-950">Alamat:</label>
     <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.alamat" type="text" placeholder="Masukkan Alamat" />
@@ -256,7 +266,7 @@
 
     <div class="flex justify-between text-sm text-gray-600 mb-1">
       <p>Pesanan atas nama <strong>{{ detailData.namaPemesan }}</strong></p>
-      <p>No. Telp: {{ detailData.nomorTelepon }}</p>
+      <p>No. Telp: +62 {{ detailData.nomorTelepon }}</p>
     </div>
 
     <div class="flex justify-between text-sm text-gray-600 mb-4">
@@ -742,16 +752,7 @@ shadowUrl: new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).hre
         const json = await res.json() 
         geojsonData.value = json 
       })
-   // Buat struktur kota: jumlah pesanan 
-    // const count = {} 
-    // data.forEach(item => { 
-    //   const kota = item.kota || 'Tidak diketahui' 
-    //   count[kota] = (count[kota] || 0) + 1 
-    // }) 
-    // orders.value = data 
-    // kotaCount.value = count 
-    // })
-      // Fungsi pewarnaan berdasarkan jumlah pesanan 
+
       const getColor = (kota) => {
         const count = kotaCount.value[kota || 'Tidak diketahui'] || 0;
 

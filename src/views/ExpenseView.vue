@@ -32,6 +32,7 @@
               <th class="overflow-x-auto bg-gray-400 text-white px-4 py-2 shadow-lg">Nominal</th>
               <th class="overflow-x-auto bg-gray-400 text-white px-4 py-2 shadow-lg">Keterangan</th>
               <th class="overflow-x-auto bg-gray-400 text-white px-4 py-2 shadow-lg">Tanggal</th>
+              <th class="overflow-x-auto bg-gray-400 text-white px-4 py-2 shadow-lg">Status</th>
               <th class="overflow-x-auto bg-gray-400 text-white px-4 py-2 shadow-lg">Aksi</th>
             </tr>
           </thead>
@@ -40,6 +41,7 @@
               <td class="px-4 py-2">{{totalHargaFormat(item.jumlah) }}</td>
               <td class="px-4 py-2">{{ item.keterangan }}</td>
               <td class="px-4 py-2">{{ item.tanggal }}</td>
+              <td class="px-4 py-2">{{ item.status }}</td>
               <td class="px-4 py-2">
                 <button @click="editGeneral(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Edit</button>
                 <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Detail</button>

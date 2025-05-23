@@ -88,48 +88,6 @@
           </div>
         </div>
 
-      <!-- Map Section -->
-        <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-lg w-full">
-          <div class="flex mt-8 justify-between items-center pb-6 relative">
-            <h2 class="text-xl font-bold text-cyan-950">MAP</h2>
-
-            <!-- Button with Dropdown -->
-            <div
-              class="relative"
-              @mouseenter="showDropdown = true"
-              @mouseleave="showDropdown = false"
-            >
-              <button
-                class="bg-white text-cyan-950 px-4 py-2 rounded-lg shadow hover:bg-cyan-950 hover:text-white transition"
-              >
-                Filter Kota
-              </button>
-
-              <!-- Dropdown Menu -->
-              <div
-                v-show="showDropdown"
-                class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow z-10 border">
-                <ul>
-                  <li
-                    v-for="city in cities"
-                    :key="city"
-                    @click="selectCity(city)"
-                    class="px-4 py-2 hover:bg-cyan-100 cursor-pointer text-sm">
-                    {{ city }}
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- Map Content -->
-          <div
-            id="map"
-            class="w-full h-64 rounded-xl bg-gray-200 flex items-center justify-center text-gray-500"
-          >
-            Showing map for: <strong class="ml-1">{{ selectedCity || "All Cities" }}</strong>
-          </div>
-        </div>
       </div>
 
 
@@ -153,16 +111,12 @@
       <div v-else>
         <!-- Form input tanggal dan note -->
         <div class="mb-4">
-          <label class="font-medium text-black">Target Penyelesaian</label>
-          <div class="flex gap-2 mt-1">
-            <input v-model="monthInput" type="text" maxlength="2" placeholder="MM" class="border p-2 w-1/3 rounded text-cyan-950" />
-            <input v-model="dayInput" type="text" maxlength="2" placeholder="DD" class="border p-2 w-1/3 rounded text-cyan-950" />
-            <input v-model="yearInput" type="text" maxlength="2" placeholder="YY" class="border p-2 w-1/3 rounded text-cyan-950" />
-          </div>
+              <label class="text-cyan-950 pr-6">Tenggat Waktu</label>
+              <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.tanggal" type="date" />
         </div>
 
         <div class="mb-6">
-          <label class="font-medium text-black">Nama Orderan</label>
+          <label class="font-medium text-black">Catatan</label>
           <input v-model="noteText" class="border p-2 w-full rounded mt-1 text-cyan-950" placeholder="Tulis nama pesanan..." />
         </div>
 
@@ -219,10 +173,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import 'leaflet/dist/leaflet.css';
 import SideBar from '@/components/SideBar.vue'
 import CalendarMonth from '@/components/CalendarMonth.vue'
+
+
 </script>
 
 <script>
@@ -231,10 +187,14 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      form: {
+      tanggal: ''
+    },
       currentMonth: new Date().getMonth(),
       currentYear: new Date().getFullYear(),
       showModal: false,
       noteText: '',
+      tanggal:'',
       monthInput: '',
       dayInput: '',
       yearInput: '',
@@ -289,21 +249,20 @@ export default {
       // Tambahkan logika map jika diperlukan
     },
     handleDateClick(date) {
-      const dateKey = `${date.year}-${String(date.month).padStart(2, '0')}-${String(date.day).padStart(2, '0')}`
-      const note = this.notes[dateKey]
+      const dateKey = `${date.year}-${String(date.month).padStart(2, '0')}-${String(date.day).padStart(2, '0')}`;
+      const note = this.notes[dateKey];
 
-      if (note) {
-        this.modalNote = note
-        this.selectedDate = dateKey
-      } else {
-        this.noteText = ''
-        this.monthInput = String(date.month).padStart(2, '0')
-        this.dayInput = String(date.day).padStart(2, '0')
-        this.yearInput = String(date.year).slice(-2)
-        this.modalNote = ''
-      }
+      this.form.tanggal = dateKey;
+      this.noteText = note || '';
+      this.modalNote = note || '';
+      this.selectedDate = dateKey;
 
-      this.showModal = true
+      const [year, month, day] = dateKey.split('-');
+      this.yearInput = year;
+      this.monthInput = month;
+      this.dayInput = day;
+
+      this.showModal = true;
     },
     closeModal() {
       this.showModal = false
@@ -312,25 +271,23 @@ export default {
     },
     openModal() {
       this.noteText = ''
+      this.tanggal= ''
       this.monthInput = ''
       this.dayInput = ''
       this.yearInput = ''
       this.showModal = true
     },
     saveNoteFromForm() {
-      const mm = parseInt(this.monthInput)
-      const dd = parseInt(this.dayInput)
-      const yy = parseInt(this.yearInput)
-
-      if (!mm || !dd || !yy || !this.noteText) {
-        alert('Mohon lengkapi semua field.')
-        return
+      if (!this.form.tanggal || !this.noteText) {
+        alert('Mohon lengkapi semua field.');
+        return;
       }
 
-      const fullYear = yy < 100 ? 2000 + yy : yy
-      const dateKey = `${fullYear}-${String(mm).padStart(2, '0')}-${String(dd).padStart(2, '0')}`
-      this.notes[dateKey] = this.noteText
-      this.closeModal()
+      const [year, month, day] = this.form.tanggal.split('-');
+      const dateKey = `${year}-${month}-${day}`;
+
+      this.notes[dateKey] = this.noteText;
+      this.closeModal();
     },
     prevMonth() {
       if (this.currentMonth === 0) {
@@ -357,6 +314,16 @@ export default {
       return new Date(this.currentYear, this.currentMonth).toLocaleString('default', { month: 'long' })
     }
   },
+  watch: {
+  'form.tanggal'(newVal) {
+    if (newVal) {
+      const [year, month, day] = newVal.split('-');
+      this.yearInput = year;
+      this.monthInput = month;
+      this.dayInput = day;
+    }
+  }
+},
 };
 </script>
 
