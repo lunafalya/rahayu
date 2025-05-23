@@ -121,17 +121,27 @@
     <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.namaPemesan" type="text" placeholder="Nama Pemesan" />
 
     <label class="text-cyan-950">Nomor Telepon :</label>
-    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.nomorTelepon" type="number" placeholder="Nomor Telepon" />
+    <div class="flex items-center border rounded p-2 mb-5 bg-white">
+      <span class="text-cyan-950 mr-2">+62</span>
+      <input
+        class="flex-1 text-cyan-950 outline-none"
+        v-model="form.nomorTelepon"
+        type="number"
+        placeholder="Nomor Telepon"
+      />
+    </div>
 
+    <label class="text-cyan-950">Kota:</label>
+    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.kota" type="text" placeholder="Masukkan Kota" />
 
     <label class="text-cyan-950">Alamat:</label>
     <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.alamat" type="text" placeholder="Masukkan Alamat" />
 
     <div class="flex gap-6">
-  <div class="flex flex-col w-full">
-    <label class="text-cyan-950 mb-1">Longitude</label>
-    <input class="text-cyan-950 border p-2 w-full rounded mb-5" v-model="form.longitude" type="text" placeholder="Masukkan Longitude"/>
-  </div>
+    <div class="flex flex-col w-full">
+      <label class="text-cyan-950 mb-1">Longitude</label>
+      <input class="text-cyan-950 border p-2 w-full rounded mb-5" v-model="form.longitude" type="text" placeholder="Masukkan Longitude"/>
+    </div>
 
   <div class="flex flex-col w-full">
     <label class="text-cyan-950 mb-1">Latitude</label>
@@ -139,8 +149,6 @@
   </div>
 </div>
     
-
-
     <label class="text-cyan-950">Jenis Produk:</label>
     <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.jenisProduk">
       <option class="text-cyan-950" disabled value="">Pilih Jenis Produk</option>
@@ -317,14 +325,12 @@
     <table class="w-full text-sm text-left border-t mt-4">
       <thead>
         <tr class="text-gray-500">
-          <th class="py-2">DP</th>
           <th class="py-2">Total Harga</th>
           <th class="py-2">Tenggat Waktu</th>
         </tr>
       </thead>
       <tbody>
         <tr class="border-t text-black">
-          <td class="py-2">{{ totalHargaFormat(detailData.dp) }}</td>
           <td class="py-2">{{ totalHargaFormat(detailData.totalHargapesanan) }}</td>
           <td class="py-2">{{ detailData.tanggalPengeluaran }}</td>
         </tr>
@@ -338,44 +344,35 @@
 </div>
 
     <!-- Bayar Modal -->
-    <div class="modal-overlay" v-if="showModalBayar" >
-      <div class="modal-content">
-        <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Bayar Pesanan</h2>
-        
-        <p><strong>Total Harga:</strong> Rp {{ totalHargaFormat(detailData.totalHargapesanan) }}</p>
+      <div class="modal-overlay" v-if="showModalBayar">
+        <div class="modal-content">
+          <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Bayar Pesanan</h2>
 
-        <label class="text-cyan-950">Jumlah yang dibayarkan</label>
-        <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"
-          v-model.number="form.dp"
-          type="number"
-          placeholder="DP Sekarang" />
+          <label class="text-cyan-950 block mb-1">Link Bayar</label>
+          <div class="flex items-center justify-between border p-2 rounded mb-5 bg-white">
+            <a 
+              :href="linkBayar" 
+              target="_blank" 
+              class="text-cyan-950 underline break-all"
+            >
+              {{ linkBayar }}
+            </a>
+            <button @click="copyLinkBayar" class="ml-2 text-cyan-950" title="Salin Link">
+              <!-- Icon copy SVG -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" 
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" 
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-4 4h6a2 2 0 012 2v6a2 2 0 01-2 2h-6a2 2 0 01-2-2v-6a2 2 0 012-2z" />
+              </svg>
+            </button>
+          </div>
 
-        <label class="text-cyan-950">Sisa Pembayaran</label>
-        <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"
-          :value="sisabayar"
-          type="number"
-          readonly />
-
-        <label class="text-cyan-950">Metode Pembayaran</label>
-        <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"
-          v-model="form.metodepembayaran">
-          <option disabled value="">Pilih Metode</option>
-          <option>Cash</option>
-          <option>Transfer</option>
-          <option>Qris</option>
-        </select>
-
-        <div class="flex justify-end space-x-2">
-          <button @click="closeModalBayar" class="btn bg-gray-200 text-white">Batal</button>
-
-          <button @click="updateBayar" class="btn bg-cyan-950 text-white"
-            :disabled="form.metodepembayaran === 'Transfer' || form.metodepembayaran === 'Qris'">Simpan</button>
-
-          <button @click="addBayar" class="btn bg-cyan-950 text-white"
-            :disabled="form.metodepembayaran === 'Cash'">Generated Code</button>
+          <div class="flex justify-end space-x-2">
+            <button @click="closeModalBayar" class="btn bg-gray-200 text-white">Batal</button>
+            <button @click="addBayar" class="btn bg-cyan-950 text-white">Selesai</button>
+          </div>
         </div>
       </div>
-    </div>
 
     </div>
 
@@ -385,6 +382,8 @@
 <script setup> 
 import { ref, onMounted, computed } from 'vue';
 import SideBar from '@/components/SideBar.vue'
+import { LMap, LTileLayer, LCircleMarker, LPopup, LGeoJson, LControl } from '@vue-leaflet/vue-leaflet'; 
+import 'leaflet/dist/leaflet.css'
 </script>
 
 <script>
@@ -407,6 +406,7 @@ export default {
       form: {
         namaPemesan: '',
         nomorTelepon: '',
+        kota: '',
         alamat: '',
         longitude: '',
         latitude: '',
@@ -518,6 +518,15 @@ export default {
         alert('Mohon lengkapi data Extra dengan benar.');
       }
     },
+    copyLinkBayar() {
+    navigator.clipboard.writeText(this.linkBayar)
+      .then(() => {
+        alert("Link berhasil disalin!");
+      })
+      .catch(err => {
+        console.error("Gagal menyalin link:", err);
+      });
+  },
     hapusExtra(index) {
       this.form.extras.splice(index, 1);
     },
@@ -622,6 +631,7 @@ export default {
       this.form = {
         namaPemesan: '',
         nomorTelepon: '',
+        kota: '',
         alamat: '',
         longitude: '',
         latitude: '',
@@ -648,4 +658,106 @@ export default {
   }
 }
 
+import L from 'leaflet' 
+delete L.Icon.Default.prototype._getIconUrl 
+L.Icon.Default.mergeOptions({ 
+iconRetinaUrl: new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href, 
+iconUrl: new URL('leaflet/dist/images/marker-icon.png', import.meta.url).href, 
+shadowUrl: new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).href 
+});
+  // Data 
+  const orders = ref([]) 
+  const kotaCount = ref({})
+    const center = { lat: -6.5, lng: 106.8 } // Dramaga 
+    
+    // onMounted(async () => { const res = await fetch('https://api.rahayukonveksi.com/orders') 
+    // const data = await res.json() 
+    const dummyOrders = [
+      {
+      "Nama Pemesan": "Dwi",
+      "alamat": "Kelurahan A, Kota Bogor",
+      "kota": "Bogor",
+      "latitude": "-6.595038",
+      "longitude": "106.816635",
+      "Jenis Produk": "Kaos",
+      "Jumlah Produk": 20
+      },
+      {
+      "Nama Pemesan": "Lina",
+      "alamat": "Kelurahan B, Kota Bogor",
+      "kota": "Bogor",
+      "latitude": "-6.589379",
+      "longitude": "106.805155",
+      "Jenis Produk": "Jaket",
+      "Jumlah Produk": 15
+      },
+      {
+      "Nama Pemesan": "Rudi",
+      "alamat": "Kelurahan C, Kota Depok",
+      "kota": "Depok",
+      "latitude": "-6.391978",
+      "longitude": "106.821823",
+      "Jenis Produk": "Kaos",
+      "Jumlah Produk": 10
+      },
+      {
+      "Nama Pemesan": "Sari",
+      "alamat": "Kelurahan D, Kota Depok",
+      "kota": "Depok",
+      "latitude": "-6.387002",
+      "longitude": "106.832789",
+      "Jenis Produk": "Kemeja",
+      "Jumlah Produk": 5
+      },
+      {
+      "Nama Pemesan": "Aminah",
+      "alamat": "Kelurahan E, Kota Tangerang",
+      "kota": "Tangerang",
+      "latitude": "-6.199602",
+      "longitude": "106.660999",
+      "Jenis Produk": "Kaos",
+      "Jumlah Produk": 3
+      }
+      ]
+    onMounted(() => {
+      const count = {}
+      dummyOrders.forEach(item => {
+      const kota = item.kota || 'Tidak diketahui'
+      count[kota] = (count[kota] || 0) + 1
+      })
+      orders.value = dummyOrders
+      kotaCount.value = count
+      })
+
+      const geojsonData = ref(null) 
+      const showBoundary = ref(true) 
+      const adminStyle = () => ({ 
+        color: '#2c3e50', 
+        weight: 1.5, 
+        fillOpacity: 0 
+      }) 
+      
+      onMounted(async () => { 
+        const res = await fetch('/jabar.geojson') 
+        const json = await res.json() 
+        geojsonData.value = json 
+      })
+   // Buat struktur kota: jumlah pesanan 
+    // const count = {} 
+    // data.forEach(item => { 
+    //   const kota = item.kota || 'Tidak diketahui' 
+    //   count[kota] = (count[kota] || 0) + 1 
+    // }) 
+    // orders.value = data 
+    // kotaCount.value = count 
+    // })
+      // Fungsi pewarnaan berdasarkan jumlah pesanan 
+      const getColor = (kota) => {
+        const count = kotaCount.value[kota || 'Tidak diketahui'] || 0;
+
+        if (count >= 10) return 'red';
+        if (count >= 5) return 'blue';
+        if (count >= 2) return 'salmon';
+        return 'pink';
+      };
 </script>

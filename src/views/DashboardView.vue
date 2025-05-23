@@ -220,112 +220,9 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import axios from 'axios'
 import 'leaflet/dist/leaflet.css';
 import SideBar from '@/components/SideBar.vue'
 import CalendarMonth from '@/components/CalendarMonth.vue'
-
-
-
-
-// Data
-const currentMonth = ref(new Date().getMonth())
-const currentYear = ref(new Date().getFullYear())
-const notes = ref({})
-const showModal = ref(false)
-const noteText = ref('')
-const monthInput = ref('')
-const dayInput = ref('')
-const yearInput = ref('')
-// const balance = ref(null)
-
-const showDropdown = ref(false)
-const selectedCity = ref("")
-const cities = ["Bogor", "Bekasi", "Cirebon", "Bandung", "Sukabumi"]
-
-const selectedDate = ref('')
-const modalNote = ref('')
-
-function handleDateClick(date) {
-  const dateKey = `${date.year}-${String(date.month).padStart(2, '0')}-${String(date.day).padStart(2, '0')}`
-  const note = notes.value[dateKey]
-
-  if (note) {
-    modalNote.value = note
-    selectedDate.value = dateKey
-  } else {
-    noteText.value = ''
-    monthInput.value = String(date.month).padStart(2, '0')
-    dayInput.value = String(date.day).padStart(2, '0')
-    yearInput.value = String(date.year).slice(-2)
-    modalNote.value = ''
-  }
-
-  showModal.value = true
-}
-
-function closeModal() {
-  showModal.value = false
-  modalNote.value = ''
-  selectedDate.value = ''
-}
-
-// Methods
-function selectCity(city) {
-  selectedCity.value = city
-  showDropdown.value = false
-  // Tambahkan logika untuk peta jika diperlukan
-}
-
-
-
-
-function openModal() {
-  noteText.value = ''
-  monthInput.value = ''
-  dayInput.value = ''
-  yearInput.value = ''
-  showModal.value = true
-}
-
-
-function saveNoteFromForm() {
-  const mm = parseInt(monthInput.value)
-  const dd = parseInt(dayInput.value)
-  const yy = parseInt(yearInput.value)
-
-  if (!mm || !dd || !yy || !noteText.value) {
-    alert('Mohon lengkapi semua field.')
-    return
-  }
-
-  const fullYear = yy < 100 ? 2000 + yy : yy
-  const dateKey = `${fullYear}-${String(mm).padStart(2, '0')}-${String(dd).padStart(2, '0')}`
-  notes.value[dateKey] = noteText.value
-  closeModal()
-}
-
-function prevMonth() {
-  if (currentMonth.value === 0) {
-    currentMonth.value = 11
-    currentYear.value -= 1
-  } else {
-    currentMonth.value -= 1
-  }
-}
-
-function nextMonth() {
-  if (currentMonth.value === 11) {
-    currentMonth.value = 0
-    currentYear.value += 1
-  } else {
-    currentMonth.value += 1
-  }
-}
-
-const currentMonthName = computed(() =>
-  new Date(currentYear.value, currentMonth.value).toLocaleString('default', { month: 'long' })
-)
 </script>
 
 <script>
@@ -334,6 +231,8 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      currentMonth: new Date().getMonth(),
+      currentYear: new Date().getFullYear(),
       showModal: false,
       noteText: '',
       monthInput: '',
@@ -344,6 +243,8 @@ export default {
       showDropdown: false,
       selectedCity: "",
       cities: ["Bogor", "Bekasi", "Cirebon", "Bandung", "Sukabumi"],
+      selectedDate: '',
+      modalNote: ''
     };
   },
   methods: {
@@ -364,14 +265,97 @@ export default {
         });
       }
     },
+    fetchTransactions() {
+      const token = localStorage.getItem('token');
+      if (token) {
+        axios.get('https://great-distinctly-seasnail.ngrok-free.app/api/ewallet/transactions', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(response => {
+          this.transactions = response.data; // Assuming the API returns transactions in this format
+          console.log(this.transactions);
+        })
+        .catch(error => {
+          console.error('Error fetching transactions:', error);
+          alert('Failed to fetch transactions. Please try again later.');
+        });
+      }
+    },
     selectCity(city) {
       this.selectedCity = city;
       this.showDropdown = false;
       // Tambahkan logika map jika diperlukan
     },
+    handleDateClick(date) {
+      const dateKey = `${date.year}-${String(date.month).padStart(2, '0')}-${String(date.day).padStart(2, '0')}`
+      const note = this.notes[dateKey]
+
+      if (note) {
+        this.modalNote = note
+        this.selectedDate = dateKey
+      } else {
+        this.noteText = ''
+        this.monthInput = String(date.month).padStart(2, '0')
+        this.dayInput = String(date.day).padStart(2, '0')
+        this.yearInput = String(date.year).slice(-2)
+        this.modalNote = ''
+      }
+
+      this.showModal = true
+    },
+    closeModal() {
+      this.showModal = false
+      this.modalNote = ''
+      this.selectedDate = ''
+    },
+    openModal() {
+      this.noteText = ''
+      this.monthInput = ''
+      this.dayInput = ''
+      this.yearInput = ''
+      this.showModal = true
+    },
+    saveNoteFromForm() {
+      const mm = parseInt(this.monthInput)
+      const dd = parseInt(this.dayInput)
+      const yy = parseInt(this.yearInput)
+
+      if (!mm || !dd || !yy || !this.noteText) {
+        alert('Mohon lengkapi semua field.')
+        return
+      }
+
+      const fullYear = yy < 100 ? 2000 + yy : yy
+      const dateKey = `${fullYear}-${String(mm).padStart(2, '0')}-${String(dd).padStart(2, '0')}`
+      this.notes[dateKey] = this.noteText
+      this.closeModal()
+    },
+    prevMonth() {
+      if (this.currentMonth === 0) {
+        this.currentMonth = 11
+        this.currentYear -= 1
+      } else {
+        this.currentMonth -= 1
+      }
+    },
+    nextMonth() {
+      if (this.currentMonth === 11) {
+        this.currentMonth = 0
+        this.currentYear += 1
+      } else {
+        this.currentMonth += 1
+      }
+    }
   },
   mounted() {
     this.fetchBalance();
+  },
+  computed: {
+    currentMonthName() {
+      return new Date(this.currentYear, this.currentMonth).toLocaleString('default', { month: 'long' })
+    }
   },
 };
 </script>
