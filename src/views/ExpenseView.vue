@@ -428,7 +428,7 @@
                 </table>
                 <div class="flex mt-4">
                   <button @click="showDetailModal = false" class="btn bg-gray-500 text-white">Tutup</button>
-                </div>
+                </div>
               </div>
 
           </div>
@@ -439,339 +439,266 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
 import SideBar from '@/components/SideBar.vue'
+</script>
 
-const search = ref('')
-const tab = ref('General')
-const showDetailModal = ref(false)
-const showCategoryModal = ref(false)
-const showGajiModal = ref(false)
-const showGeneralModal = ref(false)
-const showPinjamModal = ref(false)
-const selectedDetail = ref({})
-
-const gajiList = ref([]);
-const isEditGaji = ref(false);
-const editIndexGaji = ref(null);
-
-const generalList = ref([]);
-const isEditGeneral = ref(false);
-const editIndexGeneral = ref(null);
-
-const pinjamList = ref([]);
-const isEditPinjam = ref(false);
-const editIndexPinjam = ref(null);
-
-const pengeluaranList = ref([])
-
-const detailData= ref(null);
-
-const produkList = ref([])
-
-
-const form = ref({
-  tanggal: '',
-  kategori: '',
-  keterangan: '',
-  jumlah: null,
-})
-
-
-const karyawanList = ref([
-  { id: 'K001', nama: 'Ani' },
-  { id: 'K002', nama: 'Budi' },
-  { id: 'K003', nama: 'Citra' }
-]);
-
-// GAJI
-const gajiForm = ref({
-  id_karyawan: '',
-  nama: '',
-  produk: '',
-  tambahan: '',
-  total_gaji: 0,
-  potongan: 0,
-  tanggal_pengajuan: '',
-  transaksi: '',
-  total: '',
-  status: 'Lunas',
-  jasa: []
-});
-
-const gajiInput = ref({
-  produk: '',
-  harga: 0,
-  jumlah: 0
-});
-
-// Tambah Jasa
-function tambahJasa() {
-  if (!gajiInput.value.produk || !gajiInput.value.harga || !gajiInput.value.jumlah) {
-    alert("Mohon isi semua kolom jasa!");
-    return;
-  }
-
-  const jasaBaru = {
-    produk: gajiInput.value.produk,
-    harga: gajiInput.value.harga,
-    jumlah: gajiInput.value.jumlah,
-  };
-
-  gajiForm.value.jasa.push(jasaBaru);
-
-  gajiInput.value = {
-    produk: '',
-    harga: 0,
-    jumlah: 0,
-  };
-}
-
-// Hapus jasa dari daftar
-function hapusGaji(index) {
-  gajiForm.value.jasa.splice(index, 1);
-}
-
-// Hitung total
-const totalHargaJasa = computed(() => {
-  return gajiForm.value.jasa.reduce((total, item) => {
-    return total + (item.harga * item.jumlah);
-  }, 0);
-});
-
-const totalHargaJasaFormatted = computed(() => {
-  return 'Rp' + totalHargaJasa.value.toLocaleString('id-ID');
-});
-
-const totalGajiFormatted = computed(() => {
-  const total = totalHargaJasa.value - (gajiForm.value.potongan || 0);
-  return 'Rp' + total.toLocaleString('id-ID');
-});
-
-function totalHargaFormat(value) {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR'
-  }).format(value || 0);
-}
-
-// Tambah gaji
-function addGaji() {
-  const total = totalHargaJasa.value - (gajiForm.value.potongan || 0);
-  gajiList.value.push({ ...gajiForm.value, total });
-  resetGajiForm();
-}
-
-// Edit gaji
-function editGaji(item) {
-  gajiForm.value = { ...item };
-  isEditGaji.value = true;
-  showGajiModal.value = true;
-  editIndexGaji.value = gajiList.value.indexOf(item);
-}
-
-// Update gaji
-function updateGaji() {
-  if (editIndexGaji.value !== null) {
-    const total = totalHargaJasa.value - (gajiForm.value.potongan || 0);
-    gajiList.value[editIndexGaji.value] = { ...gajiForm.value, total };
-  }
-  resetGajiForm();
-}
-
-// Reset form
-function resetGajiForm() {
-  gajiForm.value = {
-    id_karyawan: '',
-    nama: '',
-    produk: '',
-    tambahan: '',
-    total_gaji: 0,
-    potongan: 0,
-    tanggal_pengajuan: '',
-    transaksi: '',
-    total: '',
-    status: 'Lunas',
-    jasa: []
-  };
-  gajiInput.value = {
-    produk: '',
-    harga: 0,
-    jumlah: 0
-  };
-  showGajiModal.value = false;
-  isEditGaji.value = false;
-  editIndexGaji.value = null;
-}
-
-// Simpan gaji
-function simpanGaji() {
-  if (isEditGaji.value) {
-    updateGaji();
-  } else {
-    addGaji();
-  }
-}
-
-
-
-
-
-
-
-
-// GENERAL
-
-const generalForm = ref({
-  kategori: '',
-  jumlah: 0,
-  tanggal: '',
-  nama: '',
-  email: '',
-  keterangan: '',
-  status: 'sukses'
-});
-
-function addGeneral() {
-  generalList.value.push({ ...generalForm.value });
-  resetGeneralForm();
-}
-
-function resetGeneralForm() {
-  generalForm.value = {
-    kategori: '',
-    jumlah: 0,
-    tanggal: '',
-    nama: '',
-    email: '',
-    keterangan: '',
-    status: 'sukses'
-  };
-  showGeneralModal.value = false;
-  isEditGeneral.value = false
-  editIndexGeneral.value = null
-}
-
-
-function simpanGeneral() {
-  if (isEditGeneral.value) {
-    updateGeneral();
-  } else {
-    const newGeneral = { ...generalForm.value };
-    generalList.value.push(newGeneral);
-  }
-  resetGeneralForm();
-}
-
-function updateGeneral() {
-  if (editIndexGeneral.value !== null) {
-    generalList.value[editIndexGeneral.value] = { ...generalForm.value };
-  }
-  resetGeneralForm()
-}
-
-function editGeneral(item) {
-  generalForm.value = { ...item }
-  isEditGeneral.value = true
-  showGeneralModal.value = true
-  editIndexGeneral.value = generalList.value.indexOf(item)
-}
-
-
-
-// PINJAM
-const pinjamForm = ref({
-  id_karyawan: '',
-  nama: '',
-  jumlah: 0,
-  tanggal: '',
-  status: 'Tunggak'
-});
-
-function addPinjam() {
-  pinjamList.value.push({ ...pinjamForm.value });
-  resetPinjamForm();
-}
-
-function resetPinjamForm() {
-  pinjamForm.value = {
-    id_karyawan: '',
-    nama: '',
-    jumlah: 0,
-    tanggal: '',
-    status: 'Tunggak'
-  };
-  showPinjamModal.value = false;
-  isEditPinjam.value = false
-  editIndexPinjam.value = null
-}
-
-function simpanPinjam() {
-  if (isEditPinjam.value) {
-    updatePinjam();
-  } else {
-    const newPinjam = { ...pinjamForm.value };
-    pinjamList.value.push(newPinjam);
-  }
-  resetPinjamForm();
-}
-
-function updatePinjam() {
-  if (editIndexPinjam.value !== null) {
-    pinjamList.value[editIndexPinjam.value] = { ...pinjamForm.value };
-  }
-  resetPinjamForm()
-}
-
-function editPinjam(item) {
-  pinjamForm.value = { ...item }
-  isEditPinjam.value = true
-  showPinjamModal.value = true
-  editIndexPinjam.value = pinjamList.value.indexOf(item)
-}
-
-
-
-function openCategorySelector() {
-  showCategoryModal.value = true
-}
-
-function selectCategory(category) {
-  tab.value = category;
-  showCategoryModal.value = false;
-
-  // Tampilkan modal berdasarkan kategori yang dipilih
-  if (category === 'Gaji') {
-    showGajiModal.value = true;
-  } else if (category === 'General') {
-    showGeneralModal.value = true;
-  } else if (category === 'Peminjaman') {
-    showPinjamModal.value = true;
+<script>
+export default {
+  data() {
+    return {
+      search: '',
+      tab: 'General',
+      showDetailModal: false,
+      showCategoryModal: false,
+      showGajiModal: false,
+      showGeneralModal: false,
+      showPinjamModal: false,
+      selectedDetail: {},
+      gajiList: [],
+      isEditGaji: false,
+      editIndexGaji: null,
+      generalList: [],
+      isEditGeneral: false,
+      editIndexGeneral: null,
+      pinjamList: [],
+      isEditPinjam: false,
+      editIndexPinjam: null,
+      pengeluaranList: [],
+      detailData: null,
+      produkList: [],
+      form: {
+        tanggal: '',
+        kategori: '',
+        keterangan: '',
+        jumlah: null,
+      },
+      karyawanList: [
+        { id: 'K001', nama: 'Ani' },
+        { id: 'K002', nama: 'Budi' },
+        { id: 'K003', nama: 'Citra' }
+      ],
+      gajiForm: {
+        id_karyawan: '',
+        nama: '',
+        produk: '',
+        tambahan: '',
+        total_gaji: 0,
+        potongan: 0,
+        tanggal_pengajuan: '',
+        transaksi: '',
+        total: '',
+        vac: '',
+        status: 'Lunas',
+        jasa: []
+      },
+      gajiInput: {
+        produk: '',
+        harga: 0,
+        jumlah: 0
+      },
+      generalForm: {
+        kategori: '',
+        jumlah: 0,
+        tanggal: '',
+        nama: '',
+        keterangan: '',
+        status: 'sukses'
+      },
+      pinjamForm: {
+        id_karyawan: '',
+        nama: '',
+        jumlah: 0,
+        tanggal: '',
+        status: 'Tunggak'
+      }
+    }
+  },
+  computed: {
+    totalHargaJasa() {
+      return this.gajiForm.jasa.reduce((total, item) => total + (item.harga * item.jumlah), 0)
+    },
+    totalHargaJasaFormatted() {
+      return 'Rp' + this.totalHargaJasa.toLocaleString('id-ID')
+    },
+    totalGajiFormatted() {
+      const total = this.totalHargaJasa - (this.gajiForm.potongan || 0)
+      return 'Rp' + total.toLocaleString('id-ID')
+    },
+    filteredByCategory() {
+      return this.pengeluaranList.filter(
+        p => p.kategori === this.tab && p.keterangan.toLowerCase().includes(this.search.toLowerCase())
+      )
+    },
+    uniqueCategories() {
+      return [...new Set(this.pengeluaranList.map(p => p.kategori))]
+    }
+  },
+  methods: {
+    tambahJasa() {
+      if (!this.gajiInput.produk || !this.gajiInput.harga || !this.gajiInput.jumlah) {
+        alert("Mohon isi semua kolom jasa!");
+        return;
+      }
+      const jasaBaru = {
+        produk: this.gajiInput.produk,
+        harga: this.gajiInput.harga,
+        jumlah: this.gajiInput.jumlah,
+      }
+      this.gajiForm.jasa.push(jasaBaru)
+      this.gajiInput = { produk: '', harga: 0, jumlah: 0 }
+    },
+    hapusGaji(index) {
+      this.gajiForm.jasa.splice(index, 1)
+    },
+    totalHargaFormat(value) {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+      }).format(value || 0)
+    },
+    addGaji() {
+      const total = this.totalHargaJasa - (this.gajiForm.potongan || 0)
+      this.gajiList.push({ ...this.gajiForm, total })
+      this.resetGajiForm()
+    },
+    editGaji(item) {
+      this.gajiForm = { ...item }
+      this.isEditGaji = true
+      this.showGajiModal = true
+      this.editIndexGaji = this.gajiList.indexOf(item)
+    },
+    updateGaji() {
+      if (this.editIndexGaji !== null) {
+        const total = this.totalHargaJasa - (this.gajiForm.potongan || 0)
+        this.gajiList[this.editIndexGaji] = { ...this.gajiForm, total }
+      }
+      this.resetGajiForm()
+    },
+    resetGajiForm() {
+      this.gajiForm = {
+        id_karyawan: '',
+        nama: '',
+        produk: '',
+        tambahan: '',
+        total_gaji: 0,
+        potongan: 0,
+        tanggal_pengajuan: '',
+        transaksi: '',
+        total: '',
+        status: 'Lunas',
+        jasa: []
+      }
+      this.gajiInput = { produk: '', harga: 0, jumlah: 0 }
+      this.showGajiModal = false
+      this.isEditGaji = false
+      this.editIndexGaji = null
+    },
+    simpanGaji() {
+      if (this.isEditGaji) {
+        this.updateGaji()
+      } else {
+        this.addGaji()
+      }
+    },
+    addGeneral() {
+      this.generalList.push({ ...this.generalForm })
+      this.resetGeneralForm()
+    },
+    resetGeneralForm() {
+      this.generalForm = {
+        kategori: '',
+        jumlah: 0,
+        tanggal: '',
+        nama: '',
+        keterangan: '',
+        status: 'sukses'
+      }
+      this.showGeneralModal = false
+      this.isEditGeneral = false
+      this.editIndexGeneral = null
+    },
+    simpanGeneral() {
+      if (this.isEditGeneral) {
+        this.updateGeneral()
+      } else {
+        const newGeneral = { ...this.generalForm }
+        this.generalList.push(newGeneral)
+      }
+      this.resetGeneralForm()
+    },
+    updateGeneral() {
+      if (this.editIndexGeneral !== null) {
+        this.generalList[this.editIndexGeneral] = { ...this.generalForm }
+      }
+      this.resetGeneralForm()
+    },
+    editGeneral(item) {
+      this.generalForm = { ...item }
+      this.isEditGeneral = true
+      this.showGeneralModal = true
+      this.editIndexGeneral = this.generalList.indexOf(item)
+    },
+    addPinjam() {
+      this.pinjamList.push({ ...this.pinjamForm })
+      this.resetPinjamForm()
+    },
+    resetPinjamForm() {
+      this.pinjamForm = {
+        id_karyawan: '',
+        nama: '',
+        jumlah: 0,
+        tanggal: '',
+        status: 'Tunggak'
+      }
+      this.showPinjamModal = false
+      this.isEditPinjam = false
+      this.editIndexPinjam = null
+    },
+    simpanPinjam() {
+      if (this.isEditPinjam) {
+        this.updatePinjam()
+      } else {
+        const newPinjam = { ...this.pinjamForm }
+        this.pinjamList.push(newPinjam)
+      }
+      this.resetPinjamForm()
+    },
+    updatePinjam() {
+      if (this.editIndexPinjam !== null) {
+        this.pinjamList[this.editIndexPinjam] = { ...this.pinjamForm }
+      }
+      this.resetPinjamForm()
+    },
+    editPinjam(item) {
+      this.pinjamForm = { ...item }
+      this.isEditPinjam = true
+      this.showPinjamModal = true
+      this.editIndexPinjam = this.pinjamList.indexOf(item)
+    },
+    openCategorySelector() {
+      this.showCategoryModal = true
+    },
+    selectCategory(category) {
+      this.tab = category
+      this.showCategoryModal = false
+      if (category === 'Gaji') {
+        this.showGajiModal = true
+      } else if (category === 'General') {
+        this.showGeneralModal = true
+      } else if (category === 'Peminjaman') {
+        this.showPinjamModal = true
+      }
+    },
+    getTabClass(currentTab) {
+      return this.tab === currentTab ? 'btn bg-cyan-950 text-white' : 'btn text-cyan-950 bg-white'
+    },
+    showDetail(item) {
+      this.detailData = item
+      this.showDetailModal = true
+    },
+    formatRupiah(angka) {
+      return new Intl.NumberFormat('id-ID').format(angka)
+    }
   }
 }
-
-const filteredByCategory = computed(() => {
-  return pengeluaranList.value.filter(
-    p => p.kategori === tab.value && p.keterangan.toLowerCase().includes(search.value.toLowerCase())
-  );
-});
-
-
-function getTabClass(currentTab) {
-  return tab.value === currentTab ? 'btn bg-cyan-950 text-white' : 'btn text-cyan-950 bg-white'
-}
-
-const uniqueCategories = computed(() => {
-  return [...new Set(pengeluaranList.value.map(p => p.kategori))]
-})
-
-function showDetail(item) {
-  this.detailData = item;
-  this.showDetailModal = true;
-}
-
-function formatRupiah(angka) {
-  return new Intl.NumberFormat('id-ID').format(angka)
-}
-
 </script>

@@ -47,10 +47,10 @@
       </div>
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <div v-for="n in 3" :key="n" class="flex w-64 justify-center flex-col gap-4 m-3">
-          <div class="skeleton h-48 w-full"></div>
-          <div class="skeleton h-4 w-28"></div>
-          <div class="skeleton h-4 w-full"></div>
-          <div class="skeleton h-4 w-full"></div>
+          <div class="skeleton h-48 w-full bg-gray-400"></div>
+          <div class="skeleton h-4 w-28 bg-gray-400"></div>
+          <div class="skeleton h-4 w-full bg-gray-400"></div>
+          <div class="skeleton h-4 w-full bg-gray-400"></div>
         </div>
         
       </div>

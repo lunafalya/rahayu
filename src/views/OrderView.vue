@@ -385,412 +385,267 @@
 <script setup> 
 import { ref, onMounted, computed } from 'vue';
 import SideBar from '@/components/SideBar.vue'
-import { LMap, LTileLayer, LCircleMarker, LPopup, LGeoJson, LControl } from '@vue-leaflet/vue-leaflet'; 
-import 'leaflet/dist/leaflet.css'
+</script>
 
-const showModal = ref(false);
-const daftarPesanan = ref([]);
-const showDetailModal = ref(false);
-const detailData = ref({});
-const search = ref('');
-const isEdit = ref(false);
-const editIndex = ref(null);
-const isDetailVisible = ref(false);
-const showModalBayar = ref(false);
-const currentPage = ref(1);
-const itemsPerPage = 6;
+<script>
+import axios from 'axios';
 
-const showDropdown = ref(false)
-const selectedCity = ref("")
-const cities = ["Bogor", "Bekasi", "Cirebon", "Bandung", "Sukabumi"]
-
-function selectCity(city) {
-  selectedCity.value = city
-  showDropdown.value = false
-  // Tambahkan logika untuk peta jika diperlukan
-}
-
-const filteredorder = computed(() => {
-if (!search.value) return daftarPesanan.value;
-return daftarPesanan.value.filter(order =>
-  order.namaPemesan.toLowerCase().includes(search.value.toLowerCase())
-);
-});
-
-const paginatedOrders = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return filteredorder.value.slice(start, end);
-});
-
-const totalPages = computed(() => {
-  return Math.ceil(filteredorder.value.length / itemsPerPage);
-});
-
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) currentPage.value++;
-};
-
-const prevPage = () => {
-  if (currentPage.value > 1) currentPage.value--;
-};
-
-
-
-
-const form = ref({
-  namaPemesan: '',
-  nomorTelepon: '',
-  alamat: '',
-  longitude:'',
-  latitude: '',
-  jenisProduk: '',
-  jumlahProduk: 0,
-  jenisextra: '',
-  hargaPerBaju: 0,
-  totalHargapesanan:'',
-  sisabayar: '',
-  totalHarga: 0,
-  dp: 0,
-  metodepembayaran: '',
-  ukuran: {
-    S: 0,
-    M: 0,
-    L: 0,
-    XL: 0,
-    XXL: 0,
-    lainnya: ''
-  },
-  tanggalPengeluaran: '',
-  extras:[]
-});
-
-
-function tambahExtra() {
-  if (
-    extraInput.value.jenis &&
-    extraInput.value.harga > 0 &&
-    extraInput.value.jumlah > 0
-  ) {
-    form.value.extras.push({
-      jenis: extraInput.value.jenis,
-      harga: extraInput.value.harga,
-      jumlah: extraInput.value.jumlah
-    });
-
-    // Reset input extra
-    extraInput.value = { jenis: '', harga: 0, jumlah: 0 };
-  } else {
-    alert('Mohon lengkapi data Extra dengan benar.');
-  }
-}
-
-function hapusExtra(index) {
-  form.value.extras.splice(index, 1);
-}
-
-const extraInput = ref({
-  jenis: '',
-  harga: 0,
-  jumlah: 0
-});
-
-
-
-const totalHarga = computed(() => {
-  return form.value.jumlahProduk * form.value.hargaPerBaju;
-});
-
-const totalextra = computed(() => {
-  return form.value.jumlahextra * form.value.extra;
-});
-
-const totalHargaFormatted = computed(() => {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR'
-  }).format(totalHarga.value);
-});
-
-const totalHargaPesananFormatted = computed(() => {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR'
-  }).format(totalHargaPesanan.value);
-});
-
-const totalHargaExtraFormatted = computed(() => {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR'
-  }).format(totalHargaExtra.value);
-});
-
-const totalHargaExtra = computed(() => {
-  return form.value.extras.reduce((acc, item) => {
-    return acc + (item.harga * item.jumlah);
-  }, 0);
-});
-
-const totalHargaPesanan = computed(() => {
-  return totalHarga.value + totalHargaExtra.value;
-});
-
-function totalHargaPesananFormat(value) {
-return new Intl.NumberFormat('id-ID', {
-  style: 'currency',
-  currency: 'IDR'
-}).format(value);
-}
-
-function totalHargaFormat(value) {
-return new Intl.NumberFormat('id-ID', {
-  style: 'currency',
-  currency: 'IDR'
-}).format(value);
-}
-
-function addOrder() {
-const newOrder = { ...form.value, totalHarga: totalHarga.value, totalHargapesanan: totalHargaPesanan.value, };
-daftarPesanan.value.push(newOrder);
-showModal.value = false;
-resetForm();
-}
-
-function showDetail(order) {
-  detailData.value = order;
-  isDetailVisible.value = true;
-}
-
-function closeDetail() {
-  isDetailVisible.value = false;
-  resetForm();
-}
-
-function editOrder(index) {
-const order = daftarPesanan.value[index];
-form.value = JSON.parse(JSON.stringify(order)); // clone object biar reaktif
-showModal.value = true;
-isEdit.value = true;
-editIndex.value = index;
-form.value = JSON.parse(JSON.stringify(daftarPesanan.value[index]));
-showModal.value = true;
-}
-
-function updateOrder() {
-  const totalProduk = form.value.jumlahProduk * form.value.hargaPerBaju;
-  const totalExtra = form.value.extras.reduce((acc, extra) => acc + (extra.harga * extra.jumlah), 0);
-  const totalPesanan = totalProduk + totalExtra;
-
-  form.value.totalHargapesanan = totalPesanan; // <- ini yang penting
-
-  if (editIndex.value !== null) {
-    daftarPesanan.value[editIndex.value] = { ...form.value };
-  }
-
-  closeModal();
-}
-
-
-function closeModal() {
-showModal.value = false;
-resetForm();
-  }
-
-
-function simpanPesanan() {
-const newOrder = { ...form.value, totalHarga: totalHarga.value };
-daftarPesanan.value.push(newOrder);
-showModal.value = false;
-resetForm();
-}
-
-
-// ✅ Function: Menampilkan modal dan mengisi form
-function showModalBayarFunc(index) {
-  const item = daftarPesanan.value[index];
-  detailData.value = item;
-
-  form.value.totalHarga = item.totalHargapesanan ?? 0;
-  form.value.dp = 0; // DP baru yang ingin ditambahkan
-  form.value.metodepembayaran = item.metodepembayaran ?? '';
-
-  showModalBayar.value = true;
-}
-
-
-function closeModalBayar() {
-  showModalBayar.value = false;
-}
-
-function updateBayar() {
-  if (form.value.metodepembayaran === 'Transfer' || form.value.metodepembayaran === 'Qris') {
-    alert("Metode pembayaran ini tidak bisa disimpan langsung.");
-    return;
-  }
-
-  const index = daftarPesanan.value.findIndex(item => item === detailData.value);
-  if (index !== -1) {
-    const current = daftarPesanan.value[index];
-    const previousDP = current.dp ?? 0;
-    const newTotalDP = previousDP + form.value.dp;
-
-    if (newTotalDP > current.totalHargapesanan) {
-      alert("Total DP tidak boleh melebihi total harga!");
-      return;
-    }
-
-    current.dp = newTotalDP;
-    current.sisabayar = current.totalHargapesanan - newTotalDP;
-    current.metodepembayaran = form.value.metodepembayaran;
-  }
-
-  closeModalBayar();
-}
-
-function addBayar() {
-  if (form.value.metodepembayaran !== 'Cash') {
-    const kode = 'PAY-' + Math.floor(Math.random() * 1000000);
-    alert('Kode Pembayaran: ' + kode);
-    closeModalBayar();
-  }
-}
-
-const sisabayar = computed(() => {
-  const currentItem = detailData.value;
-  const previousDP = currentItem?.dp ?? 0;
-  const totalHarga = currentItem?.totalHargapesanan ?? 0;
-  const dpBaru = form.value.dp ?? 0;
-
-  return totalHarga - (previousDP + dpBaru);
-});
-
-
-
-
-function resetForm() {
-  form.value = {
-    namaPemesan: '',
-    nomorTelepon: '',
-    alamat: '',
-    longitude:'',
-    latitude: '',
-    jenisProduk: '',
-    jumlahProduk: 0,
-    jenisextra: '',
-    hargaPerBaju: 0,
-    sisabayar:'',
-    totalHargapesanan:'',
-    ukuran: { S: 0, M: 0, L: 0, XL: 0, XXL: 0, lainnya: '' },
-    totalHarga: 0,
-    dp: 0,
-    metodepembayaran: '',
-    tanggalPengeluaran: '',
-    extras:[]
-  };
-}
-
-// Atur ikon bawaan Leaflet 
-import L from 'leaflet' 
-delete L.Icon.Default.prototype._getIconUrl 
-L.Icon.Default.mergeOptions({ 
-iconRetinaUrl: new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href, 
-iconUrl: new URL('leaflet/dist/images/marker-icon.png', import.meta.url).href, 
-shadowUrl: new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).href 
-});
-  // Data 
-  const orders = ref([]) 
-  const kotaCount = ref({})
-    const center = { lat: -6.5, lng: 106.8 } // Dramaga 
-    
-    // onMounted(async () => { const res = await fetch('https://api.rahayukonveksi.com/orders') 
-    // const data = await res.json() 
-    const dummyOrders = [
-      {
-      "Nama Pemesan": "Dwi",
-      "alamat": "Kelurahan A, Kota Bogor",
-      "kota": "Bogor",
-      "latitude": "-6.595038",
-      "longitude": "106.816635",
-      "Jenis Produk": "Kaos",
-      "Jumlah Produk": 20
+export default {
+  data() {
+    return {
+      showModal: false,
+      daftarPesanan: [],
+      showDetailModal: false,
+      detailData: {},
+      search: '',
+      isEdit: false,
+      editIndex: null,
+      isDetailVisible: false,
+      showModalBayar: false,
+      currentPage: 1,
+      itemsPerPage: 6,
+      form: {
+        namaPemesan: '',
+        nomorTelepon: '',
+        alamat: '',
+        longitude: '',
+        latitude: '',
+        jenisProduk: '',
+        jumlahProduk: 0,
+        jenisextra: '',
+        extra: 0,
+        jumlahextra: 0,
+        totalextra: '',
+        hargaPerBaju: 0,
+        totalhargapesanan: '',
+        dp: '',
+        sisabayar: '',
+        totalHarga: 0,
+        metodepembayaran: '',
+        ukuran: {
+          S: 0,
+          M: 0,
+          L: 0,
+          XL: 0,
+          XXL: 0,
+          lainnya: ''
+        },
+        tanggalPengeluaran: '',
+        extras: []
       },
-      {
-      "Nama Pemesan": "Lina",
-      "alamat": "Kelurahan B, Kota Bogor",
-      "kota": "Bogor",
-      "latitude": "-6.589379",
-      "longitude": "106.805155",
-      "Jenis Produk": "Jaket",
-      "Jumlah Produk": 15
-      },
-      {
-      "Nama Pemesan": "Rudi",
-      "alamat": "Kelurahan C, Kota Depok",
-      "kota": "Depok",
-      "latitude": "-6.391978",
-      "longitude": "106.821823",
-      "Jenis Produk": "Kaos",
-      "Jumlah Produk": 10
-      },
-      {
-      "Nama Pemesan": "Sari",
-      "alamat": "Kelurahan D, Kota Depok",
-      "kota": "Depok",
-      "latitude": "-6.387002",
-      "longitude": "106.832789",
-      "Jenis Produk": "Kemeja",
-      "Jumlah Produk": 5
-      },
-      {
-      "Nama Pemesan": "Aminah",
-      "alamat": "Kelurahan E, Kota Tangerang",
-      "kota": "Tangerang",
-      "latitude": "-6.199602",
-      "longitude": "106.660999",
-      "Jenis Produk": "Kaos",
-      "Jumlah Produk": 3
+      extraInput: {
+        jenis: '',
+        harga: 0,
+        jumlah: 0
       }
-      ]
-    onMounted(() => {
-      const count = {}
-      dummyOrders.forEach(item => {
-      const kota = item.kota || 'Tidak diketahui'
-      count[kota] = (count[kota] || 0) + 1
-      })
-      orders.value = dummyOrders
-      kotaCount.value = count
-      })
+    }
+  },
+  computed: {
+    paginatedOrders() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.filteredorder.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.filteredorder.length / this.itemsPerPage);
+    },
+    totalHarga() {
+      return this.form.jumlahProduk * this.form.hargaPerBaju;
+    },
+    totalextra() {
+      return this.form.jumlahextra * this.form.extra;
+    },
+    totalHargaFormatted() {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+      }).format(this.totalHarga);
+    },
+    totalHargaPesananFormatted() {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+      }).format(this.totalHargaPesanan);
+    },
+    totalHargaExtraFormatted() {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+      }).format(this.totalHargaExtra);
+    },
+    totalHargaExtra() {
+      return this.form.extras.reduce((acc, item) => {
+        return acc + (item.harga * item.jumlah);
+      }, 0);
+    },
+    totalHargaPesanan() {
+      return this.totalHarga + this.totalHargaExtra;
+    },
+    sisabayar() {
+      const currentItem = this.detailData;
+      const previousDP = currentItem?.dp ?? 0;
+      const totalHarga = currentItem?.totalhargapesanan ?? 0;
+      const dpBaru = this.form.dp ?? 0;
+      return totalHarga - (previousDP + dpBaru);
+    },
+    filteredorder() {
+      if (!this.search) return this.daftarPesanan;
+      return this.daftarPesanan.filter(order =>
+        order.namaPemesan?.toLowerCase().includes(this.search.toLowerCase())
+      );
+    }
+  },
+  methods: {
+    nextPage() {
+      if (this.currentPage < this.totalPages) this.currentPage++;
+    },
+    prevPage() {
+      if (this.currentPage > 1) this.currentPage--;
+    },
+    tambahExtra() {
+      if (
+        this.extraInput.jenis &&
+        this.extraInput.harga > 0 &&
+        this.extraInput.jumlah > 0
+      ) {
+        this.form.extras.push({
+          jenis: this.extraInput.jenis,
+          harga: this.extraInput.harga,
+          jumlah: this.extraInput.jumlah
+        });
+        this.extraInput = { jenis: '', harga: 0, jumlah: 0 };
+      } else {
+        alert('Mohon lengkapi data Extra dengan benar.');
+      }
+    },
+    hapusExtra(index) {
+      this.form.extras.splice(index, 1);
+    },
+    totalHargaPesananFormat(value) {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+      }).format(value);
+    },
+    totalHargaFormat(value) {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+      }).format(value);
+    },
+    totalHargaExtraFormat(value) {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+      }).format(value);
+    },
+    addOrder() {
+      const newOrder = { ...this.form, totalHarga: this.totalHarga, totalHargapesanan: this.totalHargaPesanan };
+      this.daftarPesanan.push(newOrder);
+      this.showModal = false;
+      this.resetForm();
+    },
+    showDetail(order) {
+      this.detailData = order;
+      this.isDetailVisible = true;
+    },
+    closeDetail() {
+      this.isDetailVisible = false;
+      this.resetForm();
+    },
+    editOrder(index) {
+      const order = this.daftarPesanan[index];
+      this.form = JSON.parse(JSON.stringify(order));
+      this.showModal = true;
+      this.isEdit = true;
+      this.editIndex = index;
+    },
+    updateOrder() {
+      const totalProduk = this.form.jumlahProduk * this.form.hargaPerBaju;
+      const totalExtra = this.form.extras.reduce((acc, extra) => acc + (extra.harga * extra.jumlah), 0);
+      const totalPesanan = totalProduk + totalExtra;
+      this.form.totalHargapesanan = totalPesanan;
+      if (this.editIndex !== null) {
+        this.daftarPesanan[this.editIndex] = { ...this.form };
+      }
+      this.closeModal();
+    },
+    closeModal() {
+      this.showModal = false;
+      this.resetForm();
+    },
+    simpanPesanan() {
+      const newOrder = { ...this.form, totalHarga: this.totalHarga };
+      this.daftarPesanan.push(newOrder);
+      this.showModal = false;
+      this.resetForm();
+    },
+    showModalBayarFunc(index) {
+      const item = this.daftarPesanan[index];
+      this.detailData = item;
+      this.form.totalHarga = item.totalhargapesanan ?? 0;
+      this.form.dp = 0;
+      this.form.metodepembayaran = item.metodepembayaran ?? '';
+      this.showModalBayar = true;
+    },
+    closeModalBayar() {
+      this.showModalBayar = false;
+    },
+    updateBayar() {
+      if (this.form.metodepembayaran === 'Transfer' || this.form.metodepembayaran === 'Qris') {
+        alert("Metode pembayaran ini tidak bisa disimpan langsung.");
+        return;
+      }
+      const index = this.daftarPesanan.findIndex(item => item === this.detailData);
+      if (index !== -1) {
+        const current = this.daftarPesanan[index];
+        const previousDP = current.dp ?? 0;
+        const newTotalDP = previousDP + this.form.dp;
+        if (newTotalDP > current.totalhargapesanan) {
+          alert("Total DP tidak boleh melebihi total harga!");
+          return;
+        }
+        current.dp = newTotalDP;
+        current.sisabayar = current.totalhargapesanan - newTotalDP;
+        current.metodepembayaran = this.form.metodepembayaran;
+      }
+      this.closeModalBayar();
+    },
+    addBayar() {
+      if (this.form.metodepembayaran !== 'Cash') {
+        const kode = 'PAY-' + Math.floor(Math.random() * 1000000);
+        alert('Kode Pembayaran: ' + kode);
+        this.closeModalBayar();
+      }
+    },
+    resetForm() {
+      this.form = {
+        namaPemesan: '',
+        nomorTelepon: '',
+        alamat: '',
+        longitude: '',
+        latitude: '',
+        jenisProduk: '',
+        jumlahProduk: 0,
+        jenisextra: '',
+        extra: '',
+        jumlahextra: '',
+        totalextra: '',
+        hargaPerBaju: 0,
+        dp: '',
+        sisabayar: '',
+        totalhargapesanan: '',
+        ukuran: { S: 0, M: 0, L: 0, XL: 0, XXL: 0, lainnya: '' },
+        totalHarga: 0,
+        metodepembayaran: '',
+        tanggalPengeluaran: '',
+        extras: []
+      };
+      this.extraInput = { jenis: '', harga: 0, jumlah: 0 };
+      this.isEdit = false;
+      this.editIndex = null;
+    }
+  }
+}
 
-      const geojsonData = ref(null) 
-      const showBoundary = ref(true) 
-      const adminStyle = () => ({ 
-        color: '#2c3e50', 
-        weight: 1.5, 
-        fillOpacity: 0 
-      }) 
-      
-      onMounted(async () => { 
-        const res = await fetch('/jabar.geojson') 
-        const json = await res.json() 
-        geojsonData.value = json 
-      })
-   // Buat struktur kota: jumlah pesanan 
-    // const count = {} 
-    // data.forEach(item => { 
-    //   const kota = item.kota || 'Tidak diketahui' 
-    //   count[kota] = (count[kota] || 0) + 1 
-    // }) 
-    // orders.value = data 
-    // kotaCount.value = count 
-    // })
-      // Fungsi pewarnaan berdasarkan jumlah pesanan 
-      const getColor = (kota) => {
-        const count = kotaCount.value[kota || 'Tidak diketahui'] || 0;
-
-        if (count >= 10) return 'red';
-        if (count >= 5) return 'blue';
-        if (count >= 2) return 'salmon';
-        return 'pink';
-      };
 </script>
