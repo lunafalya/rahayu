@@ -48,86 +48,27 @@
               <h3 class="font-semibold text-cyan-950">Riwayat Transaksi</h3>
               <router-link to="/income" class="text-sm text-blue-400 hover:underline">Lihat Semua</router-link>
             </div>
-            <ul class="space-y-3 text-sm">
-              <li class="flex justify-between items-center">
-                <div>
-                  <p class="font-semibold text-cyan-950">PT. SILATURAHMI</p>
-                  <p class="text-gray-400 text-xs">12.05 WIB • 22/04/2025</p>
-                </div>
-                <p class="text-red-500">Rp. 240.000 ↑</p>
-              </li>
-              <li class="flex justify-between items-center">
-                <div>
-                  <p class="font-semibold text-cyan-950">LUNA FALYA ISKANDAR</p>
-                  <p class="text-gray-400 text-xs">10.30 WIB • 19/04/2025</p>
-                </div>
-                <p class="text-cyan-400">Rp. 500.000 ↓</p>
-              </li>
-              <li class="flex justify-between items-center">
-                <div>
-                  <p class="font-semibold text-cyan-950">FALIANA ALIFIA</p>
-                  <p class="text-gray-400 text-xs">21.53 WIB • 18/04/2025</p>
-                </div>
-                <p class="text-red-500">Rp. 32.030 ↑</p>
-              </li>
-              <li class="flex justify-between items-center">
-                <div>
-                  <p class="font-semibold text-cyan-950">PT. SILATURAHMI</p>
-                  <p class="text-gray-400 text-xs">08.21 WIB • 14/04/2025</p>
-                </div>
-                <p class="text-cyan-400">Rp. 820.901 ↓</p>
-              </li>
-              <li class="flex justify-between items-center">
-                <div>
-                  <p class="font-semibold text-cyan-950">SD AMALINA</p>
-                  <p class="text-gray-400 text-xs">16.17 WIB • 10/04/2025</p>
-                </div>
-                <p class="text-cyan-400">Rp. 201.500 ↓</p>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-      <!-- Map Section -->
-        <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-lg w-full">
-          <div class="flex mt-8 justify-between items-center pb-6 relative">
-            <h2 class="text-xl font-bold text-cyan-950">MAP</h2>
-
-            <!-- Button with Dropdown -->
-            <div
-              class="relative"
-              @mouseenter="showDropdown = true"
-              @mouseleave="showDropdown = false"
-            >
-              <button
-                class="bg-white text-cyan-950 px-4 py-2 rounded-lg shadow hover:bg-cyan-950 hover:text-white transition"
-              >
-                Filter Kota
-              </button>
-
-              <!-- Dropdown Menu -->
-              <div
-                v-show="showDropdown"
-                class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow z-10 border">
-                <ul>
-                  <li
-                    v-for="city in cities"
-                    :key="city"
-                    @click="selectCity(city)"
-                    class="px-4 py-2 hover:bg-cyan-100 cursor-pointer text-sm">
-                    {{ city }}
-                  </li>
-                </ul>
-              </div>
+            <div v-if="transactions.length != 0">
+              <ul class="space-y-3 text-sm">
+                <li v-for="(transaction,index) in transactions.data.slice(0,7)" :key="index" class="flex justify-between items-center">
+                  <div>
+                    <p class="font-semibold text-cyan-950">{{ transaction.channel_category }} - <span v-if="transaction.status === 'SUCCESS'" class="text-green-400">{{ transaction.status }}</span> <span v-else>{{ transaction.status }}</span></p>
+                    <p class="text-gray-400 text-xs">{{ Intl.DateTimeFormat('id-ID', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'}).format(new Date(transaction.updated)) }}</p>
+                  </div>
+                  <p v-if="transaction.cashflow === 'MONEY_OUT'" class="text-orange-400">Rp. {{ Intl.NumberFormat('id-ID').format(transaction.amount) }} ↑</p>
+                  <p v-else class="text-blue-400">Rp. {{ Intl.NumberFormat('id-ID').format(transaction.amount) }} ↓</p>
+                </li>
+              </ul>
             </div>
-          </div>
-
-          <!-- Map Content -->
-          <div
-            id="map"
-            class="w-full h-64 rounded-xl bg-gray-200 flex items-center justify-center text-gray-500"
-          >
-            Showing map for: <strong class="ml-1">{{ selectedCity || "All Cities" }}</strong>
+            <div v-else>
+              <li v-for="n in 6" :key="n" class="flex justify-between items-center">
+                  <div>
+                    <p class="skeleton h-6 w-32 bg-gray-800 my-2"></p>
+                    <p class="skeleton h-4 w-24 bg-gray-800"></p>
+                  </div>
+                  <p class="skeleton h-6 w-24 bg-gray-800"></p>
+                </li>
+            </div>
           </div>
         </div>
       </div>
@@ -219,7 +160,6 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
 import 'leaflet/dist/leaflet.css';
 import SideBar from '@/components/SideBar.vue'
 import CalendarMonth from '@/components/CalendarMonth.vue'
@@ -244,7 +184,8 @@ export default {
       selectedCity: "",
       cities: ["Bogor", "Bekasi", "Cirebon", "Bandung", "Sukabumi"],
       selectedDate: '',
-      modalNote: ''
+      modalNote: '',
+      transactions: []
     };
   },
   methods: {
@@ -275,7 +216,6 @@ export default {
         })
         .then(response => {
           this.transactions = response.data; // Assuming the API returns transactions in this format
-          console.log(this.transactions);
         })
         .catch(error => {
           console.error('Error fetching transactions:', error);
@@ -351,6 +291,7 @@ export default {
   },
   mounted() {
     this.fetchBalance();
+    this.fetchTransactions();
   },
   computed: {
     currentMonthName() {
