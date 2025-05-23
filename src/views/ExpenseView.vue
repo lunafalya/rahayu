@@ -428,7 +428,7 @@
                 </table>
                 <div class="flex mt-4">
                   <button @click="showDetailModal = false" class="btn bg-gray-500 text-white">Tutup</button>
-                </div>
+                </div>
               </div>
 
           </div>
@@ -501,8 +501,6 @@ export default {
         jumlah: 0,
         tanggal: '',
         nama: '',
-        bank: '',
-        va: '',
         keterangan: '',
         status: 'sukses'
       },
@@ -587,7 +585,6 @@ export default {
         tanggal_pengajuan: '',
         transaksi: '',
         total: '',
-        vac: '',
         status: 'Lunas',
         jasa: []
       }
@@ -613,8 +610,6 @@ export default {
         jumlah: 0,
         tanggal: '',
         nama: '',
-        bank: '',
-        va: '',
         keterangan: '',
         status: 'sukses'
       }
