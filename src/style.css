@@ -2,7 +2,9 @@
 @plugin "daisyui";
 
 
-
+.sidebar-text {
+  transition: opacity 0.3s ease;
+}
 
 .menu:hover .menu-text {
   opacity: 1; /* Make text visible when the menu is hovered */

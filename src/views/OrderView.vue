@@ -52,36 +52,64 @@
     </div>
   </div>
 
-  <!-- Map Section -->
-  <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-md">
-    <div class="flex justify-between items-center pb-6 relative">
-      <h2 class="text-2xl font-bold text-cyan-950">MAP</h2>
-      
-
-      <!-- Dropdown Button -->
-      <div class="relative" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">
-        <button class="bg-white text-cyan-950 px-4 py-2 rounded-lg shadow hover:bg-cyan-950 hover:text-white transition">
-          Filter Kota
-        </button>
-
-
-        <!-- Dropdown Menu -->
-        <div v-show="showDropdown" class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow z-10 border">
-          <ul>
-            <li v-for="city in cities" :key="city" @click="selectCity(city)" class="px-4 py-2 hover:bg-cyan-950 hover:text-white cursor-pointer text-sm">
-              {{ city }}
-            </li>
-          </ul>
-        </div>
+  <!-- Peta Persebaran Konsumen -->
+    <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-md"> 
+      <div class="flex justify-between items-center pb-6 relative"> 
+        <h2 class="text-2xl font-bold text-cyan-950">Peta Persebaran Konsumen</h2> 
       </div>
-    </div>
-    <p>Pesanan dari kota<strong class="ml-1">{{ selectedCity || "All Cities" }}</strong> berjumlah </p>
+      <p>Warna merah menandakan jumlah konsumen tinggi, merah muda menandakan jumlah rendah.</p>
 
-    <!-- Map Box -->
-    <div id="map" class="w-full h-64 rounded-xl bg-gray-200 flex items-center justify-center text-gray-500">
-      Showing map for: <strong class="ml-1">{{ selectedCity || "All Cities" }}</strong>
+      <!-- Leaflet Map -->
+      <LMap
+          :zoom="10"
+          :center="[center.lat, center.lng]"
+          class="relative z-10"
+          style="height: 300px; width: 100%; margin-top: 1rem"
+        >
+        <LTileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution="&copy; OpenStreetMap contributors"
+        />
+        
+        <!-- Layer GeoJSON -->
+        <LGeoJson
+          v-if="geojsonData && showBoundary"
+          :geojson="geojsonData"
+          :optionsStyle="adminStyle"
+        />
+
+        <!-- Kontrol di dalam peta -->
+        <LControl position="topright">
+          <div class="leaflet-control-layers leaflet-bar p-2 bg-white rounded shadow space-y-2">
+            <label class="flex items-center space-x-2 text-sm">
+              <select v-model="showBoundary"> 
+                <option :value="true">Tampilkan batas</option> 
+                <option :value="false">Sembunyikan batas</option> 
+              </select>
+              <span>Batas Administrasi</span>
+            </label>
+          </div>
+        </LControl>
+
+
+        <LCircleMarker
+          v-for="(item, i) in orders"
+          :key="i"
+          :lat-lng="[parseFloat(item.latitude), parseFloat(item.longitude)]"
+          :radius="8"
+          :color="getColor(item.kota)"
+          fill-opacity="0.6"
+          stroke
+        >
+          <LPopup>
+            <strong>{{ item['Nama Pemesan'] }}</strong><br />
+            {{ item.alamat }}<br />
+            {{ item['Jenis Produk'] }} - {{ item['Jumlah Produk'] }} pcs<br />
+            Kota: {{ item.kota || 'Tidak diketahui' }}
+          </LPopup>
+        </LCircleMarker>
+      </LMap>
     </div>
-  </div>
 </div>
 
     <!-- OrderModal -->
@@ -355,9 +383,10 @@
 
 
 <script setup> 
-import { ref, computed } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import SideBar from '@/components/SideBar.vue'
-import 'leaflet/dist/leaflet.css';
+import { LMap, LTileLayer, LCircleMarker, LPopup, LGeoJson, LControl } from '@vue-leaflet/vue-leaflet'; 
+import 'leaflet/dist/leaflet.css'
 
 const showModal = ref(false);
 const daftarPesanan = ref([]);
@@ -661,4 +690,107 @@ function resetForm() {
   };
 }
 
+// Atur ikon bawaan Leaflet 
+import L from 'leaflet' 
+delete L.Icon.Default.prototype._getIconUrl 
+L.Icon.Default.mergeOptions({ 
+iconRetinaUrl: new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href, 
+iconUrl: new URL('leaflet/dist/images/marker-icon.png', import.meta.url).href, 
+shadowUrl: new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).href 
+});
+  // Data 
+  const orders = ref([]) 
+  const kotaCount = ref({})
+    const center = { lat: -6.5, lng: 106.8 } // Dramaga 
+    
+    // onMounted(async () => { const res = await fetch('https://api.rahayukonveksi.com/orders') 
+    // const data = await res.json() 
+    const dummyOrders = [
+      {
+      "Nama Pemesan": "Dwi",
+      "alamat": "Kelurahan A, Kota Bogor",
+      "kota": "Bogor",
+      "latitude": "-6.595038",
+      "longitude": "106.816635",
+      "Jenis Produk": "Kaos",
+      "Jumlah Produk": 20
+      },
+      {
+      "Nama Pemesan": "Lina",
+      "alamat": "Kelurahan B, Kota Bogor",
+      "kota": "Bogor",
+      "latitude": "-6.589379",
+      "longitude": "106.805155",
+      "Jenis Produk": "Jaket",
+      "Jumlah Produk": 15
+      },
+      {
+      "Nama Pemesan": "Rudi",
+      "alamat": "Kelurahan C, Kota Depok",
+      "kota": "Depok",
+      "latitude": "-6.391978",
+      "longitude": "106.821823",
+      "Jenis Produk": "Kaos",
+      "Jumlah Produk": 10
+      },
+      {
+      "Nama Pemesan": "Sari",
+      "alamat": "Kelurahan D, Kota Depok",
+      "kota": "Depok",
+      "latitude": "-6.387002",
+      "longitude": "106.832789",
+      "Jenis Produk": "Kemeja",
+      "Jumlah Produk": 5
+      },
+      {
+      "Nama Pemesan": "Aminah",
+      "alamat": "Kelurahan E, Kota Tangerang",
+      "kota": "Tangerang",
+      "latitude": "-6.199602",
+      "longitude": "106.660999",
+      "Jenis Produk": "Kaos",
+      "Jumlah Produk": 3
+      }
+      ]
+    onMounted(() => {
+      const count = {}
+      dummyOrders.forEach(item => {
+      const kota = item.kota || 'Tidak diketahui'
+      count[kota] = (count[kota] || 0) + 1
+      })
+      orders.value = dummyOrders
+      kotaCount.value = count
+      })
+
+      const geojsonData = ref(null) 
+      const showBoundary = ref(true) 
+      const adminStyle = () => ({ 
+        color: '#2c3e50', 
+        weight: 1.5, 
+        fillOpacity: 0 
+      }) 
+      
+      onMounted(async () => { 
+        const res = await fetch('/jabar.geojson') 
+        const json = await res.json() 
+        geojsonData.value = json 
+      })
+   // Buat struktur kota: jumlah pesanan 
+    // const count = {} 
+    // data.forEach(item => { 
+    //   const kota = item.kota || 'Tidak diketahui' 
+    //   count[kota] = (count[kota] || 0) + 1 
+    // }) 
+    // orders.value = data 
+    // kotaCount.value = count 
+    // })
+      // Fungsi pewarnaan berdasarkan jumlah pesanan 
+      const getColor = (kota) => {
+        const count = kotaCount.value[kota || 'Tidak diketahui'] || 0;
+
+        if (count >= 10) return 'red';
+        if (count >= 5) return 'blue';
+        if (count >= 2) return 'salmon';
+        return 'pink';
+      };
 </script>
