@@ -49,7 +49,7 @@
             <ul v-for="(transaction, index) in transactions.data" :key="index" class="text-sm m-2">
               <li class="flex justify-between items-center">
                 <div>
-                  <p class="font-semibold text-cyan-950">{{ transaction.channel_category }}</p>
+                  <p class="font-semibold text-cyan-950">{{ transaction.channel_category }} - <span v-if="transaction.status === 'SUCCESS'" class="text-green-400">{{ transaction.status }}</span> <span v-else>{{ transaction.status }}</span></p>
                   <p class="text-gray-400 text-xs">{{ Intl.DateTimeFormat('id-ID', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'}).format(new Date(transaction.updated)) }}</p>
                 </div>
                 <p v-if="transaction.cashflow === 'MONEY_OUT'" class="text-orange-400">Rp. {{ Intl.NumberFormat('id-ID').format(transaction.amount) }} ↑</p>
