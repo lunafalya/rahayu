@@ -18,15 +18,15 @@
         <table class="table bg-gray-400">
           <thead>
             <tr>
-              <th class="text-white">No.</th>
-              <th class="text-white">Nama Pemesan</th>
-              <th class="text-white">Total Harga</th>
-              <th class="text-white">Tanggal</th>
-              <th class="text-white">Status</th>
-              <th class="text-white">Aksi</th>
+              <th style="font-family: 'Poppins', sans-serif;" class="text-white">No.</th>
+              <th style="font-family: 'Poppins', sans-serif;" class="text-white">Nama Pemesan</th>
+              <th style="font-family: 'Poppins', sans-serif;" class="text-white">Total Harga</th>
+              <th style="font-family: 'Poppins', sans-serif;" class="text-white">Tanggal</th>
+              <th style="font-family: 'Poppins', sans-serif;" class="text-white">Status</th>
+              <th style="font-family: 'Poppins', sans-serif;" class="text-white">Aksi</th>
             </tr>
           </thead>
-          <tbody class="text-cyan-950 bg-white">
+          <tbody class="text-cyan-950 bg-white" style="font-family: 'Poppins', sans-serif;">
             <tr v-for="(order, index) in paginatedOrders" :key="index">
               <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
               <td>{{ order.customerName }}</td>
@@ -44,9 +44,9 @@
 
         <!-- Pagination -->
         <div class="flex bg-white justify-center items-center mt-4 gap-4">
-          <button @click="prevPage" :disabled="currentPage === 1" class="px-3 py-1 text-white rounded hover:bg-gray-300 hover:text-cyan-950 disabled:opacity-50">◀</button>
-          <span class="text-cyan-950 font-semibold">{{ currentPage }} dari {{ totalPages }}</span>
-          <button @click="nextPage" :disabled="currentPage === totalPages" class="px-3 py-1 text-white rounded hover:bg-gray-300 hover:text-cyan-950 disabled:opacity-50">▶</button>
+          <button style="font-family: 'Poppins', sans-serif;" @click="prevPage" :disabled="currentPage === 1" class="px-3 py-1 text-white rounded hover:bg-gray-300 hover:text-cyan-950 disabled:opacity-50">◀</button>
+          <span style="font-family: 'Poppins', sans-serif;" class="text-cyan-950 font-semibold">{{ currentPage }} dari {{ totalPages }}</span>
+          <button @click="nextPage" :disabled="currentPage === totalPages" style="font-family: 'Poppins', sans-serif;" class="px-3 py-1 text-white rounded hover:bg-gray-300 hover:text-cyan-950 disabled:opacity-50">▶</button>
         </div>
       </div>
     </div>
@@ -115,25 +115,26 @@
     <!-- OrderModal -->
     <div class="modal-overlay " v-if="showModal">
     <div class="modal-content">
-    <h2 class="text-2xl font-bold text-cyan-950 mb-6 text-center">TAMBAH PESANAN</h2>
+    <h2 class="text-2xl font-bold text-cyan-950 mb-6 text-center" style="font-family: 'Poppins', sans-serif;">TAMBAH PESANAN</h2>
   
-    <label class="text-cyan-950">Nama Pemesan:</label>
-    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.namaPemesan" type="text" placeholder="Nama Pemesan" />
+    <label class="text-cyan-950" style="font-family: 'Poppins', sans-serif;">Nama Pemesan:</label>
+    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" style="font-family: 'Poppins', sans-serif;" v-model="form.namaPemesan" type="text" placeholder="Nama Pemesan" />
 
-    <label class="text-cyan-950">Nomor Telepon :</label>
+    <label class="text-cyan-950" style="font-family: 'Poppins', sans-serif;">Nomor Telepon :</label>
     <div class="flex items-center border rounded p-2 mb-5 bg-white">
-      <span class="text-cyan-950 mr-2">+62</span>
+      <span class="text-cyan-950 mr-2" style="font-family: 'Poppins', sans-serif;">+62</span>
       <input
         class="flex-1 text-cyan-950 outline-none"
         v-model="form.nomorTelepon"
         type="number"
         placeholder="Nomor Telepon"
+        style="font-family: 'Poppins', sans-serif;"
       />
     </div>
 
-    <label class="text-cyan-950">Kota:</label>
-    <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.kota">
-      <option class="text-cyan-950" disabled value="">Pilih Kota</option>
+    <label class="text-cyan-950" style="font-family: 'Poppins', sans-serif;">Kota:</label>
+    <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" style="font-family: 'Poppins', sans-serif;" v-model="form.kota">
+      <option class="text-cyan-950" disabled value="" style="font-family: 'Poppins', sans-serif;">Pilih Kota</option>
       <option>Bogor</option>
       <option>Bekasi</option>
       <option>Jakarta</option>
@@ -142,24 +143,24 @@
       <option>Cirebon</option>
     </select>
 
-    <label class="text-cyan-950">Alamat:</label>
+    <label class="text-cyan-950" style="font-family: 'Poppins', sans-serif;">Alamat:</label>
     <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.alamat" type="text" placeholder="Masukkan Alamat" />
 
     <div class="flex gap-6">
     <div class="flex flex-col w-full">
-      <label class="text-cyan-950 mb-1">Longitude</label>
+      <label class="text-cyan-950 mb-1" style="font-family: 'Poppins', sans-serif;">Longitude</label>
       <input class="text-cyan-950 border p-2 w-full rounded mb-5" v-model="form.longitude" type="text" placeholder="Masukkan Longitude"/>
     </div>
 
   <div class="flex flex-col w-full">
-    <label class="text-cyan-950 mb-1">Latitude</label>
-    <input class="text-cyan-950 border p-2 w-full rounded mb-5" v-model="form.latitude" type="text" placeholder="Masukkan Latitude"/>
+    <label class="text-cyan-950 mb-1" style="font-family: 'Poppins', sans-serif;">Latitude</label>
+    <input class="text-cyan-950 border p-2 w-full rounded mb-5" style="font-family: 'Poppins', sans-serif;" v-model="form.latitude" type="text" placeholder="Masukkan Latitude"/>
   </div>
 </div>
     
-    <label class="text-cyan-950">Jenis Produk:</label>
-    <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.jenisProduk">
-      <option class="text-cyan-950" disabled value="">Pilih Jenis Produk</option>
+    <label class="text-cyan-950" style="font-family: 'Poppins', sans-serif;">Jenis Produk:</label>
+    <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" style="font-family: 'Poppins', sans-serif;"v-model="form.jenisProduk">
+      <option class="text-cyan-950" style="font-family: 'Poppins', sans-serif;" disabled value="">Pilih Jenis Produk</option>
       <option>Kaos</option>
       <option>Almamater</option>
       <option>Seragam Jas</option>
@@ -168,32 +169,32 @@
       <option>Extra</option>
     </select>
 
-    <label class="text-cyan-950">Jumlah Produk:</label>
-    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="form.jumlahProduk" type="number" placeholder="Jumlah Produk" />
+    <label class="text-cyan-950" style="font-family: 'Poppins', sans-serif;">Jumlah Produk:</label>
+    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" style="font-family: 'Poppins', sans-serif;" v-model.number="form.jumlahProduk" type="number" placeholder="Jumlah Produk" />
 
-    <label class="text-cyan-950">Harga Produk (tanpa extra):</label>
-    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5"  v-model.number="form.hargaPerBaju" type="number" placeholder="Harga per Baju" />
+    <label class="text-cyan-950" style="font-family: 'Poppins', sans-serif;">Harga Produk (tanpa extra):</label>
+    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" style="font-family: 'Poppins', sans-serif;"  v-model.number="form.hargaPerBaju" type="number" placeholder="Harga per Baju" />
 
-    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" :value="totalHargaFormatted" type="text" placeholder="Total Seluruh Harga" disabled />
+    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" style="font-family: 'Poppins', sans-serif;" :value="totalHargaFormatted" type="text" placeholder="Total Seluruh Harga" disabled />
 
     <div class="ukuran-group">
-      <label class="text-cyan-950">Ukuran:</label>
+      <label class="text-cyan-950" style="font-family: 'Poppins', sans-serif;">Ukuran:</label>
       <br>
-      <label class="text-cyan-950 pr-9">S</label>
-      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="form.ukuran.S" type="number" placeholder="S" />
+      <label class="text-cyan-950 pr-9" style="font-family: 'Poppins', sans-serif;">S</label>
+      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" style="font-family: 'Poppins', sans-serif;" v-model.number="form.ukuran.S" type="number" placeholder="S" />
       <br>
-      <label class="text-cyan-950 pr-7">M</label>
-      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="form.ukuran.M" type="number" placeholder="M" />
+      <label class="text-cyan-950 pr-7" style="font-family: 'Poppins', sans-serif;">M</label>
+      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" style="font-family: 'Poppins', sans-serif;" v-model.number="form.ukuran.M" type="number" placeholder="M" />
       <br>
-      <label class="text-cyan-950 pr-9">L</label>
-      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="form.ukuran.L" type="number" placeholder="L" />
+      <label class="text-cyan-950 pr-9" style="font-family: 'Poppins', sans-serif;">L</label>
+      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" style="font-family: 'Poppins', sans-serif;" v-model.number="form.ukuran.L" type="number" placeholder="L" />
       <br>
-      <label class="text-cyan-950 pr-7">XL</label>
-      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="form.ukuran.XL" type="number" placeholder="XL" />
+      <label class="text-cyan-950 pr-7" style="font-family: 'Poppins', sans-serif;">XL</label>
+      <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" style="font-family: 'Poppins', sans-serif;" v-model.number="form.ukuran.XL" type="number" placeholder="XL" />
     </div>
 
                       <!-- Tabel Input Extra -->
-                        <h3 class="text-lg font-semibold text-cyan-950 mb-2">Tambah Extra</h3>
+                        <h3 class="text-lg font-semibold text-cyan-950 mb-2" style="font-family: 'Poppins', sans-serif;">Tambah Extra</h3>
 
                         <!-- Tabel Daftar Extra Ditambahkan -->
                     <table class="w-full text-sm border border-gray-300 mb-4">
@@ -241,16 +242,16 @@
                     <label class="text-cyan-950">Total Harga Extra:</label>
                     <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" :value="totalHargaExtraFormatted" type="text" placeholder="Harga extra" disabled />
 
-    <label class="text-cyan-950">Total Harga Pesanan (Produk + Extra):</label>
-    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" :value="totalHargaPesananFormatted" type="text" placeholder="Total Seluruh Harga" disabled />
+    <label class="text-cyan-950" style="font-family: 'Poppins', sans-serif;">Total Harga Pesanan (Produk + Extra):</label>
+    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" style="font-family: 'Poppins', sans-serif;" :value="totalHargaPesananFormatted" type="text" placeholder="Total Seluruh Harga" disabled />
 
-    <label class="text-cyan-950 pr-6">Tenggat Waktu</label>
-    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.tanggalPengeluaran" type="date" />
+    <label class="text-cyan-950 pr-6" style="font-family: 'Poppins', sans-serif;">Tenggat Waktu</label>
+    <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" style="font-family: 'Poppins', sans-serif;" v-model="form.tanggalPengeluaran" type="date" />
     
     <div class="flex justify-end space-x-2">
-      <button @click="closeModal" class="btn bg-gray-200 text-white">Batal</button>
-      <button v-if="!isEdit" @click="addOrder" class="btn bg-cyan-950 text-white">Simpan</button>
-      <button v-else @click="updateOrder" class="btn bg-cyan-950 text-white">Update</button>
+      <button @click="closeModal" class="btn bg-gray-200 text-white" style="font-family: 'Poppins', sans-serif;">Batal</button>
+      <button v-if="!isEdit" @click="addOrder" class="btn bg-cyan-950 text-white" style="font-family: 'Poppins', sans-serif;">Simpan</button>
+      <button v-else @click="updateOrder" class="btn bg-cyan-950 text-white" style="font-family: 'Poppins', sans-serif;">Update</button>
     </div>
   </div>
   </div>
@@ -260,16 +261,16 @@
 <!-- Detail Order Modal -->
 <div class="modal-overlay"  v-if="isDetailVisible">
   <div class="modal-content max-w-3xl w-full bg-white rounded-xl shadow p-6">
-    <h1 class="text-2xl font-bold mb-6 border-b pb-4 text-cyan-950 text-center">Detail Pesanan</h1>
+    <h1 class="text-2xl font-bold mb-6 border-b pb-4 text-cyan-950 text-center" style="font-family: 'Poppins', sans-serif;">Detail Pesanan</h1>
 
-    <div class="flex justify-between text-sm text-gray-600 mb-1">
+    <div class="flex justify-between text-sm text-gray-600 mb-1" style="font-family: 'Poppins', sans-serif;">
       <p>Pesanan atas nama <strong>{{ detailData.customerName }}</strong></p>
       <p>No. Telp: +62 {{ detailData.phoneNumber }}</p>
     </div>
 
-    <div class="flex justify-between text-sm text-gray-600 mb-4">
+    <div class="flex justify-between text-sm text-gray-600 mb-4" style="font-family: 'Poppins', sans-serif;">
       <p>Alamat: {{ detailData.address }}</p>
-      <p class="text-xl font-semibold text-right text-black">
+      <p class="text-xl font-semibold text-right text-black" style="font-family: 'Poppins', sans-serif;">
         Jumlah Produk<br><span class="text-2xl">{{ detailData.productQuantity }}</span>
       </p>
     </div>
@@ -289,14 +290,14 @@
 
     <table class="w-full text-sm border-t mt-4">
       <thead>
-        <tr class="text-gray-500">
+        <tr class="text-gray-500" style="font-family: 'Poppins', sans-serif;">
           <th class="py-2 text-left">Jenis Produk</th>
           <th class="py-2 text-right">Ukuran (S/M/L/XL/XXL/Lainnya)</th>
           <!-- <th class="py-2 text-right">Harga Satuan</th> -->
         </tr>
       </thead>
       <tbody>
-        <tr class="border-t text-black text-left">
+        <tr class="border-t text-black text-left" style="font-family: 'Poppins', sans-serif;">
           <td class="py-2">{{ detailData.productType }}</td>
           <td class="py-2 text-right">
             S: {{ detailData.sizeS }},
@@ -313,7 +314,7 @@
 
     <table class="w-full text-sm text-left border-t mt-4" v-if="detailData.extras && detailData.extras.length">
       <thead>
-        <tr class="text-gray-500">
+        <tr class="text-gray-500" style="font-family: 'Poppins', sans-serif;">
           <th class="py-2">Jenis Extra</th>
           <th class="py-2">Harga</th>
           <th class="py-2">Jumlah</th>
@@ -321,7 +322,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(extra, index) in detailData.extras" :key="index" class="border-t text-black">
+        <tr v-for="(extra, index) in detailData.extras" :key="index" class="border-t text-black" style="font-family: 'Poppins', sans-serif;">
           <td class="py-2">{{ extra.name }}</td>
           <td class="py-2">{{ totalHargaExtraFormat(extra.price) }}</td>
           <td class="py-2">{{ extra.quantity }}</td>
@@ -332,19 +333,19 @@
 
     <table class="w-full text-sm text-right border-t mt-4">
       <thead>
-        <tr class="text-gray-500">
+        <tr class="text-gray-500" style="font-family: 'Poppins', sans-serif;">
           <th class="py-2">Total Harga</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-t text-black">
+        <tr class="border-t text-black" style="font-family: 'Poppins', sans-serif;">
           <td class="py-2">{{ totalHargaFormat(detailData.totalPrice) }}</td>
         </tr>
       </tbody>
     </table>
 
     <div class="flex justify-end mt-6">
-      <button @click="isDetailVisible = false" class="btn bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 text-sm">Tutup</button>
+      <button @click="isDetailVisible = false" class="btn bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 text-sm" style="font-family: 'Poppins', sans-serif;">Tutup</button>
     </div>
   </div>
 </div>
@@ -352,18 +353,19 @@
     <!-- Bayar Modal -->
       <div class="modal-overlay" v-if="showModalBayar">
         <div class="modal-content">
-          <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Bayar Pesanan</h2>
+          <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center" style="font-family: 'Poppins', sans-serif;">Bayar Pesanan</h2>
 
-          <label class="text-cyan-950 block mb-1">Link Bayar</label>
+          <label class="text-cyan-950 block mb-1" style="font-family: 'Poppins', sans-serif;">Link Bayar</label>
           <div class="flex items-center justify-between border p-2 rounded mb-5 bg-white">
             <a 
               :href="linkBayar" 
               target="_blank" 
               class="text-cyan-950 underline break-all"
+              style="font-family: 'Poppins', sans-serif;"
             >
               {{ linkBayar }}
             </a>
-            <button @click="copyLinkBayar" class="ml-2 text-cyan-950" title="Salin Link">
+            <button @click="copyLinkBayar" class="ml-2 text-cyan-950" title="Salin Link" style="font-family: 'Poppins', sans-serif;">
               <!-- Icon copy SVG -->
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" 
                   viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -374,7 +376,7 @@
           </div>
 
           <div class="flex justify-end space-x-2">
-            <button @click="closeModalBayar" class="btn bg-cyan-950 text-white">Selesai</button>
+            <button @click="closeModalBayar" class="btn bg-cyan-950 text-white" style="font-family: 'Poppins', sans-serif;">Selesai</button>
           </div>
         </div>
       </div>

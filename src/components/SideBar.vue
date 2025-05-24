@@ -10,7 +10,8 @@
           <!-- Logo -->
           <li class="flex items-center gap-2 mb-6">
             <img src="../assets/rahayuwhite.svg" alt="rahayu logo" class="w-10" />
-            <span class="text-lg font-bold text-white transition-opacity duration-300"
+            <span class="text-lg font-bold text-white transition-opacity duration-300" 
+                  style="font-family: 'Poppins', sans-serif;"
                   :class="{ 'opacity-100': isHovering, 'opacity-0': !isHovering }">
               Rahayu
             </span>
@@ -44,7 +45,8 @@
     >
       <font-awesome-icon icon="right-from-bracket" class="w-6 h-6" />
       <span class="sidebar-text opacity-0 font-semibold group-hover:opacity-100 transition-opacity delay-100 duration-300 whitespace-nowrap overflow-hidden"
-            :class="{ 'opacity-100': isHovering, 'opacity-0': !isHovering }">
+            :class="{ 'opacity-100': isHovering, 'opacity-0': !isHovering }"
+            style="font-family: 'Poppins', sans-serif;">
         Exit
       </span>
     </div>

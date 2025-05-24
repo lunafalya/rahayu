@@ -9,7 +9,7 @@
         
         <!-- Wallet Section -->
         <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-lg w-full">
-          <h2 class="font-poppins text-3xl font-bold mb-4 text-cyan-950">REKENING</h2>
+          <h2 class="font-poppins text-3xl font-bold mb-4 text-cyan-950" style="font-family: 'Poppins', sans-serif;">REKENING</h2>
           <div class="mb-6">
             <p class="text-sm text-gray-300">Saldo Tersedia</p>
             <p v-if="balance == null" class="skeleton h-9 w-56 mt-1 bg-gray-800"></p>
@@ -45,8 +45,8 @@
           <!-- Transactions -->
           <div>
             <div class="flex justify-between items-center mb-3">
-              <h3 class="font-semibold text-cyan-950">Riwayat Transaksi</h3>
-              <router-link to="/income" class="text-sm text-blue-400 hover:underline">Lihat Semua</router-link>
+              <h3 class="font-semibold text-cyan-950" style="font-family: 'Poppins', sans-serif;">Riwayat Transaksi</h3>
+              <router-link to="/income" class="text-sm text-blue-400 hover:underline" style="font-family: 'Poppins', sans-serif;">Lihat Semua</router-link>
             </div>
             <div v-if="transactions.length != 0">
               <ul class="space-y-3 text-sm">
@@ -56,7 +56,7 @@
                     <p class="text-gray-400 text-xs">{{ Intl.DateTimeFormat('id-ID', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'}).format(new Date(transaction.updated)) }}</p>
                   </div>
                   <p v-if="transaction.cashflow === 'MONEY_OUT'" class="text-orange-400">Rp. {{ Intl.NumberFormat('id-ID').format(transaction.amount) }} ↑</p>
-                  <p v-else class="text-blue-400">Rp. {{ Intl.NumberFormat('id-ID').format(transaction.amount) }} ↓</p>
+                  <p v-else class="text-blue-400" style="font-family: 'Poppins', sans-serif;">Rp. {{ Intl.NumberFormat('id-ID').format(transaction.amount) }} ↓</p>
                 </li>
               </ul>
             </div>
@@ -82,7 +82,7 @@
       </h3>
 
       <!-- Tampilkan detail jika ada note -->
-      <div v-if="modalNote" class="text-cyan-950 space-y-2">
+      <div v-if="modalNote" class="text-cyan-950 space-y-2" style="font-family: 'Poppins', sans-serif;">
         <p><strong>Nama Pesanan:</strong> {{ modalNote }}</p>
         <p><strong>Tenggat Waktu:</strong> {{ selectedDate }}</p>
         <div class="flex justify-end mt-4">
@@ -94,18 +94,18 @@
       <div v-else>
         <!-- Form input tanggal dan note -->
         <div class="mb-4">
-              <label class="text-cyan-950 pr-6">Tenggat Waktu</label>
-              <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="form.tanggal" type="date" />
+              <label class="text-cyan-950 pr-6" style="font-family: 'Poppins', sans-serif;">Tenggat Waktu</label>
+              <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" style="font-family: 'Poppins', sans-serif;" v-model="form.tanggal" type="date" />
         </div>
 
         <div class="mb-6">
-          <label class="font-medium text-black">Catatan</label>
-          <input v-model="noteText" class="border p-2 w-full rounded mt-1 text-cyan-950" placeholder="Tulis nama pesanan..." />
+          <label class="font-medium text-black" style="font-family: 'Poppins', sans-serif;">Catatan</label>
+          <input v-model="noteText" class="border p-2 w-full rounded mt-1 text-cyan-950" style="font-family: 'Poppins', sans-serif;" placeholder="Tulis nama pesanan..." />
         </div>
 
         <div class="flex justify-end gap-3">
-          <button @click="closeModal" class="px-4 py-2 rounded text-sm text-white font-semibold bg-gray-400">Batal</button>
-          <button @click="saveNoteFromForm" class="text-white px-4 py-2 rounded text-sm font-semibold hover:bg-cyan-700 bg-cyan-950">
+          <button @click="closeModal" style="font-family: 'Poppins', sans-serif;" class="px-4 py-2 rounded text-sm text-white font-semibold bg-gray-400">Batal</button>
+          <button @click="saveNoteFromForm" style="font-family: 'Poppins', sans-serif;" class="text-white px-4 py-2 rounded text-sm font-semibold hover:bg-cyan-700 bg-cyan-950">
             Tambah
           </button>
         </div>
@@ -120,14 +120,14 @@
     <div class="w-1.5/5 flex flex-col gap-4 mt-4 mr-5">
       <!-- Notifikasi -->
       <div class="bg-white rounded-2xl shadow-md p-4 h-80">
-        <h3 class="font-bold text-cyan-950">NOTIFIKASI</h3>
-        <p class="text-sm text-gray-400 mt-2">Belum ada notifikasi baru.</p>
+        <h3 class="font-bold text-cyan-950" style="font-family: 'Poppins', sans-serif;">NOTIFIKASI</h3>
+        <p class="text-sm text-gray-400 mt-2" style="font-family: 'Poppins', sans-serif;">Belum ada notifikasi baru.</p>
       </div>
 
 
       <!-- Kalender Deadline -->
       <div class="bg-white rounded-2xl shadow-md pb-5 h-auto">
-        <h3 class="font-bold m-3 text-cyan-950">KALENDAR</h3>
+        <h3 class="font-bold m-3 text-cyan-950" style="font-family: 'Poppins', sans-serif;">KALENDER</h3>
         <div class="cally rounded-box w-full p-4">
           <div class="flex justify-between items-center mb-2">
             <button @click="prevMonth">
@@ -135,9 +135,9 @@
                 <path fill="currentColor" d="M15.75 19.5 8.25 12l7.5-7.5"></path>
               </svg>
             </button>
-            <h3 class="text-sm font-semibold text-cyan-950 hover:text-white">{{ currentMonthName }} {{ currentYear }}</h3>
+            <h3 class="text-sm font-semibold text-cyan-950 hover:text-white" style="font-family: 'Poppins', sans-serif;">{{ currentMonthName }} {{ currentYear }}</h3>
             <button @click="nextMonth">
-              <svg class="fill-current size-4 text-cyan-950 hover:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <svg class="fill-current size-4 text-cyan-950 hover:text-white" style="font-family: 'Poppins', sans-serif;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path fill="currentColor" d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
               </svg>
             </button>

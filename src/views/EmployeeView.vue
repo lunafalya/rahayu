@@ -15,11 +15,13 @@
           type="text" 
           placeholder="Cari disini..." 
           class="search-bar text-cyan-950 border px-3 py-2 bg-white rounded" 
+          style="font-family: 'Poppins', sans-serif;"
         />
         <button 
           @click="showModal = true" 
           class="btn border-0 shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white"
-        >
+          style="font-family: 'Poppins', sans-serif;"
+          >
           Tambah
         </button>
       </div>
@@ -32,13 +34,13 @@
           <!-- Sticky Table Head -->
           <thead class="sticky top-[80px] bg-gray-400 z-10">
             <tr>
-              <th class="w-20 text-white">No.</th>
-              <th class="text-white">Profile</th>
-              <th class="text-white">Nama</th>
-              <th class="w-xs text-white">Email</th>
-              <th class="text-white">Jabatan</th>
-              <th class="text-white">Status</th>
-              <th class="text-white">Aksi</th>
+              <th class="w-20 text-white" style="font-family: 'Poppins', sans-serif;">No.</th>
+              <th class="text-white" style="font-family: 'Poppins', sans-serif;">Profile</th>
+              <th class="text-white" style="font-family: 'Poppins', sans-serif;">Nama</th>
+              <th class="w-xs text-white" style="font-family: 'Poppins', sans-serif;">Email</th>
+              <th class="text-white" style="font-family: 'Poppins', sans-serif;">Jabatan</th>
+              <th class="text-white" style="font-family: 'Poppins', sans-serif;">Status</th>
+              <th class="text-white" style="font-family: 'Poppins', sans-serif;">Aksi</th>
             </tr>
           </thead>
         </table>
@@ -48,7 +50,7 @@
           <table class="table text-left w-full">
             <tbody class="bg-white text-cyan-950">
               <tr v-if="filteredKaryawan.length === 0">
-                <td colspan="6" class="text-center py-4">Tidak ada data ditemukan</td>
+                <td colspan="6" class="text-center py-4" style="font-family: 'Poppins', sans-serif;">Tidak ada data ditemukan</td>
               </tr>
               <tr v-else v-for="(karyawan, index) in filteredKaryawan" :key="index">
                 <td class="align-middle">{{ index + 1 }}</td>
@@ -74,41 +76,41 @@
       <!-- Modal Form -->
       <div class="modal-overlay" v-if="showModal">
         <div class="modal-content">
-          <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Tambah Karyawan</h2>
+          <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center" style="font-family: 'Poppins', sans-serif;">Tambah Karyawan</h2>
 
-          <label class="font-medium text-cyan-950">Nama Karyawan</label>
+          <label class="font-medium text-cyan-950" style="font-family: 'Poppins', sans-serif;">Nama Karyawan</label>
           <input v-model="form.name" type="text" placeholder="Nama Karyawan" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" />
           
-          <label class="font-medium text-cyan-950">Alamat Email</label>
+          <label class="font-medium text-cyan-950" style="font-family: 'Poppins', sans-serif;">Alamat Email</label>
           <input v-model="form.email" type="text" placeholder="Masukkan Alamat Email" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" />
 
-          <label class="font-medium text-cyan-950">Foto Profil</label>
+          <label class="font-medium text-cyan-950" style="font-family: 'Poppins', sans-serif;">Foto Profil</label>
           <input type="file" @change="handleImageUpload" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" />
 
           <div v-if="form.image" class="flex justify-center mb-4">
           <img :src="form.imageUrl" alt="Preview" class="w-24 h-24 rounded-full object-cover border" />
           </div>
 
-          <label class="font-medium text-cyan-950">Jabatan</label>
+          <label class="font-medium text-cyan-950" style="font-family: 'Poppins', sans-serif;">Jabatan</label>
           <select v-model="form.position" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-6">
-            <option class="text-cyan-950" disabled value="">Pilih Jabatan</option>
-            <option class="text-cyan-950">Penjahit</option>
-            <option class="text-cyan-950">Pemotong</option>
-            <option class="text-cyan-950">Pemasak</option>
-            <option class="text-cyan-950">Packing</option>
+            <option style="font-family: 'Poppins', sans-serif;" class="text-cyan-950" disabled value="">Pilih Jabatan</option>
+            <option style="font-family: 'Poppins', sans-serif;" class="text-cyan-950">Penjahit</option>
+            <option style="font-family: 'Poppins', sans-serif;" class="text-cyan-950">Pemotong</option>
+            <option style="font-family: 'Poppins', sans-serif;" class="text-cyan-950">Pemasak</option>
+            <option style="font-family: 'Poppins', sans-serif;" class="text-cyan-950">Packing</option>
           </select>
 
-          <label class="font-medium text-cyan-950">Status</label>
+          <label class="font-medium text-cyan-950" style="font-family: 'Poppins', sans-serif;">Status</label>
           <select v-model="form.status" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-6">
-            <option class="text-cyan-950" disabled value="">Pilih Status</option>
+            <option style="font-family: 'Poppins', sans-serif;" class="text-cyan-950" disabled value="">Pilih Status</option>
             <option>Aktif</option>
             <option>Non Aktif</option>
           </select>
 
           <div class="flex justify-end space-x-2">
-            <button @click="resetForm" class="btn bg-gray-500 text-white">Batal</button>
-            <button v-if="!isEdit" @click="addKaryawan" class="btn bg-cyan-950 text-white">Simpan</button>
-            <button v-else @click="updateKaryawan" class="btn bg-cyan-950 text-white">Update</button>
+            <button @click="resetForm" class="btn bg-gray-500 text-white" style="font-family: 'Poppins', sans-serif;">Batal</button>
+            <button v-if="!isEdit" @click="addKaryawan" class="btn bg-cyan-950 text-white" style="font-family: 'Poppins', sans-serif;">Simpan</button>
+            <button v-else @click="updateKaryawan" class="btn bg-cyan-950 text-white" style="font-family: 'Poppins', sans-serif;">Update</button>
           </div>
         </div>
       </div>

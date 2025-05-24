@@ -9,8 +9,8 @@
   <div class="bg-white rounded-2xl shadow-md flex-grow p-6">
     <!-- Search bar dan tombol tambah -->
     <div class="flex mt-8 justify-between pb-6">
-      <input v-model="search" type="text" placeholder="Cari disini..." class="search-bar text-cyan-950 border px-3 py-2" />
-      <button @click="showModal = true" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white">
+      <input v-model="search" type="text" placeholder="Cari disini..." class="search-bar text-cyan-950 border px-3 py-2" style="font-family: 'Poppins', sans-serif;" />
+      <button @click="showModal = true" class="btn shadow-lg hover:bg-gray-300 hover:text-cyan-950 bg-cyan-950 text-white" style="font-family: 'Poppins', sans-serif;">
         Tambah
       </button>
     </div>
@@ -27,18 +27,20 @@
               class="rounded-lg shadow hover:shadow-lg p-4 text-center bg-white"
             >
               <img :src="item.photo" alt="Produk" class="w-full h-48 object-cover rounded mb-2" />
-              <h3 class="font-semibold text-cyan-950">{{ item.name }}</h3>
-              <p class="text-sm text-cyan-950 ">{{ Intl.NumberFormat('id-ID').format(item.price) }}</p>
+              <h3 style="font-family: 'Poppins', sans-serif;" class="font-semibold text-cyan-950">{{ item.name }}</h3>
+              <p style="font-family: 'Poppins', sans-serif;"class="text-sm text-cyan-950 ">{{ Intl.NumberFormat('id-ID').format(item.price) }}</p>
               <div class="justify-between gap-2">
               <button
                 @click="editProduct(item.originalIndex)"
                 class="btn btn-sm bg-cyan-950 text-white px-4 py-1 mt-2 rounded hover:bg-cyan-300"
+                style="font-family: 'Poppins', sans-serif;"
               >
                 Edit
               </button>
               <button
                 @click="deleteProduct(item.id)"
                 class="btn btn-sm bg-red-500 text-white px-4 py-1 mt-2 rounded hover:bg-red-300"
+                style="font-family: 'Poppins', sans-serif;"
               >
                 Hapus
               </button>
@@ -49,7 +51,7 @@
         </div>
       </div>
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <div v-for="n in 3" :key="n" class="flex w-64 justify-center flex-col gap-4 m-3">
+        <div v-for="n in 3" :key="n" class="flex w-64 justify-center flex-col gap-4 m-3" style="font-family: 'Poppins', sans-serif;">
           <div class="skeleton h-48 w-full bg-gray-400"></div>
           <div class="skeleton h-4 w-28 bg-gray-400"></div>
           <div class="skeleton h-4 w-full bg-gray-400"></div>
@@ -63,9 +65,9 @@
       <!-- Modal Form -->
       <div class="modal-overlay" v-if="showModal">
         <div class="modal-content">
-          <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">TAMBAH PRODUK</h2>
-          <label class="block mb-2  text-cyan-950">Kategori Produk</label>
-            <select v-model="form.category" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
+          <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center" style="font-family: 'Poppins', sans-serif;">TAMBAH PRODUK</h2>
+          <label class="block mb-2  text-cyan-950" style="font-family: 'Poppins', sans-serif;">Kategori Produk</label>
+            <select v-model="form.category" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" style="font-family: 'Poppins', sans-serif;">
               <option disabled value="">Pilih Kategori</option>
               <option value="kaos">Kaos</option>
               <option value="kemeja">Kemeja</option>
@@ -76,19 +78,19 @@
               <option value="jersey">Extra</option>
             </select>
 
-            <label class="block mb-2 text-cyan-950">Nama Produk</label>
+            <label class="block mb-2 text-cyan-950" style="font-family: 'Poppins', sans-serif;">Nama Produk</label>
             <input v-model="form.name" type="text" placeholder="Nama Produk" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-6" />
 
-            <label class="block mb-2 text-cyan-950">Harga</label>
+            <label class="block mb-2 text-cyan-950" style="font-family: 'Poppins', sans-serif;">Harga</label>
             <input v-model="form.price" type="number" placeholder="Kisaran harga" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-6" />
 
-            <label class="block mb-2 text-cyan-950">Gambar Produk</label>
+            <label class="block mb-2 text-cyan-950" style="font-family: 'Poppins', sans-serif;">Gambar Produk</label>
             <input type="file" @change="handleImageUpload" class="text-cyan-950 border p-2 rounded mt-1 mb-6" />
 
             <div class="flex justify-end space-x-2">
-              <button @click="closeModal" type="button" class="bg-gray-300 px-4 py-2 rounded">Batal</button>
-              <button v-if="editing" @click="saveProduct(editIndex)" type="submit" class="bg-cyan-950 text-white px-4 py-2 rounded">Simpan</button>
-              <button v-else @click="addProduct()" type="submit" class="bg-cyan-950 text-white px-4 py-2 rounded">Tambah</button>
+              <button @click="closeModal" type="button" class="bg-gray-300 px-4 py-2 rounded" style="font-family: 'Poppins', sans-serif;">Batal</button>
+              <button v-if="editing" @click="saveProduct(editIndex)" type="submit" style="font-family: 'Poppins', sans-serif;" class="bg-cyan-950 text-white px-4 py-2 rounded">Simpan</button>
+              <button v-else @click="addProduct()" type="submit" style="font-family: 'Poppins', sans-serif;" class="bg-cyan-950 text-white px-4 py-2 rounded">Tambah</button>
             </div>
       </div>
      </div>

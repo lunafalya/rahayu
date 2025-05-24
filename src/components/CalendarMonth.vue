@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-7 gap-2">
     <!-- Header Hari -->
-    <div v-for="day in days" :key="day" class="text-center font-semibold text-sm text-cyan-950">
+    <div v-for="day in days" :key="day" class="text-center font-semibold text-sm text-cyan-950" style="font-family: 'Poppins', sans-serif;">
       {{ day }}
     </div>
 
@@ -19,8 +19,11 @@
       <!-- Tanggal di pojok kiri atas -->
       <div class="absolute top-1 left-1 text-xs font-bold">{{ day }}</div>
 
-      <!-- Jika ada note -->
-
+      <!-- Titik kuning untuk hari ini -->
+      <div
+        v-if="isToday(day)"
+        class="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-blue-400 rounded-full"
+      ></div>
     </div>
   </div>
 </template>
@@ -46,6 +49,15 @@ const startOffset = computed(() => {
 })
 
 const emit = defineEmits(['date-clicked'])
+
+function isToday(day) {
+  const today = new Date()
+  return (
+    day === today.getDate() &&
+    props.currentMonth === today.getMonth() &&
+    props.currentYear === today.getFullYear()
+  )
+}
 
 function handleDateClick(day) {
   const clickedDate = {

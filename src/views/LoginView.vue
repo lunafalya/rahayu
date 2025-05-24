@@ -3,10 +3,10 @@
         <img src="../assets/rahayu.svg" alt="Rahayu Logo" class="w-32 h-32" />
         <fieldset class="fieldset w-xs bg-base-200 border bg-blue-200 border-base-300 p-5 rounded-xl">
 
-            <label class="fieldset-label">Nama Pengguna</label>
+            <label class="fieldset-label" style="font-family: 'Poppins', sans-serif;">Nama Pengguna</label>
             <input type="text" class="input" placeholder="Username" v-model="username" />
             
-            <label class="fieldset-label">Kata Sandi</label>
+            <label class="fieldset-label" style="font-family: 'Poppins', sans-serif;">Kata Sandi</label>
             <div class="relative">
                 <input :type="showPassword ? 'text' : 'password'" class="input w-full" placeholder="Password" v-model="password" />
                 <button type="button" class="absolute right-3 top-3 bg-transparent" @click="togglePasswordVisibility">
@@ -14,11 +14,11 @@
                 </button>
             </div>
 
-            <a href="/forgotpassword" class="text-sm text-blue-500 hover:underline block text-end">
+            <a href="/forgotpassword" class="text-sm text-blue-500 hover:underline block text-end" style="font-family: 'Poppins', sans-serif;">
                 Lupa Sandi?
             </a>
 
-            <button class="btn w-full my-4 hover:text-white hover:bg-cyan-900 bg-cyan-700 text-white" type="button" @click="Login()">
+            <button class="btn w-full my-4 hover:text-white hover:bg-cyan-900 bg-cyan-700 text-white" style="font-family: 'Poppins', sans-serif;" type="button" @click="Login()">
                 <p>Masuk</p>
             </button>
         </fieldset>
