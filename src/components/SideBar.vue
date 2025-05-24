@@ -40,8 +40,7 @@
   <div class="mt-45">
     <div
       class="flex items-center gap-4 cursor-pointer p-3 rounded-md transition-all duration-200 text-white hover:bg-cyan-600"
-      :class="{ 'bg-cyan-700': isActive('/exit') }"
-      @click="$router.push('/')"
+      @click="logout"
     >
       <font-awesome-icon icon="right-from-bracket" class="w-6 h-6" />
       <span class="sidebar-text opacity-0 font-semibold group-hover:opacity-100 transition-opacity delay-100 duration-300 whitespace-nowrap overflow-hidden"
@@ -72,4 +71,18 @@
   ]
   
   const isActive = (menuRoute) => route.path === menuRoute
+
+    const logout = () => {
+      // Hapus token
+      localStorage.removeItem('token')
+
+      // Redirect ke halaman login
+      router.replace({ name: 'login' })
+
+      // Cegah tombol back
+      history.pushState(null, '', location.href)
+      window.addEventListener('popstate', () => {
+        history.pushState(null, '', location.href)
+      })
+    }
   </script>
