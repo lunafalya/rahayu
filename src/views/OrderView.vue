@@ -34,7 +34,7 @@
               <td>{{ Intl.DateTimeFormat('id-ID').format(new Date(order.deadline)) }}</td>
               <td>{{ order.status}}</td>
               <td>
-                <button @click="editOrder(order.id)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button>
+                <!-- <button @click="editOrder(order.id)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button> -->
                 <button @click="showDetail(order)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Detail</button>
                 <button v-if="order.status == 'PENDING'" @click="showModalBayarFunc(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Bayar</button>
               </td>
