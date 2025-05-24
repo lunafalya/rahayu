@@ -648,7 +648,7 @@ export default {
       }).format(value);
     },
     addOrder() {
-      axios.post('https://great-distinctly-seasnail.ngrok-free.app/api/ewallet/payment/orders', {
+      axios.post('https://api.rahayu-konveksi.ydns.eu/api/ewallet/payment/orders', {
         CustomerName: this.form.namaPemesan,
         PhoneNumber: this.form.nomorTelepon.toString(),
         City: this.form.kota,
@@ -761,7 +761,7 @@ export default {
       this.editIndex = null;
     },
     fetchOrders() {
-      axios.get('https://great-distinctly-seasnail.ngrok-free.app/api/orders', {
+      axios.get('https://api.rahayu-konveksi.ydns.eu/api/orders', {
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('token')
         }

@@ -166,7 +166,7 @@ import axios from 'axios';
       this.editIndex = null;
     },
     getKaryawan() {
-      axios.get('https://great-distinctly-seasnail.ngrok-free.app/api/employees', {
+      axios.get('https://api.rahayu-konveksi.ydns.eu/api/employees', {
           headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('token')
           }
@@ -188,7 +188,7 @@ import axios from 'axios';
         formData.append('status', this.form.status);
         formData.append('image', this.form.image);
 
-        axios.post('https://great-distinctly-seasnail.ngrok-free.app/api/employees', formData, {
+        axios.post('https://api.rahayu-konveksi.ydns.eu/api/employees', formData, {
             headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('token'),
               'Content-Type': 'multipart/form-data'
@@ -206,7 +206,7 @@ import axios from 'axios';
       }
     },
     editKaryawan(id) {
-      axios.get(`https://great-distinctly-seasnail.ngrok-free.app/api/employees/${id}`, {
+      axios.get(`https://api.rahayu-konveksi.ydns.eu/api/employees/${id}`, {
           headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('token'),
           }
@@ -234,7 +234,7 @@ import axios from 'axios';
           formData.append('image', this.form.image);
         }
         
-        axios.put(`https://great-distinctly-seasnail.ngrok-free.app/api/employees/${this.editIndex}`, formData, {
+        axios.put(`https://api.rahayu-konveksi.ydns.eu/api/employees/${this.editIndex}`, formData, {
             headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('token'),
               'Content-Type': 'multipart/form-data'
@@ -253,7 +253,7 @@ import axios from 'axios';
     },
     deleteKaryawan(id) {
       if (confirm('Apakah Anda yakin ingin menghapus karyawan ini?')) {
-        axios.delete(`https://great-distinctly-seasnail.ngrok-free.app/api/employees/${id}`, {
+        axios.delete(`https://api.rahayu-konveksi.ydns.eu/api/employees/${id}`, {
             headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('token')
             }

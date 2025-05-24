@@ -195,7 +195,7 @@ export default {
     fetchBalance() {
       const token = localStorage.getItem('token');
       if (token) {
-        axios.get('https://great-distinctly-seasnail.ngrok-free.app/api/ewallet/balance', {
+        axios.get('https://api.rahayu-konveksi.ydns.eu/api/ewallet/balance', {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -212,7 +212,7 @@ export default {
     fetchTransactions() {
       const token = localStorage.getItem('token');
       if (token) {
-        axios.get('https://great-distinctly-seasnail.ngrok-free.app/api/ewallet/transactions', {
+        axios.get('https://api.rahayu-konveksi.ydns.eu/api/ewallet/transactions', {
           headers: {
             Authorization: `Bearer ${token}`
           }

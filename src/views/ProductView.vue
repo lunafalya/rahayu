@@ -137,7 +137,7 @@ export default {
     },
     getProducts() {
       axios
-        .get('https://great-distinctly-seasnail.ngrok-free.app/api/products', {
+        .get('https://api.rahayu-konveksi.ydns.eu/api/products', {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
           },
@@ -165,7 +165,7 @@ export default {
         formData.append('image', this.form.image)
 
         axios
-          .post('https://great-distinctly-seasnail.ngrok-free.app/api/products', formData, {
+          .post('https://api.rahayu-konveksi.ydns.eu/api/products', formData, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             }
@@ -190,7 +190,7 @@ export default {
         formData.append('image', this.form.image)
 
         axios
-          .put(`https://great-distinctly-seasnail.ngrok-free.app/api/products/${this.products[index].id}`, formData, {
+          .put(`https://api.rahayu-konveksi.ydns.eu/api/products/${this.products[index].id}`, formData, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -209,7 +209,7 @@ export default {
     deleteProduct(id) {
       if (confirm('Are you sure you want to delete this product?')) {
         axios
-          .delete(`https://great-distinctly-seasnail.ngrok-free.app/api/products/${id}`, {
+          .delete(`https://api.rahayu-konveksi.ydns.eu/api/products/${id}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`
             }

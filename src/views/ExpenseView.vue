@@ -572,7 +572,7 @@ export default {
     },
     addGaji() {
       const email = this.getKaryawanEmail(this.gajiForm.id_karyawan);
-      axios.post(`https://great-distinctly-seasnail.ngrok-free.app/api/ewallet/payout/payrolls?Email=${encodeURIComponent(email)}`, {
+      axios.post(`https://api.rahayu-konveksi.ydns.eu/api/ewallet/payout/payrolls?Email=${encodeURIComponent(email)}`, {
           EmployeeId: this.gajiForm.id_karyawan,
           TotalSalary: this.totalHargaJasa,
           Date: this.gajiForm.tanggal_pengajuan,
@@ -629,7 +629,7 @@ export default {
       this.editIndexGaji = null
     },
     addGeneral() {
-      axios.post('https://great-distinctly-seasnail.ngrok-free.app/api/ewallet/payout/generals', {
+      axios.post('https://api.rahayu-konveksi.ydns.eu/api/ewallet/payout/generals', {
           Email: this.generalForm.email,
           TotalExpense: this.generalForm.jumlah,
           Date: this.generalForm.tanggal,
@@ -675,7 +675,7 @@ export default {
     },
     addPinjam() {
       const email = this.getKaryawanEmail(this.pinjamForm.id_karyawan);
-      axios.post(`https://great-distinctly-seasnail.ngrok-free.app/api/ewallet/payout/loans?Email=${encodeURIComponent(email)}`, {
+      axios.post(`https://api.rahayu-konveksi.ydns.eu/api/ewallet/payout/loans?Email=${encodeURIComponent(email)}`, {
           EmployeeId: this.pinjamForm.id_karyawan,
           Amount: this.pinjamForm.jumlah,
           Date: this.pinjamForm.tanggal,
@@ -754,7 +754,7 @@ export default {
       return karyawan ? karyawan.email : '-';
     },
     fetchKaryawan() {
-      axios.get('https://great-distinctly-seasnail.ngrok-free.app/api/employees', {
+      axios.get('https://api.rahayu-konveksi.ydns.eu/api/employees', {
           headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('token')
           }
@@ -767,7 +767,7 @@ export default {
         });
     },
     fetchGeneral() {
-      axios.get('https://great-distinctly-seasnail.ngrok-free.app/api/generals', {
+      axios.get('https://api.rahayu-konveksi.ydns.eu/api/generals', {
           headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('token')
           }
@@ -781,7 +781,7 @@ export default {
         });
     },
     fetchGaji() {
-      axios.get('https://great-distinctly-seasnail.ngrok-free.app/api/payrolls', {
+      axios.get('https://api.rahayu-konveksi.ydns.eu/api/payrolls', {
           headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('token')
           }
@@ -795,7 +795,7 @@ export default {
         });
     },
     fetchPinjam() {
-      axios.get('https://great-distinctly-seasnail.ngrok-free.app/api/loans', {
+      axios.get('https://api.rahayu-konveksi.ydns.eu/api/loans', {
           headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('token')
           }

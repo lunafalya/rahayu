@@ -41,7 +41,7 @@ export default {
             this.showPassword = !this.showPassword;
         },
         Login() {
-            axios.post('https://great-distinctly-seasnail.ngrok-free.app/api/auth/login', {
+            axios.post('https://api.rahayu-konveksi.ydns.eu/api/auth/login', {
                 Username: this.username,
                 Password: this.password,
             }).then(response => {
