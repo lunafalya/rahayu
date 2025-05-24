@@ -38,12 +38,11 @@
           </thead>
           <tbody class="bg-white text-cyan-950 px-4 py-2">
             <tr v-for="(item, index) in generalList" :key="index">
-              <td class="px-4 py-2">{{totalHargaFormat(item.jumlah) }}</td>
-              <td class="px-4 py-2">{{ item.keterangan }}</td>
-              <td class="px-4 py-2">{{ item.tanggal }}</td>
+              <td class="px-4 py-2">{{totalHargaFormat(item.totalExpense) }}</td>
+              <td class="px-4 py-2">{{ item.description }}</td>
+              <td class="px-4 py-2">{{ Intl.DateTimeFormat('id-ID').format(new Date(item.date)) }}</td>
               <td class="px-4 py-2">{{ item.status }}</td>
               <td class="px-4 py-2">
-                <button @click="editGeneral(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Edit</button>
                 <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Detail</button>
               </td>
             </tr>
@@ -64,13 +63,13 @@
           </thead>
           <tbody class="bg-white text-cyan-950 px-4 py-2">
             <tr v-for="(item, index) in gajiList" :key="index">
-              <td class="px-4 py-2">{{ item.nama }}</td>
-              <td class="px-4 py-2">{{ totalHargaFormat(item.total) }}</td>
-              <td class="px-4 py-2">{{ item.potongan }}</td>
-              <td class="px-4 py-2">{{ item.tanggal_pengajuan }}</td>
+              <td class="px-4 py-2">{{ getKaryawanName(item.employeeId) }}</td>
+              <td class="px-4 py-2">{{ totalHargaFormat(item.totalSalary) }}</td>
+              <td class="px-4 py-2">{{ totalHargaFormat(item.deduction) }}</td>
+              <td class="px-4 py-2">{{ Intl.DateTimeFormat('id-ID').format(new Date(item.date)) }}</td>
               <td class="px-4 py-2">{{ item.status }}</td>
               <td>
-                <button @click="editGaji(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Edit</button>
+                <button v-if="item.transaction == 'Cash'" @click="editGaji(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Edit</button>
                 <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Detail</button>
               </td>
             </tr>
@@ -83,7 +82,6 @@
             <tr>
               <th class="overflow-x-auto text-white bg-gray-400 px-4 py-2">Nama Karyawan</th>
               <th class="overflow-x-auto text-white bg-gray-400 px-4 py-2">Nominal Pinjaman</th>
-              <th class="overflow-x-auto text-white bg-gray-400 px-4 py-2">Tunggakan</th>
               <th class="overflow-x-auto text-white bg-gray-400 px-4 py-2">Tanggal</th>
               <th class="overflow-x-auto text-white bg-gray-400 px-4 py-2">Status</th>
               <th class="overflow-x-auto text-white bg-gray-400 px-4 py-2">Aksi</th>
@@ -91,13 +89,12 @@
           </thead>
           <tbody class="bg-white text-cyan-950 px-4 py-2">
             <tr v-for="(item, index) in pinjamList" :key="index">
-              <td class="px-4 py-2">{{ item.nama }}</td>
-              <td class="px-4 py-2">{{ totalHargaFormat(item.jumlah) }}</td>
-              <td class="px-4 py-2">{{ totalHargaFormat(item.jumlah) }}</td>
-              <td class="px-4 py-2">{{ item.tanggal }}</td>
+              <td class="px-4 py-2">{{ getKaryawanName(item.employeeId) }}</td>
+              <td class="px-4 py-2">{{ totalHargaFormat(item.amount) }}</td>
+              <td class="px-4 py-2">{{ Intl.DateTimeFormat('id-ID').format(new Date(item.date)) }}</td>
               <td class="px-4 py-2">{{ item.status }}</td>
               <td>
-                <button @click="editPinjam(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Edit</button>
+                <button v-if="item.transaction == 'Cash'" @click="editPinjam(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Edit</button>
                 <button @click="showDetail(item)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-700">Detail</button>
               </td>
             </tr>
@@ -124,8 +121,8 @@
             <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Form Gaji Karyawan</h2>
             
             <label class="font-medium text-cyan-950">Nama Karyawan</label>
-            <select v-model="gajiForm.nama" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
-              <option v-for="k in karyawanList" :key="k.id" :value="k.id">{{ k.id }} - {{ k.nama }}</option>
+            <select v-model="gajiForm.id_karyawan" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
+              <option v-for="k in karyawanList" :key="k.id" :value="k.id">{{ k.name }}</option>
             </select>
 
             <label class="font-medium text-cyan-950">Transaksi</label>
@@ -231,16 +228,19 @@
             <h2 class="text-xl font-bold text-cyan-950 mb-6 text-center">Tambah Pengeluaran</h2>
 
             <label class="font-medium text-cyan-950">Nama Karyawan</label>
-            <select v-model="pinjamForm.nama" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
-              <option v-for="k in karyawanList" :key="k.id" :value="k.id">{{ k.id }} - {{ k.nama }}</option>
+            <select v-model="pinjamForm.id_karyawan" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5">
+              <option v-for="k in karyawanList" :key="k.id" :value="k.id">{{ k.name }}</option>
             </select>
 
             <label class="font-medium text-cyan-950">Transaksi</label>
-            <select v-model="pinjamForm.bayar" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-6">
+            <select v-model="pinjamForm.transaksi" class="text-cyan-950 border p-2 w-full rounded mt-1 mb-6">
               <option class="text-cyan-950" disabled value="">Pilih Jenis Transaksi</option>
               <option>Cash</option>
               <option>Transfer</option>
             </select>
+
+            <label class="font-medium text-cyan-950">Keterangan</label>
+            <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model="pinjamForm.keterangan" type="text" />
 
             <label class="text-cyan-950">Nominal</label>
             <input class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" v-model.number="pinjamForm.jumlah" type="number" />
@@ -277,21 +277,22 @@
               <h1 class="text-2xl font-bold mb-6 border-b pb-4">Detail Transaksi</h1>
 
               <div class="flex justify-between text-sm text-gray-600 mb-1">
-                <p>Transaksi dikirim ke <strong>{{ detailData.nama }}</strong></p>
-                <p>ID Transaksi: {{ detailData.id_transaksi }}</p>
+                <p>Transaksi dikirim ke <strong>{{ detailData.name }}</strong></p>
+                <p>ID Transaksi: {{ detailData.id }}</p>
               </div>
               <div class="flex justify-between text-sm text-gray-600 mb-4">
-                <p>{{ detailData.tanggal }}</p>
-                <p class="text-xl font-semibold text-right text-black">Jumlah<br><span class="text-2xl text-black">{{ totalHargaFormat(detailData.jumlah) }}</span></p>
+                <p>{{ Intl.DateTimeFormat('id-ID').format(new Date(detailData.date)) }}</p>
+                <p class="text-xl font-semibold text-right text-black">Jumlah<br><span class="text-2xl text-black">{{ totalHargaFormat(detailData.totalExpense) }}</span></p>
               </div>
 
               <p class="text-sm mb-2">Status Transaksi: 
                 <span
                   class="inline-block px-3 py-1 rounded-full text-xs font-semibold"
                   :class="{
-                    'bg-green-100 text-green-800': detailData.status === 'Selesai',
-                    'bg-yellow-100 text-yellow-800': detailData.status === 'Pending',
-                    'bg-red-100 text-red-800': detailData.status === 'Gagal'
+                    'bg-green-100 text-green-800': detailData.status === 'PAID',
+                    'bg-yellow-100 text-yellow-800': detailData.status === 'PENDING',
+                    'bg-red-100 text-red-800': detailData.status === 'FAILED',
+                    'bg-gray-100 text-black': !['PAID', 'PENDING', 'FAILED'].includes(detailData.status)
                   }"
                 >
                   {{ detailData.status }}
@@ -308,15 +309,15 @@
                 </thead>
                 <tbody>
                   <tr class="border-t text-black">
-                    <td class="py-2">{{ detailData.keterangan }}</td>
+                    <td class="py-2">{{ detailData.description }}</td>
                     <td class="py-2">{{ detailData.email }}</td>
-                    <td class="py-2 text-right">{{ totalHargaFormat(detailData.jumlah) }}</td>
+                    <td class="py-2 text-right">{{ totalHargaFormat(detailData.totalExpense) }}</td>
                   </tr>
                 </tbody>
                 <tfoot>
                   <tr class="border-t font-semibold">
                     <td colspan="3" class="py-2 text-right">Total</td>
-                    <td class="py-2 text-right">{{ totalHargaFormat(detailData.jumlah) }}</td>
+                    <td class="py-2 text-right">{{ totalHargaFormat(detailData.totalExpense) }}</td>
                   </tr>
                 </tfoot>
               </table>
@@ -327,24 +328,25 @@
             
 
             <div v-else-if="tab === 'Gaji'" class="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow">
-              <h1 class="text-2xl font-bold mb-6 border-b pb-4">Detail Transaksi Gaji</h1>
+              <h1 class="text-2xl font-bold mb-6 border-b pb-4 text-black">Detail Transaksi Gaji</h1>
 
               <div class="flex justify-between text-sm text-gray-600 mb-1">
-                <p>Transaksi dikirim ke <strong>{{ detailData.nama }}</strong></p>
-                <p>ID Transaksi: {{ detailData.id_transaksi }}</p>
+                <p>Transaksi dikirim ke <strong>{{ karyawanName }}</strong></p>
+                <p>ID Transaksi: {{ detailData.id }}</p>
               </div>
               <div class="flex justify-between text-sm text-gray-600 mb-4">
-                <p>{{ detailData.tanggal_pengajuan }}</p>
-                <p class="text-xl font-semibold text-right text-black">Jumlah<br><span class="text-2xl text-black">{{ totalHargaFormat(detailData.total) }}</span></p>
+                <p>{{ Intl.DateTimeFormat('id-ID').format(new Date(detailData.date)) }}</p>
+                <p class="text-xl font-semibold text-right text-black">Jumlah<br><span class="text-2xl text-black">{{ totalHargaFormat(detailData.salaryPaid) }}</span></p>
               </div>
 
               <p class="text-sm mb-2">Status Transaksi: 
                 <span
                   class="inline-block px-3 py-1 rounded-full text-xs font-semibold"
                   :class="{
-                    'bg-green-100 text-green-800': detailData.status === 'Selesai',
-                    'bg-yellow-100 text-yellow-800': detailData.status === 'Pending',
-                    'bg-red-100 text-red-800': detailData.status === 'Gagal'
+                    'bg-green-100 text-green-800': detailData.status === 'PAID',
+                    'bg-yellow-100 text-yellow-800': detailData.status === 'PENDING',
+                    'bg-red-100 text-red-800': detailData.status === 'FAILED',
+                    'bg-gray-100 text-black': !['PAID', 'PENDING', 'FAILED'].includes(detailData.status)
                   }"
                 >
                   {{ detailData.status }}
@@ -356,22 +358,20 @@
               <table class="w-full text-sm text-left border-t mt-4">
                 <thead>
                   <tr class="text-gray-500">
-                    <th class="py-2">Keterangan</th>
                     <th class="py-2">Transaksi</th>
                     <th class="py-2 text-right">Jumlah</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr class="border-t text-black">
-                    <td class="py-2">Gaji Awal - Potongan</td>
-                    <td class="py-2">{{ detailData.transaksi }}</td>
-                    <td class="py-2 text-right">{{ totalHargaFormat(detailData.total) }}</td>
+                    <td class="py-2">{{ detailData.transaction }}</td>
+                    <td class="py-2 text-right">{{ totalHargaFormat(detailData.salaryPaid) }}</td>
                   </tr>
                 </tbody>
                 <tfoot>
                   <tr class="border-t font-semibold">
                     <td colspan="3" class="py-2 text-right">Total</td>
-                    <td class="py-2 text-right">{{ totalHargaFormat(detailData.total) }}</td>
+                    <td class="py-2 text-right text-black">{{ totalHargaFormat(detailData.salaryPaid) }}</td>
                   </tr>
                 </tfoot>
               </table>
@@ -386,21 +386,22 @@
                 <h1 class="text-2xl font-bold mb-6 border-b pb-4">Detail Transaksi Peminjaman</h1>
 
                 <div class="flex justify-between text-sm text-gray-600 mb-1">
-                  <p>Transaksi dikirim ke <strong>{{ detailData.nama }}</strong></p>
-                  <p>ID Transaksi: {{ detailData.id_transaksi }}</p>
+                  <p>Transaksi dikirim ke <strong>{{ karyawanName }}</strong></p>
+                  <p>ID Transaksi: {{ detailData.id }}</p>
                 </div>
                 <div class="flex justify-between text-sm text-gray-600 mb-4">
-                  <p>{{ detailData.tanggal }}</p>
-                  <p class="text-xl font-semibold text-right text-black">Jumlah<br><span class="text-2xl text-black">{{ totalHargaFormat(detailData.jumlah) }}</span></p>
+                  <p>{{ Intl.DateTimeFormat('id-ID').format(new Date(detailData.date)) }}</p>
+                  <p class="text-xl font-semibold text-right text-black">Jumlah<br><span class="text-2xl text-black">{{ totalHargaFormat(detailData.amount) }}</span></p>
                 </div>
 
                 <p class="text-sm mb-2">Status Transaksi: 
                   <span
                     class="inline-block px-3 py-1 rounded-full text-xs font-semibold"
                     :class="{
-                      'bg-green-100 text-green-800': detailData.status === 'Selesai',
-                      'bg-yellow-100 text-yellow-800': detailData.status === 'Pending',
-                      'bg-red-100 text-red-800': detailData.status === 'Gagal'
+                      'bg-green-100 text-green-800': detailData.status === 'PAID',
+                      'bg-yellow-100 text-yellow-800': detailData.status === 'PENDING',
+                      'bg-red-100 text-red-800': detailData.status === 'FAILED',
+                      'bg-gray-100 text-black': !['PAID', 'PENDING', 'FAILED'].includes(detailData.status)
                     }"
                   >
                     {{ detailData.status }}
@@ -417,14 +418,14 @@
                   </thead>
                   <tbody>
                     <tr class="border-t text-black">
-                      <td class="py-2">Peminjaman Dana</td>
-                      <td class="py-2 text-right">{{ totalHargaFormat(detailData.jumlah) }}</td>
+                      <td class="py-2">{{ detailData.description }}</td>
+                      <td class="py-2 text-right">{{ totalHargaFormat(detailData.amount) }}</td>
                     </tr>
                   </tbody>
                   <tfoot>
                     <tr class="border-t font-semibold">
                       <td colspan="3" class="py-2 text-right">Total</td>
-                      <td class="py-2 text-right">{{ totalHargaFormat(detailData.jumlah) }}</td>
+                      <td class="py-2 text-right">{{ totalHargaFormat(detailData.amount) }}</td>
                     </tr>
                   </tfoot>
                 </table>
@@ -445,6 +446,8 @@ import SideBar from '@/components/SideBar.vue'
 </script>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -474,11 +477,7 @@ export default {
         keterangan: '',
         jumlah: null,
       },
-      karyawanList: [
-        { id: 'K001', nama: 'Ani' },
-        { id: 'K002', nama: 'Budi' },
-        { id: 'K003', nama: 'Citra' }
-      ],
+      karyawanList: [],
       gajiForm: {
         id_karyawan: '',
         nama: '',
@@ -504,17 +503,21 @@ export default {
         tanggal: '',
         nama: '',
         keterangan: '',
+        email: '',
         status: 'sukses'
       },
       pinjamForm: {
         id_karyawan: '',
         nama: '',
+        transaksi: '',
+        keterangan: '',
         jumlah: 0,
         tanggal: '',
         status: 'Tunggak'
       }
     }
   },
+
   computed: {
     totalHargaJasa() {
       return this.gajiForm.jasa.reduce((total, item) => total + (item.harga * item.jumlah), 0)
@@ -522,9 +525,12 @@ export default {
     totalHargaJasaFormatted() {
       return 'Rp' + this.totalHargaJasa.toLocaleString('id-ID')
     },
-    totalGajiFormatted() {
+    totalGaji() {
       const total = this.totalHargaJasa - (this.gajiForm.potongan || 0)
-      return 'Rp' + total.toLocaleString('id-ID')
+      return total
+    },
+    totalGajiFormatted() {
+      return 'Rp' + this.totalGaji.toLocaleString('id-ID')
     },
     filteredByCategory() {
       return this.pengeluaranList.filter(
@@ -533,8 +539,14 @@ export default {
     },
     uniqueCategories() {
       return [...new Set(this.pengeluaranList.map(p => p.kategori))]
-    }
+    },
+    karyawanName() {
+      if (!this.detailData || !this.detailData.employeeId) return '-';
+      const karyawan = this.karyawanList.find(k => k.id === this.detailData.employeeId);
+      return karyawan ? karyawan.name : '-';
+    },
   },
+
   methods: {
     tambahJasa() {
       if (!this.gajiInput.produk || !this.gajiInput.harga || !this.gajiInput.jumlah) {
@@ -559,12 +571,33 @@ export default {
       }).format(value || 0)
     },
     addGaji() {
-      const total = this.totalHargaJasa - (this.gajiForm.potongan || 0)
-      this.gajiList.push({ ...this.gajiForm, total })
-      this.resetGajiForm()
+      const email = this.getKaryawanEmail(this.gajiForm.id_karyawan);
+      axios.post(`https://great-distinctly-seasnail.ngrok-free.app/api/ewallet/payout/payrolls?Email=${encodeURIComponent(email)}`, {
+          EmployeeId: this.gajiForm.id_karyawan,
+          TotalSalary: this.totalHargaJasa,
+          Date: this.gajiForm.tanggal_pengajuan,
+          Transaction: this.gajiForm.transaksi,
+          Status: this.gajiForm.status,
+          Deduction: this.gajiForm.potongan,
+          SalaryPaid: this.totalGaji
+      }, {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        })
+        .then(response => {
+          this.gajiList.push(response.data)
+          this.resetGajiForm()
+        })
+        .catch(error => {
+          console.error('Error adding gaji data:', error)
+        })
     },
     editGaji(item) {
-      this.gajiForm = { ...item }
+      this.gajiForm = {
+        ...item,
+        jasa: Array.isArray(item.jasa) ? item.jasa : []
+      }
       this.isEditGaji = true
       this.showGajiModal = true
       this.editIndexGaji = this.gajiList.indexOf(item)
@@ -595,16 +628,25 @@ export default {
       this.isEditGaji = false
       this.editIndexGaji = null
     },
-    simpanGaji() {
-      if (this.isEditGaji) {
-        this.updateGaji()
-      } else {
-        this.addGaji()
-      }
-    },
     addGeneral() {
-      this.generalList.push({ ...this.generalForm })
-      this.resetGeneralForm()
+      axios.post('https://great-distinctly-seasnail.ngrok-free.app/api/ewallet/payout/generals', {
+          Email: this.generalForm.email,
+          TotalExpense: this.generalForm.jumlah,
+          Date: this.generalForm.tanggal,
+          Name: this.generalForm.nama,
+          Description: this.generalForm.keterangan
+        }, {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        })
+        .then(response => {
+          this.generalList.push(response.data)
+          this.resetGeneralForm()
+        })
+        .catch(error => {
+          console.error('Error adding general data:', error)
+        })
     },
     resetGeneralForm() {
       this.generalForm = {
@@ -613,20 +655,11 @@ export default {
         tanggal: '',
         nama: '',
         keterangan: '',
-        status: 'sukses'
+        status: ''
       }
       this.showGeneralModal = false
       this.isEditGeneral = false
       this.editIndexGeneral = null
-    },
-    simpanGeneral() {
-      if (this.isEditGeneral) {
-        this.updateGeneral()
-      } else {
-        const newGeneral = { ...this.generalForm }
-        this.generalList.push(newGeneral)
-      }
-      this.resetGeneralForm()
     },
     updateGeneral() {
       if (this.editIndexGeneral !== null) {
@@ -641,13 +674,33 @@ export default {
       this.editIndexGeneral = this.generalList.indexOf(item)
     },
     addPinjam() {
-      this.pinjamList.push({ ...this.pinjamForm })
-      this.resetPinjamForm()
+      const email = this.getKaryawanEmail(this.pinjamForm.id_karyawan);
+      axios.post(`https://great-distinctly-seasnail.ngrok-free.app/api/ewallet/payout/loans?Email=${encodeURIComponent(email)}`, {
+          EmployeeId: this.pinjamForm.id_karyawan,
+          Amount: this.pinjamForm.jumlah,
+          Date: this.pinjamForm.tanggal,
+          Status: this.pinjamForm.status,
+          Description: this.pinjamForm.keterangan,
+          Transaction: this.pinjamForm.transaksi
+        }, {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        })
+        .then(response => {
+          this.pinjamList.push(response.data)
+          this.resetPinjamForm()
+        })
+        .catch(error => {
+          console.error('Error adding pinjam data:', error)
+        })
     },
     resetPinjamForm() {
       this.pinjamForm = {
         id_karyawan: '',
         nama: '',
+        transaksi: '',
+        keterangan: '',
         jumlah: 0,
         tanggal: '',
         status: 'Tunggak'
@@ -655,15 +708,6 @@ export default {
       this.showPinjamModal = false
       this.isEditPinjam = false
       this.editIndexPinjam = null
-    },
-    simpanPinjam() {
-      if (this.isEditPinjam) {
-        this.updatePinjam()
-      } else {
-        const newPinjam = { ...this.pinjamForm }
-        this.pinjamList.push(newPinjam)
-      }
-      this.resetPinjamForm()
     },
     updatePinjam() {
       if (this.editIndexPinjam !== null) {
@@ -700,7 +744,78 @@ export default {
     },
     formatRupiah(angka) {
       return new Intl.NumberFormat('id-ID').format(angka)
+    },
+     getKaryawanName(id) {
+      const karyawan = this.karyawanList.find(k => k.id === id);
+      return karyawan ? karyawan.name : '-';
+    },
+     getKaryawanEmail(employeeId) {
+      const karyawan = this.karyawanList.find(k => k.id === employeeId);
+      return karyawan ? karyawan.email : '-';
+    },
+    fetchKaryawan() {
+      axios.get('https://great-distinctly-seasnail.ngrok-free.app/api/employees', {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        })
+        .then(response => {
+          this.karyawanList = response.data;
+        })
+        .catch(error => {
+          console.error('Error fetching karyawan data:', error);
+        });
+    },
+    fetchGeneral() {
+      axios.get('https://great-distinctly-seasnail.ngrok-free.app/api/generals', {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        })
+        .then(response => {
+          this.generalList = response.data;
+          console.log(this.generalList);
+        })
+        .catch(error => {
+          console.error('Error fetching general data:', error);
+        });
+    },
+    fetchGaji() {
+      axios.get('https://great-distinctly-seasnail.ngrok-free.app/api/payrolls', {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        })
+        .then(response => {
+          this.gajiList = response.data;
+          console.log(this.gajiList);
+        })
+        .catch(error => {
+          console.error('Error fetching gaji data:', error);
+        });
+    },
+    fetchPinjam() {
+      axios.get('https://great-distinctly-seasnail.ngrok-free.app/api/loans', {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        })
+        .then(response => {
+          this.pinjamList = response.data;
+          console.log(this.pinjamList);
+        })
+        .catch(error => {
+          console.error('Error fetching pinjam data:', error);
+        });
     }
+        
+  },
+
+  mounted() {
+    this.fetchKaryawan();
+    this.fetchGeneral();
+    this.fetchGaji();
+    this.fetchPinjam();
   }
 }
 </script>

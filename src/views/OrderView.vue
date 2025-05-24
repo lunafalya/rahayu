@@ -21,7 +21,6 @@
               <th class="text-white">No.</th>
               <th class="text-white">Nama Pemesan</th>
               <th class="text-white">Total Harga</th>
-              <th class="text-white">Sisa Pembayaran</th>
               <th class="text-white">Tanggal</th>
               <th class="text-white">Status</th>
               <th class="text-white">Aksi</th>
@@ -30,15 +29,14 @@
           <tbody class="text-cyan-950 bg-white">
             <tr v-for="(order, index) in paginatedOrders" :key="index">
               <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
-              <td>{{ order.namaPemesan }}</td>
-              <td>{{ totalHargaFormat(order.totalHargapesanan) }}</td>
-              <td>{{ totalHargaFormat(order.sisabayar) }}</td>
-              <td>{{ order.tanggalPengeluaran }}</td>
+              <td>{{ order.customerName }}</td>
+              <td>{{ totalHargaFormat(order.totalPrice) }}</td>
+              <td>{{ Intl.DateTimeFormat('id-ID').format(new Date(order.deadline)) }}</td>
               <td>{{ order.status}}</td>
               <td>
-                <button @click="editOrder(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button>
+                <!-- <button @click="editOrder(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button> -->
                 <button @click="showDetail(order)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Detail</button>
-                <button @click="showModalBayarFunc(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Bayar</button>
+                <button v-if="order.status == 'PENDING'" @click="showModalBayarFunc(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Bayar</button>
               </td>
             </tr>
           </tbody>
@@ -55,14 +53,14 @@
   </div>
 
   <!-- Peta Persebaran Konsumen -->
-    <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-md"> 
+    <!-- <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-md"> 
       <div class="flex justify-between items-center pb-6 relative"> 
         <h2 class="text-2xl font-bold text-cyan-950">Peta Persebaran Konsumen</h2> 
       </div>
-      <p>Warna merah menandakan jumlah konsumen tinggi, merah muda menandakan jumlah rendah.</p>
+      <p>Warna merah menandakan jumlah konsumen tinggi, merah muda menandakan jumlah rendah.</p> -->
 
       <!-- Leaflet Map -->
-      <LMap
+      <!-- <LMap
           :zoom="10"
           :center="[center.lat, center.lng]"
           class="relative z-10"
@@ -71,17 +69,17 @@
         <LTileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="&copy; OpenStreetMap contributors"
-        />
+        /> -->
         
         <!-- Layer GeoJSON -->
-        <LGeoJson
+        <!-- <LGeoJson
           v-if="geojsonData && showBoundary"
           :geojson="geojsonData"
           :optionsStyle="adminStyle"
-        />
+        /> -->
 
         <!-- Kontrol di dalam peta -->
-        <LControl position="topright">
+        <!-- <LControl position="topright">
           <div class="leaflet-control-layers leaflet-bar p-2 bg-white rounded shadow space-y-2">
             <label class="flex items-center space-x-2 text-sm">
               <select v-model="showBoundary"> 
@@ -111,7 +109,7 @@
           </LPopup>
         </LCircleMarker>
       </LMap>
-    </div>
+    </div> -->
   </div>
 
     <!-- OrderModal -->
@@ -211,16 +209,16 @@
                       <tbody>
                         <tr v-for="(extra, index) in form.extras" :key="index">
                           <td class="border p-2">
-                            <input v-model="extra.jenis" class="w-full border rounded p-1" />
+                            <input v-model="extra.name" class="w-full border rounded p-1" />
                           </td>
                           <td class="border p-2">
-                            <input v-model.number="extra.harga" type="number" class="w-full border rounded p-1" />
+                            <input v-model.number="extra.price" type="number" class="w-full border rounded p-1" />
                           </td>
                           <td class="border p-2">
-                            <input v-model.number="extra.jumlah" type="number" class="w-full border rounded p-1" />
+                            <input v-model.number="extra.quantity" type="number" class="w-full border rounded p-1" />
                           </td>
                           <td class="border p-2">
-                            Rp{{ extra.harga * extra.jumlah }}
+                            Rp{{ extra.price * extra.quantity }}
                           </td>
                           <td class="border p-2">
                             <button @click="hapusExtra(index)" class="text-red-600 hover:underline">Hapus</button>
@@ -231,10 +229,10 @@
 
                     <!-- Form Tambah Extra -->
                     <div class="grid grid-cols-4 gap-2 mb-2">
-                      <input class="border p-2 rounded" v-model="extraInput.jenis" type="text" placeholder="Nama Extra (contoh: Lengan Panjang)" />
-                      <input class="border p-2 rounded" v-model.number="extraInput.harga" type="number" placeholder="Harga Extra" />
-                      <input class="border p-2 rounded" v-model.number="extraInput.jumlah" type="number" placeholder="Jumlah Extra" />
-                      <input class="border p-2 rounded bg-gray-100" :value="extraInput.harga * extraInput.jumlah" type="text" placeholder="Total" disabled />
+                      <input class="border p-2 rounded" v-model="extraInput.name" type="text" placeholder="Nama Extra (contoh: Lengan Panjang)" />
+                      <input class="border p-2 rounded" v-model.number="extraInput.price" type="number" placeholder="Harga Extra" />
+                      <input class="border p-2 rounded" v-model.number="extraInput.quantity" type="number" placeholder="Jumlah Extra" />
+                      <input class="border p-2 rounded bg-gray-100" :value="extraInput.price * extraInput.quantity" type="text" placeholder="Total" disabled />
                     </div>
 
                     <button @click="tambahExtra" class="bg-cyan-950 text-white px-3 py-1 rounded mb-4">+ Tambah Extra</button>
@@ -265,14 +263,14 @@
     <h1 class="text-2xl font-bold mb-6 border-b pb-4 text-cyan-950 text-center">Detail Pesanan</h1>
 
     <div class="flex justify-between text-sm text-gray-600 mb-1">
-      <p>Pesanan atas nama <strong>{{ detailData.namaPemesan }}</strong></p>
-      <p>No. Telp: +62 {{ detailData.nomorTelepon }}</p>
+      <p>Pesanan atas nama <strong>{{ detailData.customerName }}</strong></p>
+      <p>No. Telp: +62 {{ detailData.phoneNumber }}</p>
     </div>
 
     <div class="flex justify-between text-sm text-gray-600 mb-4">
-      <p>Alamat: {{ detailData.alamat }}</p>
+      <p>Alamat: {{ detailData.address }}</p>
       <p class="text-xl font-semibold text-right text-black">
-        Jumlah Produk<br><span class="text-2xl">{{ detailData.jumlahProduk }}</span>
+        Jumlah Produk<br><span class="text-2xl">{{ detailData.productQuantity }}</span>
       </p>
     </div>
 
@@ -280,35 +278,35 @@
       <span
         class="inline-block px-3 py-1 rounded-full text-xs font-semibold"
         :class="{
-          'bg-green-100 text-green-800': detailData.status === 'Lunas',
-          'bg-yellow-100 text-yellow-800': detailData.status === 'DP',
-          'bg-red-100 text-red-800': detailData.status === 'Belum Bayar'
+          'bg-green-100 text-green-800': detailData.status === 'PAID',
+          'bg-yellow-100 text-yellow-800': detailData.status === 'PENDING',
+          'bg-red-100 text-red-800': detailData.status === 'FAILED'
         }"
       >
         {{ detailData.status }}
       </span>
     </p>
 
-    <table class="w-full text-sm text-left border-t mt-4">
+    <table class="w-full text-sm border-t mt-4">
       <thead>
         <tr class="text-gray-500">
-          <th class="py-2">Jenis Produk</th>
-          <th class="py-2">Ukuran (S/M/L/XL/XXL/Lainnya)</th>
-          <th class="py-2 text-right">Harga Satuan</th>
+          <th class="py-2 text-left">Jenis Produk</th>
+          <th class="py-2 text-right">Ukuran (S/M/L/XL/XXL/Lainnya)</th>
+          <!-- <th class="py-2 text-right">Harga Satuan</th> -->
         </tr>
       </thead>
       <tbody>
-        <tr class="border-t text-black">
-          <td class="py-2">{{ detailData.jenisProduk }}</td>
-          <td class="py-2">
-            S: {{ detailData.ukuran?.S }},
-            M: {{ detailData.ukuran?.M }},
-            L: {{ detailData.ukuran?.L }},
-            XL: {{ detailData.ukuran?.XL }},
-            XXL: {{ detailData.ukuran?.XXL }},
-            lainnya: {{ detailData.ukuran?.lainnya }}
+        <tr class="border-t text-black text-left">
+          <td class="py-2">{{ detailData.productType }}</td>
+          <td class="py-2 text-right">
+            S: {{ detailData.sizeS }},
+            M: {{ detailData.sizeM }},
+            L: {{ detailData.sizeL }},
+            XL: {{ detailData.sizeXL }},
+            XXL: {{ detailData.sizeXXL }},
+            lainnya: {{ detailData.otherSize }}
           </td>
-          <td class="py-2 text-right">{{ totalHargaFormat(detailData.hargaPerBaju) }}</td>
+          <!-- <td class="py-2 text-right">{{ totalHargaFormat(detailData.hargaPerBaju) }}</td> -->
         </tr>
       </tbody>
     </table>
@@ -324,25 +322,23 @@
       </thead>
       <tbody>
         <tr v-for="(extra, index) in detailData.extras" :key="index" class="border-t text-black">
-          <td class="py-2">{{ extra.jenis }}</td>
-          <td class="py-2">Rp{{ extra.harga }}</td>
-          <td class="py-2">{{ extra.jumlah }}</td>
-          <td class="py-2 text-right">Rp{{ extra.harga * extra.jumlah }}</td>
+          <td class="py-2">{{ extra.name }}</td>
+          <td class="py-2">{{ totalHargaExtraFormat(extra.price) }}</td>
+          <td class="py-2">{{ extra.quantity }}</td>
+          <td class="py-2 text-right">{{ totalHargaExtraFormat(extra.price * extra.quantity) }}</td>
         </tr>
       </tbody>
     </table>
 
-    <table class="w-full text-sm text-left border-t mt-4">
+    <table class="w-full text-sm text-right border-t mt-4">
       <thead>
         <tr class="text-gray-500">
           <th class="py-2">Total Harga</th>
-          <th class="py-2">Tenggat Waktu</th>
         </tr>
       </thead>
       <tbody>
         <tr class="border-t text-black">
-          <td class="py-2">{{ totalHargaFormat(detailData.totalHargapesanan) }}</td>
-          <td class="py-2">{{ detailData.tanggalPengeluaran }}</td>
+          <td class="py-2">{{ totalHargaFormat(detailData.totalPrice) }}</td>
         </tr>
       </tbody>
     </table>
@@ -378,8 +374,7 @@
           </div>
 
           <div class="flex justify-end space-x-2">
-            <button @click="closeModalBayar" class="btn bg-gray-200 text-white">Batal</button>
-            <button @click="addBayar" class="btn bg-cyan-950 text-white">Selesai</button>
+            <button @click="closeModalBayar" class="btn bg-cyan-950 text-white">Selesai</button>
           </div>
         </div>
       </div>
@@ -394,279 +389,6 @@ import { ref, onMounted, computed } from 'vue';
 import SideBar from '@/components/SideBar.vue'
 import { LMap, LTileLayer, LCircleMarker, LPopup, LGeoJson, LControl } from '@vue-leaflet/vue-leaflet'; 
 import 'leaflet/dist/leaflet.css'
-</script>
-
-<script>
-import axios from 'axios';
-
-export default {
-  data() {
-    return {
-      showModal: false,
-      daftarPesanan: [],
-      showDetailModal: false,
-      detailData: {},
-      search: '',
-      isEdit: false,
-      editIndex: null,
-      isDetailVisible: false,
-      showModalBayar: false,
-      currentPage: 1,
-      itemsPerPage: 6,
-      form: {
-        namaPemesan: '',
-        nomorTelepon: '',
-        kota: '',
-        alamat: '',
-        longitude: '',
-        latitude: '',
-        jenisProduk: '',
-        jumlahProduk: 0,
-        jenisextra: '',
-        extra: 0,
-        jumlahextra: 0,
-        totalextra: '',
-        hargaPerBaju: 0,
-        totalhargapesanan: '',
-        dp: '',
-        sisabayar: '',
-        totalHarga: 0,
-        metodepembayaran: '',
-        ukuran: {
-          S: 0,
-          M: 0,
-          L: 0,
-          XL: 0,
-          XXL: 0,
-          lainnya: ''
-        },
-        tanggalPengeluaran: '',
-        extras: []
-      },
-      extraInput: {
-        jenis: '',
-        harga: 0,
-        jumlah: 0
-      }
-    }
-  },
-  computed: {
-    paginatedOrders() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
-      return this.filteredorder.slice(start, end);
-    },
-    totalPages() {
-      return Math.ceil(this.filteredorder.length / this.itemsPerPage);
-    },
-    totalHarga() {
-      return this.form.jumlahProduk * this.form.hargaPerBaju;
-    },
-    totalextra() {
-      return this.form.jumlahextra * this.form.extra;
-    },
-    totalHargaFormatted() {
-      return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR'
-      }).format(this.totalHarga);
-    },
-    totalHargaPesananFormatted() {
-      return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR'
-      }).format(this.totalHargaPesanan);
-    },
-    totalHargaExtraFormatted() {
-      return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR'
-      }).format(this.totalHargaExtra);
-    },
-    totalHargaExtra() {
-      return this.form.extras.reduce((acc, item) => {
-        return acc + (item.harga * item.jumlah);
-      }, 0);
-    },
-    totalHargaPesanan() {
-      return this.totalHarga + this.totalHargaExtra;
-    },
-    sisabayar() {
-      const currentItem = this.detailData;
-      const previousDP = currentItem?.dp ?? 0;
-      const totalHarga = currentItem?.totalhargapesanan ?? 0;
-      const dpBaru = this.form.dp ?? 0;
-      return totalHarga - (previousDP + dpBaru);
-    },
-    filteredorder() {
-      if (!this.search) return this.daftarPesanan;
-      return this.daftarPesanan.filter(order =>
-        order.namaPemesan?.toLowerCase().includes(this.search.toLowerCase())
-      );
-    }
-  },
-  methods: {
-    nextPage() {
-      if (this.currentPage < this.totalPages) this.currentPage++;
-    },
-    prevPage() {
-      if (this.currentPage > 1) this.currentPage--;
-    },
-    tambahExtra() {
-      if (
-        this.extraInput.jenis &&
-        this.extraInput.harga > 0 &&
-        this.extraInput.jumlah > 0
-      ) {
-        this.form.extras.push({
-          jenis: this.extraInput.jenis,
-          harga: this.extraInput.harga,
-          jumlah: this.extraInput.jumlah
-        });
-        this.extraInput = { jenis: '', harga: 0, jumlah: 0 };
-      } else {
-        alert('Mohon lengkapi data Extra dengan benar.');
-      }
-    },
-    copyLinkBayar() {
-    navigator.clipboard.writeText(this.linkBayar)
-      .then(() => {
-        alert("Link berhasil disalin!");
-      })
-      .catch(err => {
-        console.error("Gagal menyalin link:", err);
-      });
-  },
-    hapusExtra(index) {
-      this.form.extras.splice(index, 1);
-    },
-    totalHargaPesananFormat(value) {
-      return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR'
-      }).format(value);
-    },
-    totalHargaFormat(value) {
-      return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR'
-      }).format(value);
-    },
-    totalHargaExtraFormat(value) {
-      return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR'
-      }).format(value);
-    },
-    addOrder() {
-      const newOrder = { ...this.form, totalHarga: this.totalHarga, totalHargapesanan: this.totalHargaPesanan };
-      this.daftarPesanan.push(newOrder);
-      this.showModal = false;
-      this.resetForm();
-    },
-    showDetail(order) {
-      this.detailData = order;
-      this.isDetailVisible = true;
-    },
-    closeDetail() {
-      this.isDetailVisible = false;
-      this.resetForm();
-    },
-    editOrder(index) {
-      const order = this.daftarPesanan[index];
-      this.form = JSON.parse(JSON.stringify(order));
-      this.showModal = true;
-      this.isEdit = true;
-      this.editIndex = index;
-    },
-    updateOrder() {
-      const totalProduk = this.form.jumlahProduk * this.form.hargaPerBaju;
-      const totalExtra = this.form.extras.reduce((acc, extra) => acc + (extra.harga * extra.jumlah), 0);
-      const totalPesanan = totalProduk + totalExtra;
-      this.form.totalHargapesanan = totalPesanan;
-      if (this.editIndex !== null) {
-        this.daftarPesanan[this.editIndex] = { ...this.form };
-      }
-      this.closeModal();
-    },
-    closeModal() {
-      this.showModal = false;
-      this.resetForm();
-    },
-    simpanPesanan() {
-      const newOrder = { ...this.form, totalHarga: this.totalHarga };
-      this.daftarPesanan.push(newOrder);
-      this.showModal = false;
-      this.resetForm();
-    },
-    showModalBayarFunc(index) {
-      const item = this.daftarPesanan[index];
-      this.detailData = item;
-      this.form.totalHarga = item.totalhargapesanan ?? 0;
-      this.form.dp = 0;
-      this.form.metodepembayaran = item.metodepembayaran ?? '';
-      this.showModalBayar = true;
-    },
-    closeModalBayar() {
-      this.showModalBayar = false;
-    },
-    updateBayar() {
-      if (this.form.metodepembayaran === 'Transfer' || this.form.metodepembayaran === 'Qris') {
-        alert("Metode pembayaran ini tidak bisa disimpan langsung.");
-        return;
-      }
-      const index = this.daftarPesanan.findIndex(item => item === this.detailData);
-      if (index !== -1) {
-        const current = this.daftarPesanan[index];
-        const previousDP = current.dp ?? 0;
-        const newTotalDP = previousDP + this.form.dp;
-        if (newTotalDP > current.totalhargapesanan) {
-          alert("Total DP tidak boleh melebihi total harga!");
-          return;
-        }
-        current.dp = newTotalDP;
-        current.sisabayar = current.totalhargapesanan - newTotalDP;
-        current.metodepembayaran = this.form.metodepembayaran;
-      }
-      this.closeModalBayar();
-    },
-    addBayar() {
-      if (this.form.metodepembayaran !== 'Cash') {
-        const kode = 'PAY-' + Math.floor(Math.random() * 1000000);
-        alert('Kode Pembayaran: ' + kode);
-        this.closeModalBayar();
-      }
-    },
-    resetForm() {
-      this.form = {
-        namaPemesan: '',
-        nomorTelepon: '',
-        kota: '',
-        alamat: '',
-        longitude: '',
-        latitude: '',
-        jenisProduk: '',
-        jumlahProduk: 0,
-        jenisextra: '',
-        extra: '',
-        jumlahextra: '',
-        totalextra: '',
-        hargaPerBaju: 0,
-        dp: '',
-        sisabayar: '',
-        totalhargapesanan: '',
-        ukuran: { S: 0, M: 0, L: 0, XL: 0, XXL: 0, lainnya: '' },
-        totalHarga: 0,
-        metodepembayaran: '',
-        tanggalPengeluaran: '',
-        extras: []
-      };
-      this.extraInput = { jenis: '', harga: 0, jumlah: 0 };
-      this.isEdit = false;
-      this.editIndex = null;
-    }
-  }
-}
 
 import L from 'leaflet' 
 delete L.Icon.Default.prototype._getIconUrl 
@@ -761,4 +483,300 @@ shadowUrl: new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).hre
         if (count >= 2) return 'salmon';
         return 'pink';
       };
+</script>
+
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      showModal: false,
+      daftarPesanan: [],
+      showDetailModal: false,
+      detailData: {},
+      search: '',
+      isEdit: false,
+      editIndex: null,
+      isDetailVisible: false,
+      showModalBayar: false,
+      linkBayar: '',
+      currentPage: 1,
+      itemsPerPage: 6,
+      form: {
+        namaPemesan: '',
+        nomorTelepon: '',
+        kota: '',
+        alamat: '',
+        longitude: '',
+        latitude: '',
+        jenisProduk: '',
+        jumlahProduk: 0,
+        jenisextra: '',
+        extra: 0,
+        jumlahextra: 0,
+        totalextra: '',
+        hargaPerBaju: 0,
+        totalhargapesanan: 0,
+        dp: '',
+        totalHarga: 0,
+        metodepembayaran: '',
+        ukuran: {
+          S: 0,
+          M: 0,
+          L: 0,
+          XL: 0,
+          XXL: 0,
+          lainnya: ''
+        },
+        tanggalPengeluaran: '',
+        extras: []
+      },
+      extraInput: {
+        name: '',
+        price: 0,
+        quantity: 0
+      }
+    }
+  },
+  computed: {
+    paginatedOrders() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.filteredorder.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.filteredorder.length / this.itemsPerPage);
+    },
+    totalHarga() {
+      return this.form.jumlahProduk * this.form.hargaPerBaju;
+    },
+    totalextra() {
+      return this.form.jumlahextra * this.form.extra;
+    },
+    totalHargaFormatted() {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+      }).format(this.totalHarga);
+    },
+    totalHargaPesananFormatted() {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+      }).format(this.totalHargaPesanan);
+    },
+    totalHargaExtraFormatted() {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+      }).format(this.totalHargaExtra);
+    },
+    totalHargaExtra() {
+      return this.form.extras.reduce((acc, item) => {
+        return acc + (item.price * item.quantity);
+      }, 0);
+    },
+    totalHargaPesanan() {
+      return this.totalHarga + this.totalHargaExtra;
+    },
+    sisabayar() {
+      const currentItem = this.detailData;
+      const previousDP = currentItem?.dp ?? 0;
+      const totalHarga = currentItem?.totalhargapesanan ?? 0;
+      const dpBaru = this.form.dp ?? 0;
+      return totalHarga - (previousDP + dpBaru);
+    },
+    filteredorder() {
+      if (!this.search) return this.daftarPesanan;
+      return this.daftarPesanan.filter(order =>
+        order.namaPemesan?.toLowerCase().includes(this.search.toLowerCase())
+      );
+    }
+  },
+  methods: {
+    nextPage() {
+      if (this.currentPage < this.totalPages) this.currentPage++;
+    },
+    prevPage() {
+      if (this.currentPage > 1) this.currentPage--;
+    },
+    tambahExtra() {
+      if (
+        this.extraInput.name &&
+        this.extraInput.price > 0 &&
+        this.extraInput.quantity > 0
+      ) {
+        this.form.extras.push({
+          name: this.extraInput.name,
+          price: this.extraInput.price,
+          quantity: this.extraInput.quantity
+        });
+        this.extraInput = { name: '', price: 0, quantity: 0 };
+      } else {
+        alert('Mohon lengkapi data Extra dengan benar.');
+      }
+    },
+    copyLinkBayar() {
+    navigator.clipboard.writeText(this.linkBayar)
+      .then(() => {
+        alert("Link berhasil disalin!");
+      })
+      .catch(err => {
+        console.error("Gagal menyalin link:", err);
+      });
+  },
+    hapusExtra(index) {
+      this.form.extras.splice(index, 1);
+    },
+    totalHargaPesananFormat(value) {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+      }).format(value);
+    },
+    totalHargaFormat(value) {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+      }).format(value);
+    },
+    totalHargaExtraFormat(value) {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+      }).format(value);
+    },
+    addOrder() {
+      axios.post('https://great-distinctly-seasnail.ngrok-free.app/api/ewallet/payment/orders', {
+        CustomerName: this.form.namaPemesan,
+        PhoneNumber: this.form.nomorTelepon.toString(),
+        City: this.form.kota,
+        Address: this.form.alamat,
+        Longitude: parseFloat(this.form.longitude),
+        Latitude: parseFloat(this.form.latitude),
+        ProductType: this.form.jenisProduk,
+        ProductQuantity: this.form.jumlahProduk,
+        Deadline: this.form.tanggalPengeluaran,
+        Status: this.form.status || "Belum Bayar",
+        Extras: this.form.extras.map(extra => ({
+          name: extra.name,
+          price: extra.price.toString(), // match your C# model (string)
+          quantity: extra.quantity
+        })),
+        ExtraPrice: this.totalHargaExtra, // or this.form.extra if that's correct
+        SizeS: this.form.ukuran.S,
+        SizeM: this.form.ukuran.M,
+        SizeL: this.form.ukuran.L,
+        SizeXL: this.form.ukuran.XL,
+        SizeXXL: this.form.ukuran.XXL,
+        OtherSize: this.form.ukuran.lainnya,
+        TotalPrice: this.totalHargaPesanan,
+      }, 
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        }
+      )
+        .then(response => {
+          this.daftarPesanan.push(response.data);
+          this.showModal = false;
+          this.resetForm();
+        })
+        .catch(error => {
+          console.error('Error adding order:', error);
+        });
+    },
+    showDetail(order) {
+      this.detailData = order;
+      this.isDetailVisible = true;
+    },
+    closeDetail() {
+      this.isDetailVisible = false;
+      this.resetForm();
+    },
+    editOrder(index) {
+      const order = this.daftarPesanan[index];
+      this.form = JSON.parse(JSON.stringify(order));
+      this.showModal = true;
+      this.isEdit = true;
+      this.editIndex = index;
+    },
+    updateOrder() {
+      const totalProduk = this.form.jumlahProduk * this.form.hargaPerBaju;
+      const totalExtra = this.form.extras.reduce((acc, extra) => acc + (extra.harga * extra.jumlah), 0);
+      const totalPesanan = totalProduk + totalExtra;
+      this.form.totalHargapesanan = totalPesanan;
+      if (this.editIndex !== null) {
+        this.daftarPesanan[this.editIndex] = { ...this.form };
+      }
+      this.closeModal();
+    },
+    closeModal() {
+      this.showModal = false;
+      this.resetForm();
+    },
+    simpanPesanan() {
+      const newOrder = { ...this.form, totalHarga: this.totalHarga };
+      this.daftarPesanan.push(newOrder);
+      this.showModal = false;
+      this.resetForm();
+    },
+    showModalBayarFunc(index) {
+      const order = this.daftarPesanan[index];
+      this.linkBayar = order.paymentUrl || ''; // Ganti dengan URL yang sesuai
+      this.showModalBayar = true;
+    },
+    closeModalBayar() {
+      this.showModalBayar = false;
+    },
+    resetForm() {
+      this.form = {
+        namaPemesan: '',
+        nomorTelepon: '',
+        kota: '',
+        alamat: '',
+        longitude: '',
+        latitude: '',
+        jenisProduk: '',
+        jumlahProduk: 0,
+        jenisextra: '',
+        extra: '',
+        jumlahextra: '',
+        totalextra: '',
+        hargaPerBaju: 0,
+        dp: '',
+        sisabayar: '',
+        totalhargapesanan: '',
+        ukuran: { S: 0, M: 0, L: 0, XL: 0, XXL: 0, lainnya: '' },
+        totalHarga: 0,
+        metodepembayaran: '',
+        tanggalPengeluaran: '',
+        extras: []
+      };
+      this.extraInput = { name: '', price: 0, quantity: 0 };
+      this.isEdit = false;
+      this.editIndex = null;
+    },
+    fetchOrders() {
+      axios.get('https://great-distinctly-seasnail.ngrok-free.app/api/orders', {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      })
+        .then(response => {
+          this.daftarPesanan = response.data;
+          console.log('Orders fetched:', this.daftarPesanan);
+        })
+        .catch(error => {
+          console.error('Error fetching orders:', error);
+        });
+    }
+  },
+  mounted() {
+    this.fetchOrders();
+  }
+}
 </script>

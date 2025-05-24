@@ -33,8 +33,9 @@
           <thead class="sticky top-[80px] bg-gray-400 z-10">
             <tr>
               <th class="w-20 text-white">No.</th>
-              <th class="w-30 pl-9 text-white">Profile</th>
+              <th class="text-white">Profile</th>
               <th class="text-white">Nama</th>
+              <th class="w-xs text-white">Email</th>
               <th class="text-white">Jabatan</th>
               <th class="text-white">Status</th>
               <th class="text-white">Aksi</th>
@@ -55,6 +56,7 @@
                   <img :src="karyawan.photo" alt="Profile" class="align-middle w-12 h-12 object-cover rounded-full mx-auto" />
                 </td>
                 <td class="align-middle">{{ karyawan.name }}</td>
+                <td class="align-middle">{{ karyawan.email }}</td>
                 <td class="align-middle">{{ karyawan.position }}</td>
                 <td class="align-middle">
                   <span class="align-middle" :class="['status-badge', karyawan.status.toLowerCase()]">{{ karyawan.status }}</span>
