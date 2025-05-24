@@ -34,7 +34,7 @@
               <td>{{ Intl.DateTimeFormat('id-ID').format(new Date(order.deadline)) }}</td>
               <td>{{ order.status}}</td>
               <td>
-                <!-- <button @click="editOrder(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button> -->
+                <button @click="editOrder(order.id)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Edit</button>
                 <button @click="showDetail(order)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Detail</button>
                 <button v-if="order.status == 'PENDING'" @click="showModalBayarFunc(index)" class="btn btn-sm text-white bg-cyan-950 hover:bg-white hover:text-cyan-950">Bayar</button>
               </td>
@@ -159,7 +159,7 @@
 </div>
     
     <label class="text-cyan-950" style="font-family: 'Poppins', sans-serif;">Jenis Produk:</label>
-    <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" style="font-family: 'Poppins', sans-serif;"v-model="form.jenisProduk">
+    <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" style="font-family: 'Poppins', sans-serif;" v-model="form.jenisProduk">
       <option class="text-cyan-950" style="font-family: 'Poppins', sans-serif;" disabled value="">Pilih Jenis Produk</option>
       <option>Kaos</option>
       <option>Almamater</option>
@@ -699,12 +699,34 @@ export default {
       this.isDetailVisible = false;
       this.resetForm();
     },
-    editOrder(index) {
-      const order = this.daftarPesanan[index];
-      this.form = JSON.parse(JSON.stringify(order));
-      this.showModal = true;
-      this.isEdit = true;
-      this.editIndex = index;
+    editOrder(id) {
+      axios.put(`https://api.rahayu-konveksi.ydns.eu/api/orders/${id}`, {
+        ...this.form,
+        Extras: this.form.extras.map(extra => ({
+          name: extra.name,
+          price: extra.price.toString(),
+          quantity: extra.quantity
+        })),
+        ExtraPrice: this.totalHargaExtra,
+        TotalPrice: this.totalHargaPesanan
+      }, 
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      })
+        .then(response => {
+          const index = this.daftarPesanan.findIndex(order => order.id === id);
+          if (index !== -1) {
+            this.daftarPesanan[index] = response.data;
+            this.resetForm();
+            this.showModal = false;
+          }
+        })
+        .catch(error => {
+          console.error('Error updating order:', error);
+        });
     },
     updateOrder() {
       const totalProduk = this.form.jumlahProduk * this.form.hargaPerBaju;
