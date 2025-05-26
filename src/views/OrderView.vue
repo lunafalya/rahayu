@@ -57,7 +57,7 @@
       <div class="flex justify-between items-center pb-6 relative"> 
         <h2 class="text-2xl font-bold text-cyan-950">Peta Persebaran Konsumen</h2> 
       </div>
-      <p>Warna merah menandakan jumlah konsumen tinggi, merah muda menandakan jumlah rendah.</p>
+      <p>Persebaran pasar konsumen dibagi menjadi 2Q dari warna Merah tertinggi hingga warna Kuning.</p>
 
       <!-- Leaflet Map -->
       <LMap
@@ -447,7 +447,6 @@
 
 </template>
 
-
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue';
 import SideBar from '@/components/SideBar.vue';
@@ -502,13 +501,32 @@ const kotaPurchaseCount = computed(() => {
   return count;
 });
 
-// Warna polygon berdasarkan total pembelian
+const terciles = computed(() => {
+  const values = Object.values(kotaPurchaseCount.value)
+    .filter(v => v > 0)
+    .sort((a, b) => a - b);
+
+  const q = (p) => {
+    const pos = (values.length - 1) * p;
+    const base = Math.floor(pos);
+    const rest = pos - base;
+    return values[base] + rest * ((values[base + 1] ?? 0) - values[base]);
+  };
+
+  return {
+    Q1: q(1 / 3),
+    Q2: q(2 / 3)
+  };
+});
+
 const getColorByTotalPurchase = (kota) => {
   const total = kotaPurchaseCount.value[kota] || 0;
-  if (total >= 100) return 'red';
-  if (total >= 50) return 'orange';
-  if (total > 0) return 'yellow';
-  return '#f0f0f0';
+  const { Q1, Q2 } = terciles.value;
+
+  if (total >= Q2) return 'red';     // level tinggi
+  if (total >= Q1) return 'orange';  // level menengah
+  if (total > 0) return 'yellow';    // level rendah
+  return null;                       // tidak ada warna
 };
 
 // Warna marker per pelanggan
@@ -521,13 +539,34 @@ const getColorByCustomerPurchase = (jumlahProduk) => {
 // Style GeoJSON
 const styleFeature = (feature) => {
   const namaKota = feature.properties.NAME_2?.trim();
+  const total = kotaPurchaseCount.value[namaKota] || 0;
   const isSelected = selectedCity.value === namaKota;
+  const fillColor = getColorByTotalPurchase(namaKota);
+
+  if (isSelected) {
+    return {
+      color: '#333',        // border lebih tebal
+      weight: 2,
+      fillColor: 'transparent',
+      fillOpacity: 0
+    };
+  }
+
+  if (total <= 0 || !fillColor) {
+    return {
+      fillColor: 'transparent',
+      color: 'transparent',
+      weight: 0,
+      fillOpacity: 0,
+      opacity: 0
+    };
+  }
 
   return {
-    color: isSelected ? '#000' : '#888',
-    weight: isSelected ? 2 : 1,
-    fillOpacity: isSelected ? 0 : 0.5,
-    fillColor: isSelected ? 'transparent' : getColorByTotalPurchase(namaKota)
+    color: '#666',
+    weight: 1,
+    fillColor,
+    fillOpacity: 0.6
   };
 };
 
