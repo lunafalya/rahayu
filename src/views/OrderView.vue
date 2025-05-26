@@ -52,65 +52,125 @@
     </div>
   </div>
 
-  <!-- Peta Persebaran Konsumen -->
-    <!-- <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-md"> 
+ <!-- Peta Persebaran Konsumen -->
+    <div class="bg-white text-cyan-950 rounded-2xl p-6 shadow-md"> 
       <div class="flex justify-between items-center pb-6 relative"> 
         <h2 class="text-2xl font-bold text-cyan-950">Peta Persebaran Konsumen</h2> 
       </div>
-      <p>Warna merah menandakan jumlah konsumen tinggi, merah muda menandakan jumlah rendah.</p> -->
+      <p>Warna merah menandakan jumlah konsumen tinggi, merah muda menandakan jumlah rendah.</p>
 
       <!-- Leaflet Map -->
-      <!-- <LMap
-          :zoom="10"
-          :center="[center.lat, center.lng]"
-          class="relative z-10"
-          style="height: 300px; width: 100%; margin-top: 1rem"
-        >
+      <LMap
+        ref="mapRef"
+        :zoom="10"
+        :center="[center.lat, center.lng]"
+        class="z-0"
+        style="height: 300px; width: 100%; margin-top: 1rem"
+      >
         <LTileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="&copy; OpenStreetMap contributors"
-        /> -->
-        
-        <!-- Layer GeoJSON -->
-        <!-- <LGeoJson
-          v-if="geojsonData && showBoundary"
-          :geojson="geojsonData"
-          :optionsStyle="adminStyle"
-        /> -->
+        />
 
-        <!-- Kontrol di dalam peta -->
-        <!-- <LControl position="topright">
-          <div class="leaflet-control-layers leaflet-bar p-2 bg-white rounded shadow space-y-2">
-            <label class="flex items-center space-x-2 text-sm">
-              <select v-model="showBoundary"> 
-                <option :value="true">Tampilkan batas</option> 
-                <option :value="false">Sembunyikan batas</option> 
+        <!-- Kontrol Layer & Filter -->
+        <LControl position="topright">
+          <div class="leaflet-control-layers leaflet-bar p-2 bg-white rounded shadow space-y-2 text-sm w-64">
+            <!-- Pilihan Layer -->
+            <label class="flex items-center space-x-2 mb-2">
+              <span class="font-semibold">Layer Peta</span>
+              <select v-model="selectedLayer" class="text-sm border rounded px-1 py-0.5">
+                <option value="polygon">Wilayah Persebaran</option>
+                <option value="marker">Titik Konsumen</option>
               </select>
-              <span>Batas Administrasi</span>
             </label>
+
+            <!-- Filter Wilayah -->
+            <div v-if="selectedLayer === 'polygon'">
+              <label class="block text-sm font-medium mb-1">Filter Wilayah:</label>
+              <input
+                v-model="selectedCity"
+                type="text"
+                list="city-options"
+                class="border rounded px-2 py-1 w-full"
+                placeholder="Ketik nama kota..."
+              />
+              <datalist id="city-options">
+                <option
+                  v-for="(jumlah, kota) in kotaPurchaseCount"
+                  :key="kota"
+                  :value="kota"
+                />
+              </datalist>
+            </div>
           </div>
         </LControl>
 
+        <!-- GeoJSON Layer -->
+        <LGeoJson
+          v-if="selectedLayer === 'polygon' && showBoundary && filteredGeoJson"
+          :geojson="filteredGeoJson"
+          :options-style="styleFeature"
+        />
 
+        <!-- Titik Konsumen: Layer marker (semua konsumen) -->
         <LCircleMarker
-          v-for="(item, i) in orders"
-          :key="i"
-          :lat-lng="[parseFloat(item.latitude), parseFloat(item.longitude)]"
+          v-for="(order, i) in selectedLayer === 'marker' ? orders : []"
+          :key="'all-' + i"
+          :lat-lng="[order.latitude, order.longitude]"
           :radius="8"
-          :color="getColor(item.kota)"
-          fill-opacity="0.6"
-          stroke
+          :color="getColorByCustomerPurchase(order['Jumlah Produk'])"
         >
           <LPopup>
-            <strong>{{ item['Nama Pemesan'] }}</strong><br />
-            {{ item.alamat }}<br />
-            {{ item['Jenis Produk'] }} - {{ item['Jumlah Produk'] }} pcs<br />
-            Kota: {{ item.kota || 'Tidak diketahui' }}
+            <strong>{{ order['Nama Pemesan'] }}</strong><br />
+            {{ order.Alamat }}<br />
+            {{ order.Kota || 'Tidak diketahui' }}<br />
+            {{ order['Jenis Produk'] }} - {{ order['Jumlah Produk'] }} pcs
           </LPopup>
         </LCircleMarker>
+
+        <!-- Titik Konsumen: Hanya yang cocok dengan filter kota -->
+        <LCircleMarker
+          v-for="(order, i) in selectedLayer === 'polygon' && selectedCity ? filteredOrders : []"
+          :key="'filtered-' + i"
+          :lat-lng="[order.latitude, order.longitude]"
+          :radius="8"
+          :color="getColorByCustomerPurchase(order['Jumlah Produk'])"
+        >
+          <LPopup>
+            <strong>{{ order['Nama Pemesan'] }}</strong><br />
+            {{ order.Alamat }}<br />
+            {{ order.Kota || 'Tidak diketahui' }}<br />
+            {{ order['Jenis Produk'] }} - {{ order['Jumlah Produk'] }} pcs
+          </LPopup>
+        </LCircleMarker>
+
+        <!-- Sidebar Khusus Filter -->
+        <SideBar v-if="selectedCity && selectedLayer === 'polygon'">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-lg font-semibold">Pesanan di {{ selectedCity }}</h3>
+            <button @click="closeSidebar" class="text-sm text-red-500 hover:underline">Tutup</button>
+          </div>
+          <ul class="text-sm">
+            <li v-for="(order, i) in filteredOrders" :key="i">
+              {{ order.Nama }} - {{ order['Jumlah Produk'] }} produk
+            </li>
+          </ul>
+        </SideBar>
+
+        <!-- Sidebar Global (jika ada kebutuhan lain) -->
+        <SideBar v-if="showSidebar">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-lg font-semibold">Pesanan di {{ selectedCity }}</h3>
+            <button @click="closeSidebar" class="text-sm text-red-500 hover:underline">Tutup</button>
+          </div>
+          <ul class="text-sm">
+            <li v-for="(order, i) in filteredOrders" :key="i">
+              {{ order.Nama }} - {{ order['Jumlah Produk'] }} produk
+            </li>
+          </ul>
+        </SideBar>
       </LMap>
-    </div> -->
-  </div>
+    </div>
 
     <!-- OrderModal -->
     <div class="modal-overlay " v-if="showModal">
@@ -136,8 +196,10 @@
     <select class="text-cyan-950 border p-2 w-full rounded mt-1 mb-5" style="font-family: 'Poppins', sans-serif;" v-model="form.kota">
       <option class="text-cyan-950" disabled value="" style="font-family: 'Poppins', sans-serif;">Pilih Kota</option>
       <option>Bogor</option>
+      <option>Kota Bogor</option>
       <option>Bekasi</option>
-      <option>Jakarta</option>
+      <option>Kota Bekasi</option>
+      <option>Jakarta Selatan</option>
       <option>Depok</option>
       <option>Tanggerang</option>
       <option>Cirebon</option>
@@ -380,111 +442,176 @@
           </div>
         </div>
       </div>
-
     </div>
+</div>
 
 </template>
 
 
-<script setup> 
-import { ref, onMounted, computed } from 'vue';
-import SideBar from '@/components/SideBar.vue'
-import { LMap, LTileLayer, LCircleMarker, LPopup, LGeoJson, LControl } from '@vue-leaflet/vue-leaflet'; 
-import 'leaflet/dist/leaflet.css'
+<script setup>
+import { ref, onMounted, computed, watch } from 'vue';
+import SideBar from '@/components/SideBar.vue';
+import {
+  LMap,
+  LTileLayer,
+  LCircleMarker,
+  LPopup,
+  LGeoJson,
+  LControl
+} from '@vue-leaflet/vue-leaflet';
+import 'leaflet/dist/leaflet.css';
+import axios from 'axios';
+import L from 'leaflet';
 
-import L from 'leaflet' 
-delete L.Icon.Default.prototype._getIconUrl 
-L.Icon.Default.mergeOptions({ 
-iconRetinaUrl: new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href, 
-iconUrl: new URL('leaflet/dist/images/marker-icon.png', import.meta.url).href, 
-shadowUrl: new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).href 
+// Konfigurasi marker default Leaflet
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href,
+  iconUrl: new URL('leaflet/dist/images/marker-icon.png', import.meta.url).href,
+  shadowUrl: new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).href
 });
-  // Data 
-  const orders = ref([]) 
-  const kotaCount = ref({})
-    const center = { lat: -6.5, lng: 106.8 } // Dramaga 
-    
-    // onMounted(async () => { const res = await fetch('https://api.rahayukonveksi.com/orders') 
-    // const data = await res.json() 
-    const dummyOrders = [
-      {
-      "Nama Pemesan": "Dwi",
-      "alamat": "Kelurahan A, Kota Bogor",
-      "kota": "Bogor",
-      "latitude": "-6.595038",
-      "longitude": "106.816635",
-      "Jenis Produk": "Kaos",
-      "Jumlah Produk": 20
-      },
-      {
-      "Nama Pemesan": "Lina",
-      "alamat": "Kelurahan B, Kota Bogor",
-      "kota": "Bogor",
-      "latitude": "-6.589379",
-      "longitude": "106.805155",
-      "Jenis Produk": "Jaket",
-      "Jumlah Produk": 15
-      },
-      {
-      "Nama Pemesan": "Rudi",
-      "alamat": "Kelurahan C, Kota Depok",
-      "kota": "Depok",
-      "latitude": "-6.391978",
-      "longitude": "106.821823",
-      "Jenis Produk": "Kaos",
-      "Jumlah Produk": 10
-      },
-      {
-      "Nama Pemesan": "Sari",
-      "alamat": "Kelurahan D, Kota Depok",
-      "kota": "Depok",
-      "latitude": "-6.387002",
-      "longitude": "106.832789",
-      "Jenis Produk": "Kemeja",
-      "Jumlah Produk": 5
-      },
-      {
-      "Nama Pemesan": "Aminah",
-      "alamat": "Kelurahan E, Kota Tangerang",
-      "kota": "Tangerang",
-      "latitude": "-6.199602",
-      "longitude": "106.660999",
-      "Jenis Produk": "Kaos",
-      "Jumlah Produk": 3
+
+// State
+const orders = ref([]);
+const mapRef = ref(null);
+const selectedLayer = ref('marker');
+const center = { lat: -6.5, lng: 106.8 };
+const geojsonData = ref(null);
+const showBoundary = ref(true);
+
+const showSidebar = ref(false);
+const selectedCity = ref(null);
+const highlightFeature = ref(null);
+
+// Filter order berdasarkan kota jika selectedCity diisi
+const filteredOrders = computed(() => {
+  if (!selectedCity.value) return orders.value;
+  return orders.value.filter(o => o.Kota?.trim() === selectedCity.value);
+});
+
+// Hitung jumlah pembelian per kota
+const kotaPurchaseCount = computed(() => {
+  const count = {};
+  orders.value.forEach(item => {
+    const namaKota = item.Kota?.trim();
+    const jumlah = Number(item['Jumlah Produk']) || 0;
+    if (namaKota) {
+      count[namaKota] = (count[namaKota] || 0) + jumlah;
+    }
+  });
+  return count;
+});
+
+// Warna polygon berdasarkan total pembelian
+const getColorByTotalPurchase = (kota) => {
+  const total = kotaPurchaseCount.value[kota] || 0;
+  if (total >= 100) return 'red';
+  if (total >= 50) return 'orange';
+  if (total > 0) return 'yellow';
+  return '#f0f0f0';
+};
+
+// Warna marker per pelanggan
+const getColorByCustomerPurchase = (jumlahProduk) => {
+  if (jumlahProduk >= 100) return 'red';
+  if (jumlahProduk >= 50) return 'orange';
+  return 'yellow';
+};
+
+// Style GeoJSON
+const styleFeature = (feature) => {
+  const namaKota = feature.properties.NAME_2?.trim();
+  const isSelected = selectedCity.value === namaKota;
+
+  return {
+    color: isSelected ? '#000' : '#888',
+    weight: isSelected ? 2 : 1,
+    fillOpacity: isSelected ? 0 : 0.5,
+    fillColor: isSelected ? 'transparent' : getColorByTotalPurchase(namaKota)
+  };
+};
+
+// Filter GeoJSON berdasarkan kota terpilih
+const filteredGeoJson = computed(() => {
+  if (!geojsonData.value) return null;
+  if (!selectedCity.value) return geojsonData.value;
+
+  return {
+    ...geojsonData.value,
+    features: geojsonData.value.features.filter(
+      f => f.properties.NAME_2?.trim() === selectedCity.value
+    )
+  };
+});
+
+watch([selectedCity, filteredGeoJson], ([city, geojson]) => {
+  if (city && geojson && mapRef.value && geojson.features.length > 0) {
+    const layer = L.geoJSON(geojson);
+    const bounds = layer.getBounds();
+    mapRef.value.leafletObject.fitBounds(bounds);
+  }
+});
+
+// Klik polygon wilayah
+const onFeatureClick = (e) => {
+  const kota = e.target.feature.properties.NAME_2?.trim();
+  selectedCity.value = kota;
+  highlightFeature.value = e.target.feature;
+  showSidebar.value = true;
+};
+
+// Callback per feature
+const onEachFeature = (feature, layer) => {
+  layer.on({
+    click: onFeatureClick
+  });
+};
+
+// Tutup sidebar
+const closeSidebar = () => {
+  showSidebar.value = false;
+  selectedCity.value = null;
+  highlightFeature.value = null;
+};
+
+// Ambil data pesanan
+onMounted(async () => {
+  try {
+    const res = await axios.get('/api/maps-order', {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
-      ]
-    onMounted(() => {
-      const count = {}
-      dummyOrders.forEach(item => {
-      const kota = item.kota || 'Tidak diketahui'
-      count[kota] = (count[kota] || 0) + 1
-      })
-      orders.value = dummyOrders
-      kotaCount.value = count
-      })
+    });
 
-      const geojsonData = ref(null) 
-      const showBoundary = ref(true) 
-      const adminStyle = () => ({ 
-        color: '#2c3e50', 
-        weight: 1.5, 
-        fillOpacity: 0 
-      }) 
-      
-      onMounted(async () => { 
-        const res = await fetch('/jabar.geojson') 
-        const json = await res.json() 
-        geojsonData.value = json 
+    const data = res.data;
+    orders.value = data
+      .map(item => {
+        const latitude = Number(item.Latitude || item.latitude);
+        const longitude = Number(item.Longitude || item.longitude);
+        if (!isFinite(latitude) || !isFinite(longitude)) return null;
+
+        const kota = item.Kota?.trim();
+        const tipeWilayah = kota?.toLowerCase().startsWith('kota') ? 'kota' : 'kabupaten';
+
+        return {
+          ...item,
+          latitude,
+          longitude,
+          Kota: kota,
+          tipeWilayah
+        };
       })
+      .filter(Boolean);
+  } catch (err) {
+    console.error('Gagal mengambil data pesanan:', err);
+  }
+});
 
-      const getColor = (kota) => {
-        const count = kotaCount.value[kota || 'Tidak diketahui'] || 0;
-
-        if (count >= 10) return 'red';
-        if (count >= 5) return 'blue';
-        if (count >= 2) return 'salmon';
-        return 'pink';
-      };
+// Ambil GeoJSON wilayah
+onMounted(async () => {
+  const res = await fetch('/jawa.geojson');
+  geojsonData.value = await res.json();
+});
 </script>
 
 <script>
