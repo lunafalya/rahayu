@@ -620,7 +620,7 @@ const closeSidebar = () => {
 // Ambil data pesanan
 onMounted(async () => {
   try {
-    const res = await axios.get('http://bk8kcw04w8wsw8s40c8kswko.34.126.166.246.sslip.io/api/maps-order', {
+    const res = await axios.get('https://geo.rahayu-konveksi.ydns.eu/api/maps-order', {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
