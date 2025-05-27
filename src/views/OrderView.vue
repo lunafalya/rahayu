@@ -200,8 +200,12 @@
       <option>Bekasi</option>
       <option>Kota Bekasi</option>
       <option>Jakarta Selatan</option>
+      <option>Jakarta Timur</option>
+      <option>Jakarta Utara</option>
+      <option>Jakarta Barat</option>
+      <option>Jakarta Pusat</option>
       <option>Depok</option>
-      <option>Tanggerang</option>
+      <option>Tangerang</option>
       <option>Cirebon</option>
     </select>
 
@@ -616,7 +620,7 @@ const closeSidebar = () => {
 // Ambil data pesanan
 onMounted(async () => {
   try {
-    const res = await axios.get('/api/maps-order', {
+    const res = await axios.get('http://bk8kcw04w8wsw8s40c8kswko.34.126.166.246.sslip.io/api/maps-order', {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
